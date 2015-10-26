@@ -1,48 +1,20 @@
-﻿Build started 25-10-2015 18:56:09.
-     1>Project "C:\Users\Jip\Documents\School\C++1\Eindopdracht\Eindopdracht\Eindopdracht.vcxproj" on node 2 (Build target(s)).
-     1>ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Yu"stdafx.h" /Fp"Debug\Eindopdracht.pch" /Fo"Debug\\" /Fd"Debug\vc140.pdb" /Gd /TP /analyze- /errorReport:prompt Main.cpp Map.cpp Room.cpp
-         Room.cpp
-     1>c:\users\jip\documents\school\c++1\eindopdracht\eindopdracht\room.h(4): warning C4067: unexpected tokens following preprocessor directive - expected a newline
-     1>c:\users\jip\documents\school\c++1\eindopdracht\eindopdracht\room.h(5): warning C4067: unexpected tokens following preprocessor directive - expected a newline
-     1>c:\users\jip\documents\school\c++1\eindopdracht\eindopdracht\enemy.h(4): warning C4067: unexpected tokens following preprocessor directive - expected a newline
-     1>c:\users\jip\documents\school\c++1\eindopdracht\eindopdracht\room.h(6): warning C4067: unexpected tokens following preprocessor directive - expected a newline
-     1>c:\users\jip\documents\school\c++1\eindopdracht\eindopdracht\room.h(7): warning C4067: unexpected tokens following preprocessor directive - expected a newline
-     1>c:\users\jip\documents\school\c++1\eindopdracht\eindopdracht\room.h(9): warning C4067: unexpected tokens following preprocessor directive - expected a newline
-     1>c:\users\jip\documents\school\c++1\eindopdracht\eindopdracht\room.h(10): warning C4067: unexpected tokens following preprocessor directive - expected a newline
-     1>c:\users\jip\documents\school\c++1\eindopdracht\eindopdracht\room.h(11): warning C4067: unexpected tokens following preprocessor directive - expected a newline
-         Map.cpp
-     1>c:\users\jip\documents\school\c++1\eindopdracht\eindopdracht\room.h(4): warning C4067: unexpected tokens following preprocessor directive - expected a newline
-     1>c:\users\jip\documents\school\c++1\eindopdracht\eindopdracht\room.h(5): warning C4067: unexpected tokens following preprocessor directive - expected a newline
-     1>c:\users\jip\documents\school\c++1\eindopdracht\eindopdracht\enemy.h(4): warning C4067: unexpected tokens following preprocessor directive - expected a newline
-     1>c:\users\jip\documents\school\c++1\eindopdracht\eindopdracht\room.h(6): warning C4067: unexpected tokens following preprocessor directive - expected a newline
-     1>c:\users\jip\documents\school\c++1\eindopdracht\eindopdracht\room.h(7): warning C4067: unexpected tokens following preprocessor directive - expected a newline
-     1>c:\users\jip\documents\school\c++1\eindopdracht\eindopdracht\room.h(9): warning C4067: unexpected tokens following preprocessor directive - expected a newline
-     1>c:\users\jip\documents\school\c++1\eindopdracht\eindopdracht\room.h(10): warning C4067: unexpected tokens following preprocessor directive - expected a newline
-     1>c:\users\jip\documents\school\c++1\eindopdracht\eindopdracht\room.h(11): warning C4067: unexpected tokens following preprocessor directive - expected a newline
-     1>c:\users\jip\documents\school\c++1\eindopdracht\eindopdracht\map.cpp(19): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
-         Main.cpp
-     1>c:\users\jip\documents\school\c++1\eindopdracht\eindopdracht\room.h(4): warning C4067: unexpected tokens following preprocessor directive - expected a newline
-     1>c:\users\jip\documents\school\c++1\eindopdracht\eindopdracht\room.h(5): warning C4067: unexpected tokens following preprocessor directive - expected a newline
-     1>c:\users\jip\documents\school\c++1\eindopdracht\eindopdracht\enemy.h(4): warning C4067: unexpected tokens following preprocessor directive - expected a newline
-     1>c:\users\jip\documents\school\c++1\eindopdracht\eindopdracht\room.h(6): warning C4067: unexpected tokens following preprocessor directive - expected a newline
-     1>c:\users\jip\documents\school\c++1\eindopdracht\eindopdracht\room.h(7): warning C4067: unexpected tokens following preprocessor directive - expected a newline
-     1>c:\users\jip\documents\school\c++1\eindopdracht\eindopdracht\room.h(9): warning C4067: unexpected tokens following preprocessor directive - expected a newline
-     1>c:\users\jip\documents\school\c++1\eindopdracht\eindopdracht\room.h(10): warning C4067: unexpected tokens following preprocessor directive - expected a newline
-     1>c:\users\jip\documents\school\c++1\eindopdracht\eindopdracht\room.h(11): warning C4067: unexpected tokens following preprocessor directive - expected a newline
-         Generating Code...
-       Link:
-         C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\Jip\Documents\School\C++1\Eindopdracht\Debug\Eindopdracht.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /Debug /PDB:"C:\Users\Jip\Documents\School\C++1\Eindopdracht\Debug\Eindopdracht.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\Jip\Documents\School\C++1\Eindopdracht\Debug\Eindopdracht.lib" /MACHINE:X86 Debug\Enemy.obj
+﻿Build started 26-10-2015 23:21:15.
+     1>Project "C:\Users\Jip\Documents\School\C++1\Text_Adventure\Eindopdracht\Eindopdracht\Eindopdracht.vcxproj" on node 2 (Build target(s)).
+     1>Link:
+         C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\Jip\Documents\School\C++1\Text_Adventure\Eindopdracht\Debug\Eindopdracht.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /Debug /PDB:"C:\Users\Jip\Documents\School\C++1\Text_Adventure\Eindopdracht\Debug\Eindopdracht.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\Jip\Documents\School\C++1\Text_Adventure\Eindopdracht\Debug\Eindopdracht.lib" /MACHINE:X86 Debug\Armour.obj
+         Debug\Enemy.obj
          Debug\Hero.obj
          Debug\Item.obj
          Debug\Main.obj
          Debug\Map.obj
          Debug\Room.obj
+         Debug\Shield.obj
          Debug\stdafx.obj
          Debug\Trap.obj
-         Eindopdracht.vcxproj -> C:\Users\Jip\Documents\School\C++1\Eindopdracht\Debug\Eindopdracht.exe
-     1>Done Building Project "C:\Users\Jip\Documents\School\C++1\Eindopdracht\Eindopdracht\Eindopdracht.vcxproj" (Build target(s)).
+         Debug\Weapon.obj
+         Eindopdracht.vcxproj -> C:\Users\Jip\Documents\School\C++1\Text_Adventure\Eindopdracht\Debug\Eindopdracht.exe
+     1>Done Building Project "C:\Users\Jip\Documents\School\C++1\Text_Adventure\Eindopdracht\Eindopdracht\Eindopdracht.vcxproj" (Build target(s)).
 
 Build succeeded.
 
-Time Elapsed 00:00:03.23
+Time Elapsed 00:00:00.86

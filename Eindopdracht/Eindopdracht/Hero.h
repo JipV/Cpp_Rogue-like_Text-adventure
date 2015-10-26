@@ -1,6 +1,9 @@
 #ifndef __HERO_H__
 #define __HERO_H__
 
+#include "Weapon.h";
+#include "Armour.h";
+#include "Shield.h";
 #include "Item.h";
 
 #include "string";
@@ -34,6 +37,10 @@ class Hero
 		int attack_;
 		int defense_;
 		int mindfulness_;
+
+		Weapon weapon_;
+		Armour armour_;
+		Shield shield_;
 
 		std::vector<Item> items_;
 };
