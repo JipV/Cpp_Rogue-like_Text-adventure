@@ -1,7 +1,7 @@
 #ifndef __TRAP_H__
 #define __TRAP_H__
 
-#include "string";
+#include "string"
 
 class Trap
 {

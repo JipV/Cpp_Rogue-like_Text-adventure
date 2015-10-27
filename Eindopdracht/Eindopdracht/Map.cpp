@@ -192,6 +192,19 @@ Room* Map::getRoom(int x, int y, int z)
 	return &rooms_[index(x, y, z)];
 }
 
+Room* Map::getStartLocation()
+{
+	for (int x = 0; x < xSize_; x++)
+	{
+		Room* room = getRoom(x, 0, 0);
+		if (room->getType() == Room::ROOM_TYPE::StartLocation)
+		{
+			return room;
+		}
+	}
+	return nullptr;
+}
+
 int Map::getSize()
 {
 	return xSize_ * ySize_ * zSize_;

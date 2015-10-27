@@ -1,13 +1,14 @@
 #ifndef __HERO_H__
 #define __HERO_H__
 
-#include "Weapon.h";
-#include "Armour.h";
-#include "Shield.h";
-#include "Item.h";
+#include "Room.h"
+#include "Weapon.h"
+#include "Armour.h"
+#include "Shield.h"
+#include "Item.h"
 
-#include "string";
-#include "vector";
+#include "string"
+#include "vector"
 
 class Hero
 {
@@ -26,6 +27,10 @@ class Hero
 		int getAttack();
 		int getDefense();
 		int getMindfulness();
+
+		Room* getCurrentRoom();
+		void setCurrentRoom(Room* room);
+
 		std::vector<Item> getItems();
 
 	private:
@@ -37,6 +42,8 @@ class Hero
 		int attack_;
 		int defense_;
 		int mindfulness_;
+
+		Room* currentRoom_;
 
 		Weapon weapon_;
 		Armour armour_;

@@ -1,14 +1,14 @@
 #ifndef __ROOM_H__
 #define __ROOM_H__
 
-#include "Room.h";
-#include "Enemy.h";
-#include "Item.h";
-#include "Trap.h";
+#include "Room.h"
+#include "Enemy.h"
+#include "Item.h"
+#include "Trap.h"
 
-#include "string";
-#include "map";
-#include "vector";
+#include "string"
+#include "map"
+#include "vector"
 
 class Room
 {

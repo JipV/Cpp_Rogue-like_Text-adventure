@@ -62,6 +62,16 @@ int Hero::getMindfulness()
 	return mindfulness_;
 }
 
+Room* Hero::getCurrentRoom()
+{
+	return currentRoom_;
+}
+
+void Hero::setCurrentRoom(Room* room)
+{
+	currentRoom_ = room;
+}
+
 std::vector<Item> Hero::getItems()
 {
 	return items_;

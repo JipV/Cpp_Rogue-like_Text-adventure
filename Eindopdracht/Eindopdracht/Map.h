@@ -17,6 +17,8 @@ class Map
 		void addRoom(Room* room, int x, int y, int z);
 		Room* getRoom(int x, int y, int z);
 
+		Room* getStartLocation();
+
 		int getSize();
 
 		int getXSize();

@@ -1,11 +1,11 @@
 #ifndef __ENEMY_H__
 #define __ENEMY_H__
 
-#include "Weapon.h";
-#include "Armour.h";
-#include "Shield.h";
+#include "Weapon.h"
+#include "Armour.h"
+#include "Shield.h"
 
-#include "string";
+#include "string"
 
 class Enemy
 {
