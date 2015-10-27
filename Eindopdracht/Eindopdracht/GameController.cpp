@@ -6,6 +6,7 @@
 
 GameController::GameController()
 {
+	isRunning_ = false;
 }
 
 GameController::~GameController()
@@ -26,56 +27,72 @@ void GameController::startGame()
 
 	std::cout << "\nDe game begint nu.\n";
 
-	std::cout << "\n" << hero_->getCurrentRoom()->getDescription() << "\n\n";
+	isRunning_ = true;
 
-	//map.showMap();
+	while (isRunning_) {
+		std::cout << "\n" << hero_->getCurrentRoom()->getDescription() << "\n";
 
+		std::cout << "\nWat doe je?\n";
+		std::cout << "[bekijk kaart]\n";
+
+		std::string action;
+		std::getline(std::cin, action);
+
+		while (action.compare("bekijk kaart") != 0) {
+			std::cout << "\nIngevoerde actie is niet herkent.\n";
+			std::cout << "[bekijk kaart]\n";
+			std::getline(std::cin, action);
+		}
+
+		if (action.compare("bekijk kaart") == 0) {
+			map_->showMap();
+		}
+	}
 	std::cin.get(); // Console blijft open
 }
 
 Map* GameController::createMap()
 {
-	/*int xSize;
+	std::string xSize;
 	std::cout << "Hoeveel kamers breed wil je de kerker is: ";
-	std::cin >> xSize;
+	std::getline(std::cin, xSize);
 
-	int ySize;
-	std::cout << "Hoeveel kamers lang wil je de kerker is: ";
-	std::cin >> ySize;
+	std::string ySize;
+	std::cout << "\nHoeveel kamers lang wil je de kerker is: ";
+	std::getline(std::cin, ySize);
 
-	int zSize;
-	std::cout << "Hoeveel verdiepingen wil je de kerker heeft: ";
-	std::cin >> zSize;
+	std::string zSize;
+	std::cout << "\nHoeveel verdiepingen wil je de kerker heeft: ";
+	std::getline(std::cin, zSize);
 
-	Map map = Map(xSize, ySize, zSize);*/
-
-	return new Map(10, 3, 3);
+	// ER MOET NOG WORDEN GECHECKT OF ER GELDIGE WAARDEN ZIJN INGEVOERD
+	return new Map(std::stoi(xSize), std::stoi(ySize), std::stoi(zSize));
 }
 
 Hero* GameController::createHero()
 {
-	std::cout << "Wil je spelen met een nieuwe held of met een eerder opgeslagen held?\n";
+	std::cout << "\nWil je spelen met een nieuwe held of met een eerder opgeslagen held?\n";
 	std::cout << "[new|load]\n";
 
 	std::string action;
-	std::cin >> action;
+	std::getline(std::cin, action);
 
 	while (action.compare("new") != 0 && action.compare("load") != 0) {
 		std::cout << "\nIngevoerde actie is niet herkent.\n";
 		std::cout << "[new|load]\n";
-		std::cin >> action;
+		std::getline(std::cin, action);
 	}
 
 	if (action.compare("new") == 0) {
 		std::cout << "\nWat is de naam van de nieuwe held?\n";
 		std::string name;
-		std::cin >> name;
+		std::getline(std::cin, name);
 
 		// ER MOET NOG GECHECKT WORDEN OF DE NAAM NIET AL BESTAAT IN VERBAND MET OPSLAAN
 		// ER MOET NOG GECHECHT WORDEN OF DE INGEVOERDE TEKENS GELDIG ZIJN
 		while (name.length() < 3) {
 			std::cout << "\nDe moet minstens drie tekens lang zijn.\nVoer opnieuw een naam in.\n";
-			std::cin >> name;
+			std::getline(std::cin, name);
 		}
 
 		return new Hero(name);
@@ -83,12 +100,12 @@ Hero* GameController::createHero()
 	else if (action.compare("load") == 0) {
 		std::cout << "\nWat is de naam van held?\n";
 		std::string name;
-		std::cin >> name;
+		std::getline(std::cin, name);
 
 		std::ifstream input_file(name + ".txt");
 		while (!input_file) {
 			std::cout << "\nEr is geen held met die naam.\nVoer opnieuw een naam in.\n";
-			std::cin >> name;
+			std::getline(std::cin, name);
 
 			input_file.open(name + ".txt");
 		}

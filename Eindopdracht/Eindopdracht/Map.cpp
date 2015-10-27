@@ -52,7 +52,7 @@ void Map::createMap() // ER WORDT NOG NIET VOOR GEZORGT DAT ALLE RUIMTES BEREIKB
 	// Maak trappen aan
 	for (int z = 1; z < zSize_; z++)
 	{
-		int randomNumberOfStairs = rand() % (xSize_ / 5) + 1;
+		int randomNumberOfStairs = rand() % (xSize_) + 1;
 
 		for (int i = 0; i < randomNumberOfStairs; i++)
 		{
@@ -107,7 +107,7 @@ void Map::createMap() // ER WORDT NOG NIET VOOR GEZORGT DAT ALLE RUIMTES BEREIKB
 
 void Map::showMap()
 {
-	std::cout << "Kerker kaart: \n";
+	std::cout << "\nKerker kaart: \n";
 
 	for (int z = 0; z < zSize_; z++)
 	{

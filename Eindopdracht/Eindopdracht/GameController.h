@@ -19,6 +19,8 @@ class GameController
 
 		Map* map_ = nullptr;
 		Hero* hero_ = nullptr;
+
+		bool isRunning_;
 };
 
 #endif
