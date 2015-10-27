@@ -37,7 +37,6 @@ void Map::createMap() // ER WORDT NOG NIET VOOR GEZORGT DAT ALLE RUIMTES BEREIKB
 			{
 				addRoom(new Room(), x, y, z);
 			}
-
 		}
 	}
 

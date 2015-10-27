@@ -14,7 +14,7 @@ class Hero
 {
 	public:
 
-		Hero();
+		Hero(std::string name);
 		~Hero();
 
 		void addItem(Item item);

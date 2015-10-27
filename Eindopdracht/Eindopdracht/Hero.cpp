@@ -1,8 +1,9 @@
 #include "stdafx.h"
 #include "Hero.h"
 
-Hero::Hero()
+Hero::Hero(std::string name)
 {
+	name_ = name;
 	items_ = std::vector<Item>();
 }
 

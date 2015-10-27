@@ -142,12 +142,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <Text Include="held1.txt" />
     <Text Include="ReadMe.txt" />
     <Text Include="room_options.txt" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Armour.h" />
     <ClInclude Include="Enemy.h" />
+    <ClInclude Include="GameController.h" />
     <ClInclude Include="Hero.h" />
     <ClInclude Include="Item.h" />
     <ClInclude Include="Map.h" />
@@ -161,6 +163,7 @@
   <ItemGroup>
     <ClCompile Include="Armour.cpp" />
     <ClCompile Include="Enemy.cpp" />
+    <ClCompile Include="GameController.cpp" />
     <ClCompile Include="Hero.cpp" />
     <ClCompile Include="Item.cpp" />
     <ClCompile Include="Main.cpp" />
