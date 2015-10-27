@@ -21,12 +21,24 @@ class Hero
 		void removeItem(Item item);
 
 		std::string getName();
+		
 		int getLevel();
+		void setLevel(int level);
+		
 		int getHP();
+		void setHP(int hp);
+		
 		int getXP();
+		void setXP(int xp);
+
 		int getAttack();
+		void setAttack(int attack);
+
 		int getDefense();
+		void setDefense(int defense);
+
 		int getMindfulness();
+		void setMindfulness(int mindfulness);
 
 		Room* getCurrentRoom();
 		void setCurrentRoom(Room* room);
