@@ -45,6 +45,11 @@ void Map::createMap() // ER WORDT NOG NIET VOOR GEZORGT DAT ALLE RUIMTES BEREIKB
 	int randomXPosition = rand() % xSize_;
 	getRoom(randomXPosition, 0, 0)->setType(Room::ROOM_TYPE::StartLocation);
 
+	// Locatie eindvijhand
+	randomXPosition = rand() % xSize_;
+	int randomYPosition = rand() % ySize_;
+	getRoom(randomXPosition, randomYPosition, zSize_ - 1)->setType(Room::ROOM_TYPE::EndEnemy);
+
 	// Maak trappen aan
 	for (int z = 1; z < zSize_; z++)
 	{
