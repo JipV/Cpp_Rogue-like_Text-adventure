@@ -1,0 +1,22 @@
+size:Je staat in een grote kamer
+size:Je staat in een middelgrote kamer
+size:Je staat in een kleine kamer
+floor:met een stenen vloer
+floor:met een houte vloer
+floor:met een oude krakende vloer
+decor:en in het midden staat een tafel. Om de tafel staan vier stoelen.
+decor:en in de hoek staat een bed.
+decor:en tegen de muur staat een grote kast.
+decor:en er staat geen meubels.
+chest:In de hoek staat een kist.
+chest:Er staan twee kisten in de kamer.
+chest:Er staan geen kisten in de kamer.
+tidy:Verder is de kamer schoon en netjes
+tidy:Verder is de kamer vies en rommelig
+tidy:Verder is de redelijk schoon en netjes
+lighting:en wordt verlicht met kaarsen.
+lighting:en wordt verlicht met fakkels.
+lighting:en wordt verlicht door een haardvuur.
+lighting:en wordt niet verlicht, waardoor het er donker is.
+atmosphere:De sfeer in de kamer is aangenaam.
+atmosphere:De sfeer in de kamer is niet prettig.
