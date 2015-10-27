@@ -11,8 +11,9 @@ int main()
 	Hero player = Hero();
 	player.setCurrentRoom(map.getStartLocation());
 
+	std::cout << player.getCurrentRoom()->getDescription() << "\n\n";
 
-	map.showMap();
+	//map.showMap();
 
 	std::cin.get(); // Console blijft open
 

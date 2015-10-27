@@ -22,25 +22,6 @@ class Room
 			EndEnemy
 		};
 
-		enum ROOM_SIZE {
-			Large,
-			Medium,
-			Small
-		};
-
-		enum ROOM_DECOR {
-			TableAndChairs,
-			Bed,
-			Empty
-		};
-
-		enum ROOM_LIGHTING {
-			Candle,
-			Torch,
-			Fire,
-			None
-		};
-
 		Room();
 		~Room();
 
@@ -61,10 +42,13 @@ class Room
 
 		ROOM_TYPE type_;
 
-		ROOM_SIZE size_;
-		bool isTidy_;
-		ROOM_DECOR decor_;
-		ROOM_LIGHTING lighting;
+		std::vector<std::string> sizeOptions_;
+		std::vector<std::string> floorOptions_;
+		std::vector<std::string> decorOptions_;
+		std::vector<std::string> chestOptions_;
+		std::vector<std::string> tidyOptions_;
+		std::vector<std::string> lightingOptions_;
+		std::vector<std::string> atmosphereOptions_;
 
 		std::string description_;
 

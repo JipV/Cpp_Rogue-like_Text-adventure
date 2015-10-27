@@ -26,7 +26,7 @@ Map::~Map()
 	rooms_ = nullptr;
 }
 
-void Map::createMap()
+void Map::createMap() // ER WORDT NOG NIET VOOR GEZORGT DAT ALLE RUIMTES BEREIKBAAR ZIJN
 {
 	// Maak kamers aan
 	for (int z = 0; z < zSize_; z++)
