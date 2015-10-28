@@ -17,6 +17,8 @@ class Hero
 		Hero(std::string name);
 		~Hero();
 
+		void goToNextRoom(Room* currentRoom);
+
 		void addItem(Item item);
 		void removeItem(Item item);
 

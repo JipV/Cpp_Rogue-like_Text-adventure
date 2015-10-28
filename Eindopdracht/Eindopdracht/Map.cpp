@@ -48,20 +48,21 @@ void Map::createMap() // ER WORDT NOG NIET VOOR GEZORGT DAT ALLE RUIMTES BEREIKB
 	randomXPosition = rand() % xSize_;
 	int randomYPosition = rand() % ySize_;
 	getRoom(randomXPosition, randomYPosition, zSize_ - 1)->setType(Room::ROOM_TYPE::EndEnemy);
+	// ER WORDT NOG EINDVIJHAND TOEGEVOEGD AAN DE KAMER
 
 	// Maak trappen aan
 	for (int z = 1; z < zSize_; z++)
 	{
 		int randomNumberOfStairs = rand() % (xSize_) + 1;
 
-		for (int i = 0; i < randomNumberOfStairs; i++)
+		for (int i = 0; i < randomNumberOfStairs; i++) // ER NOG VOOR WORDEN GEZORGD DAT ER EEN NORMAAL AANTAL TRAPPEN KUNNEN WORDEN TOEGEVOEGD (Nu kunnen het er in verhouding veel zijn)
 		{
 			int randomXPosition = rand() % xSize_;
 			Room* currentRoom = getRoom(randomXPosition, 0, z);
 			Room* roomUp = getRoom(randomXPosition, ySize_ - 1, z - 1);
 
-			currentRoom->addExit("UP", roomUp);
-			roomUp->addExit("DOWN", currentRoom);
+			currentRoom->addExit("boven", roomUp);
+			roomUp->addExit("beneden", currentRoom);
 
 			currentRoom->setType(Room::ROOM_TYPE::StairsUp);
 			roomUp->setType(Room::ROOM_TYPE::StairsDown);
@@ -83,8 +84,8 @@ void Map::createMap() // ER WORDT NOG NIET VOOR GEZORGT DAT ALLE RUIMTES BEREIKB
 
 					if (rand() % 2 == 1)
 					{
-						currentRoom->addExit("EAST", roomEast);
-						roomEast->addExit("WEST", currentRoom);
+						currentRoom->addExit("oost", roomEast);
+						roomEast->addExit("west", currentRoom);
 					}
 				}
 
@@ -94,8 +95,8 @@ void Map::createMap() // ER WORDT NOG NIET VOOR GEZORGT DAT ALLE RUIMTES BEREIKB
 
 					if (rand() % 2 == 1)
 					{
-						currentRoom->addExit("SOUTH", roomSouth);
-						roomSouth->addExit("NORTH", currentRoom);
+						currentRoom->addExit("zuid", roomSouth);
+						roomSouth->addExit("noord", currentRoom);
 					}
 				}
 			}
@@ -140,7 +141,7 @@ void Map::showMap()
 					}
 
 					// Teken uitgang van west naar oost
-					if (room->getExits().count("EAST"))
+					if (room->getExits().count("oost"))
 					{
 						std::cout << '-';
 					}
@@ -162,7 +163,7 @@ void Map::showMap()
 				Room* room = getRoom(x, y, z);
 				if (room->getIsVisited())
 				{
-					if (room->getExits().count("SOUTH"))
+					if (room->getExits().count("zuid"))
 					{
 						std::cout << "| ";
 					}

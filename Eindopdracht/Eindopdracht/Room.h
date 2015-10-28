@@ -25,6 +25,9 @@ class Room
 		Room();
 		~Room();
 
+		void showDescription();
+		void showExits();
+
 		void addExit(std::string name, Room* room);
 
 		bool getIsVisited();
@@ -33,7 +36,6 @@ class Room
 		ROOM_TYPE getType();
 		void setType(ROOM_TYPE type);
 
-		std::string getDescription();
 		std::map<std::string, Room*> getExits();
 
 	private:

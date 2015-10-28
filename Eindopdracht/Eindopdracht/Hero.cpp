@@ -1,6 +1,8 @@
 #include "stdafx.h"
 #include "Hero.h"
 
+#include "iostream"
+
 Hero::Hero(std::string name)
 {
 	name_ = name;
@@ -16,6 +18,50 @@ Hero::Hero(std::string name)
 
 Hero::~Hero()
 {
+}
+
+void Hero::goToNextRoom(Room* currentRoom)
+{
+	std::cout << "\nWelke richting?.\n";
+	std::cout << "[";
+
+	std::map<std::string, Room*> exits = currentRoom->getExits();
+	typedef std::map<std::string, Room*>::iterator it_type;
+	for (it_type iterator = exits.begin(); iterator != exits.end(); iterator++) {
+		std::cout << iterator->first;
+		if (iterator != --exits.end()) {
+			std::cout << " | ";
+		}
+	}
+
+	std::cout << "]\n";
+	std::cout << "\nRichting: ";
+	
+	std::string direction;
+	std::getline(std::cin, direction);
+
+	std::map<std::string, Room*>::iterator it = exits.find(direction);
+	while (it != exits.end()) {
+		std::cout << "\nIngevoerde richting is niet herkent. Voer opnieuw een richting in.\n";
+		std::cout << "[";
+
+		for (it_type iterator = exits.begin(); iterator != exits.end(); iterator++) {
+			std::cout << iterator->first;
+			if (iterator != --exits.end()) {
+				std::cout << " | ";
+			}
+		}
+
+		std::cout << "]\n";
+		std::cout << "\nRichting: ";
+
+		std::getline(std::cin, direction);
+		it = exits.find(direction);
+	}
+
+	currentRoom_ = exits.find(direction)->second;
+	currentRoom_->showDescription();
+	currentRoom_->showExits();
 }
 
 void Hero::addItem(Item item)
