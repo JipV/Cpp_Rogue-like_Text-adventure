@@ -191,17 +191,25 @@ void Map::showMap(Room* currentRoom)
 
 					// Teken uitgang van west naar oost
 					if (room->getExits().count("oost"))
-					{
 						std::cout << '-';
-					}
 					else
-					{
 						std::cout << ' ';
-					}
 				}
 				else
 				{
-					std::cout << ". ";
+					std::cout << ".";
+					
+					if (x < xSize_ - 1)
+					{
+						Room* eastRoom = getRoom(x + 1, y, z);
+						if (eastRoom->getIsVisited() &&
+							eastRoom->getExits().count("west"))
+							std::cout << '-';
+						else
+							std::cout << ' ';
+					}
+					else
+						std::cout << ' ';
 				}
 			}
 			std::cout << "\n";
@@ -213,13 +221,23 @@ void Map::showMap(Room* currentRoom)
 				if (room->getIsVisited())
 				{
 					if (room->getExits().count("zuid"))
-					{
 						std::cout << "| ";
+					else
+						std::cout << "  ";
+				}
+				else
+				{
+					if (y < ySize_-1)
+					{
+						Room* southRoom = getRoom(x, y + 1, z);
+						if (southRoom->getIsVisited() &&
+							southRoom->getExits().count("noord"))
+							std::cout << "| ";
+						else
+							std::cout << "  ";
 					}
 					else
-					{
 						std::cout << "  ";
-					}
 				}
 			}
 			std::cout << "\n";

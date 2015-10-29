@@ -41,7 +41,7 @@ Room::Room()
 	}
 	input_file.close();
 
-	isVisited_ = true;
+	isVisited_ = false;
 	type_ = NormalRoom;
 
 	description_ = "Beschrijving: ";

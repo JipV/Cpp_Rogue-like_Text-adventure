@@ -59,7 +59,7 @@ void Hero::goToNextRoom(Room* currentRoom)
 		it = exits.find(direction);
 	}
 
-	currentRoom_ = exits.find(direction)->second;
+	setCurrentRoom(exits.find(direction)->second);
 	currentRoom_->showDescription();
 	currentRoom_->showExits();
 }
@@ -154,6 +154,7 @@ Room* Hero::getCurrentRoom()
 void Hero::setCurrentRoom(Room* room)
 {
 	currentRoom_ = room;
+	room->setIsVisited(true);
 }
 
 std::vector<Item> Hero::getItems()
