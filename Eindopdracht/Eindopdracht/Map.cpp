@@ -3,15 +3,12 @@
 #include "Random.h"
 #include "Room.h"
 #include "Hero.h"
-
-Map::Map()
-	: xSize_{ 0 }, ySize_{ 0 }, zSize_{ 0 }, rooms_{ nullptr }
-{
-}
+#include "RoomGenerator.h"
 
 Map::Map(int xSize, int ySize, int zSize)
 	: xSize_{ xSize }, ySize_{ ySize }, zSize_{ zSize }, rooms_{ nullptr }
 {
+	roomGenerator_ = new RoomGenerator();
 	rooms_ = new Room*[getSize()]();
 	createMap();
 }
@@ -24,13 +21,13 @@ Map::~Map()
 
 	delete[] rooms_;
 	rooms_ = nullptr;
+
+	delete roomGenerator_;
+	roomGenerator_ = nullptr;
 }
 
 void Map::createMap()
 {
-	// Aantal rooms per verdieping
-	int numRooms = xSize_ * ySize_;
-
 	// Genereer een random startpositie
 	int x = Random::getRandomNumber(0, xSize_ - 1),
 	    y = Random::getRandomNumber(0, ySize_ - 1);
@@ -45,19 +42,21 @@ void Map::createMap()
 		// Eerste verdieping, start met een startlocation.
 		if (z == 0)
 		{
-			startLocation_ = new Room();
-			startLocation_->setType(Room::ROOM_TYPE::StartLocation);
+			roomGenerator_->setSpecialRoom(endX, endY, Room::ROOM_TYPE::StartLocation);
+
+			startLocation_ = roomGenerator_->createRoom(x, y);
 
 			addRoom(startLocation_, x, y, z);
 		}
 		// Niet de eerste verdieping, maak een stairs up
 		else
 		{
+			roomGenerator_->setSpecialRoom(endX, endY, Room::ROOM_TYPE::StairsUp);
+
 			x = endX;
 			y = endY;
 
-			Room* stairsUp = new Room();
-			stairsUp->setType(Room::ROOM_TYPE::StairsUp);
+			Room* stairsUp = roomGenerator_->createRoom(x, y);
 			addRoom(stairsUp, x, y, z);
 
 			Room* stairsDown = getRoom(x, y, z - 1);
@@ -74,13 +73,13 @@ void Map::createMap()
 			endY = Random::getRandomNumber(0, ySize_ - 1);
 		}
 
+		if (z < zSize_ - 1)
+			roomGenerator_->setSpecialRoom(endX, endY, Room::ROOM_TYPE::StairsDown);
+		else
+			roomGenerator_->setSpecialRoom(endX, endY, Room::ROOM_TYPE::EndEnemy);
+
 		// Genereer de maze voor deze verdieping
 		generateRoom(x, y, z);
-
-		if (z < zSize_-1)
-			getRoom(endX, endY, z)->setType(Room::ROOM_TYPE::StairsDown);
-		else
-			getRoom(endX, endY, z)->setType(Room::ROOM_TYPE::EndEnemy);
 	}
 }
 
@@ -91,7 +90,7 @@ void Map::generateRoom(int x, int y, int z)
 	Room* currentRoom = getRoom(x, y, z);
 	if (currentRoom == nullptr) // Start positie/stairs down is al geset.
 	{
-		currentRoom = new Room();
+		currentRoom = roomGenerator_->createRoom(x, y);
 		addRoom(currentRoom, x, y, z);
 	}
 

@@ -1,57 +1,8 @@
 #include "stdafx.h"
 #include "Room.h"
 
-#include "iostream"
-#include "fstream"
-#include "string"
-
-#include "Random.h"
-
-Room::Room()
+Room::Room(ROOM_TYPE type, std::string description) : isVisited_(true), type_(type), description_(description)
 {
-	std::string line;
-	std::ifstream input_file("room_options.txt");
-	if (input_file) {
-		while (getline(input_file, line)) {
-			std::string optionName = line.substr(0, line.find(":"));
-			std::string option = line.substr(line.find(":") + 1, line.length());
-
-			if (optionName.compare("size") == 0) {
-				sizeOptions_.push_back(option);
-			}
-			else if (optionName.compare("floor") == 0) {
-				floorOptions_.push_back(option);
-			}
-			else if (optionName.compare("decor") == 0) {
-				decorOptions_.push_back(option);
-			}
-			else if (optionName.compare("chest") == 0) {
-				chestOptions_.push_back(option);
-			}
-			else if (optionName.compare("tidy") == 0) {
-				tidyOptions_.push_back(option);
-			}
-			else if (optionName.compare("lighting") == 0) {
-				lightingOptions_.push_back(option);
-			}
-			else if (optionName.compare("atmosphere") == 0) {
-				atmosphereOptions_.push_back(option);
-			}
-		}
-	}
-	input_file.close();
-
-	isVisited_ = false;
-	type_ = NormalRoom;
-
-	description_ = "Beschrijving: ";
-	description_ += sizeOptions_.at(Random::getRandomNumber(0, sizeOptions_.size() - 1)) + " ";
-	description_ += floorOptions_.at(Random::getRandomNumber(0, floorOptions_.size() - 1)) + " ";
-	description_ += decorOptions_.at(Random::getRandomNumber(0, decorOptions_.size() - 1)) + " ";
-	description_ += chestOptions_.at(Random::getRandomNumber(0, chestOptions_.size() - 1)) + " ";
-	description_ += tidyOptions_.at(Random::getRandomNumber(0, tidyOptions_.size() - 1)) + " ";
-	description_ += lightingOptions_.at(Random::getRandomNumber(0, lightingOptions_.size() - 1)) + " ";
-	description_ += atmosphereOptions_.at(Random::getRandomNumber(0, atmosphereOptions_.size() - 1)) + " ";
 }
 
 Room::~Room()
@@ -67,7 +18,7 @@ void Room::showExits()
 {
 	std::cout << "\nUitgangen: ";
 	typedef std::map<std::string, Room*>::iterator it_type;
-	for (it_type iterator = exits_.begin(); iterator != exits_.end(); iterator++) {
+	for (it_type iterator = exits_.begin(); iterator != exits_.end(); ++iterator) {
 		std::cout << iterator->first;
 		if (iterator != --exits_.end()) {
 			std::cout << ", ";
@@ -78,13 +29,21 @@ void Room::showExits()
 
 void Room::getActions(std::vector<std::string>* actions)
 {
-	// Nog geen
+	actions->push_back("kijk rond");
 }
 
 bool Room::handleAction(std::vector<std::string> action)
 {
 	std::string command = action[0];
 
+	if (command == "kijk" &&
+		action.size() == 2 &&
+		action[1] == "rond")
+	{
+		showDescription();
+		showExits();
+		return true;
+	}
 	
 	return false;
 }

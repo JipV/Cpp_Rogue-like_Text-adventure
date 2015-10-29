@@ -149,6 +149,8 @@ void Hero::setMindfulness(int mindfulness)
 void Hero::getActions(std::vector<std::string>* actions)
 {
 	actions->push_back("loop [richting]");
+
+	currentRoom_->getActions(actions);
 }
 
 

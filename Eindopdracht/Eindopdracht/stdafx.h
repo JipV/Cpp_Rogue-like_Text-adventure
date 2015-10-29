@@ -21,5 +21,6 @@
 #include <random>
 #include <stack>
 #include <array>
+#include <map>
 
 // TODO: reference additional headers your program requires here
