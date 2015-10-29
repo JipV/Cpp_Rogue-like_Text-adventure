@@ -28,7 +28,11 @@ class Room
 		void showDescription();
 		void showExits();
 
+		void getActions(std::vector<std::string>* actions);
+		bool handleAction(std::vector<std::string> action);
+
 		void addExit(std::string name, Room* room);
+		Room* getExit(std::string name);
 
 		bool getIsVisited();
 		void setIsVisited(bool isVisited);

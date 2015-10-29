@@ -1,7 +1,8 @@
 #ifndef __MAP_H__
 #define __MAP_H__
 
-#include "Room.h"
+class Room;
+class Hero;
 
 class Map
 {
@@ -13,6 +14,9 @@ class Map
 		
 		void createMap();
 		void showMap(Room* currentRoom);
+
+		void getActions(std::vector<std::string>* actions);
+		bool handleAction(std::vector<std::string> action, Hero* hero);
 
 		void addRoom(Room* room, int x, int y, int z);
 		Room* getRoom(int x, int y, int z);

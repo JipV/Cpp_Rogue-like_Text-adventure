@@ -1,7 +1,8 @@
 #include "stdafx.h"
 #include "Map.h"
 #include "Random.h"
-#include <array>
+#include "Room.h"
+#include "Hero.h"
 
 Map::Map()
 	: xSize_{ 0 }, ySize_{ 0 }, zSize_{ 0 }, rooms_{ nullptr }
@@ -252,6 +253,24 @@ void Map::showMap(Room* currentRoom)
 	std::cout << "L  : Trap omlaag \n";
 	std::cout << "H  : Trap omhoog \n";
 	std::cout << ".  : Niet bezocht \n";
+}
+
+void Map::getActions(std::vector<std::string>* actions)
+{
+	actions->push_back("kaart");
+}
+
+bool Map::handleAction(std::vector<std::string> action, Hero* hero)
+{
+	std::string command = action[0];
+
+	if (command == "kaart")
+	{
+		showMap(hero->getCurrentRoom());
+		return true;
+	}
+
+	return false;
 }
 
 void Map::addRoom(Room* room, int x, int y, int z)
