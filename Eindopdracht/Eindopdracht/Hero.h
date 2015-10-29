@@ -42,6 +42,9 @@ class Hero
 		int getMindfulness();
 		void setMindfulness(int mindfulness);
 
+		void getActions(std::vector<std::string>* actions);
+		bool handleAction(std::vector<std::string> action);
+
 		Room* getCurrentRoom();
 		void setCurrentRoom(Room* room);
 

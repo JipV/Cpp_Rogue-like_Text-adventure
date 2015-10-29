@@ -76,9 +76,31 @@ void Room::showExits()
 	std::cout << "\n";
 }
 
+void Room::getActions(std::vector<std::string>* actions)
+{
+	// Nog geen
+}
+
+bool Room::handleAction(std::vector<std::string> action)
+{
+	std::string command = action[0];
+
+	
+	return false;
+}
+
 void Room::addExit(std::string name, Room* room)
 {
 	exits_[name] = room;
+}
+
+Room* Room::getExit(std::string name)
+{
+	if (exits_.count(name))
+	{
+		return exits_[name];
+	}
+	return nullptr;
 }
 
 bool Room::getIsVisited()

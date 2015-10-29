@@ -146,6 +146,30 @@ void Hero::setMindfulness(int mindfulness)
 	mindfulness_ = mindfulness;
 }
 
+void Hero::getActions(std::vector<std::string>* actions)
+{
+	actions->push_back("loop [richting]");
+}
+
+
+bool Hero::handleAction(std::vector<std::string> action)
+{
+	std::string command = action[0];
+
+	if (command == "loop" && action.size() == 2)
+	{
+		Room* newRoom = currentRoom_->getExit(action[1]);
+
+		if (newRoom != nullptr)
+		{
+			setCurrentRoom(newRoom);
+			return true;
+		}
+	}
+
+	return currentRoom_->handleAction(action);
+}
+
 Room* Hero::getCurrentRoom()
 {
 	return currentRoom_;
@@ -154,6 +178,8 @@ Room* Hero::getCurrentRoom()
 void Hero::setCurrentRoom(Room* room)
 {
 	currentRoom_ = room;
+	currentRoom_->showDescription();
+	currentRoom_->showExits();
 	room->setIsVisited(true);
 }
 
