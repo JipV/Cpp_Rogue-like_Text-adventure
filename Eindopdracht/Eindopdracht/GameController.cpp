@@ -1,26 +1,18 @@
 #include "stdafx.h"
 #include "GameController.h"
 
-#include "iostream"
-#include "fstream"
-
-#include "random"
-
 GameController::GameController()
 {
-	std::random_device dev;
-	std::default_random_engine dre{ dev() };
-
 	isRunning_ = false;
 }
 
 GameController::~GameController()
 {
 	delete map_;
-	Map* map_ = nullptr;
+	map_ = nullptr;
 
 	delete hero_;
-	Hero* hero_ = nullptr;
+	hero_ = nullptr;
 }
 
 void GameController::startGame()

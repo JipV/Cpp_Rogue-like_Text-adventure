@@ -11,11 +11,15 @@
 #include <tchar.h>
 
 #include <iostream>
+#include <fstream>
 #include <string>
 
 #include <stdlib.h>
 #include <time.h>
 #include <windows.h>
+
+#include <random>
+#include <stack>
 
 
 // TODO: reference additional headers your program requires here
