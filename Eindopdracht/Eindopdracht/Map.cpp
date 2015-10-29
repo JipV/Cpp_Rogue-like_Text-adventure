@@ -1,13 +1,6 @@
 #include "stdafx.h"
 #include "Map.h"
 
-#include "iostream"
-#include "string"
-
-#include "stdlib.h"
-#include "time.h"
-#include "windows.h"
-
 Map::Map()
 	: xSize_{ 0 }, ySize_{ 0 }, zSize_{ 0 }, rooms_{ nullptr }
 {
