@@ -11,28 +11,20 @@ class Enemy
 {
 	public:
 
-		enum ENEMY_TYPE {
-			Rat,
-			Wolf,
-			Human,
-			Zombie
-		};
-
-		enum ENEMY_SIZE {
-			Normal,
-			Big
-		};
-
-		Enemy();
+		Enemy(std::string type, std::string size, int level, int hp, int attack, int defense, int chanceHeroEscapes);
 		~Enemy();
+
+		std::string getType();
 
 	private:
 
-		ENEMY_TYPE type_;
-		ENEMY_SIZE size;
-		bool chases;
+		std::string type_;
+		std::string size_;
 		int level_;
 		int hp_;
+		int attack_;
+		int defense_;
+		int chanceHeroEscapes_;
 
 		Weapon weapon_;
 		Armour armour_;

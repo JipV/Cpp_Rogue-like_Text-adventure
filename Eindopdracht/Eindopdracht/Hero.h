@@ -17,7 +17,12 @@ class Hero
 		Hero(std::string name);
 		~Hero();
 
-		void goToNextRoom(Room* currentRoom);
+		bool goToRoom(std::string direction);
+		void fight();
+		bool flee(std::string direction);
+		void search();
+		void rest();
+		void viewItems();
 
 		void addItem(Item item);
 		void removeItem(Item item);

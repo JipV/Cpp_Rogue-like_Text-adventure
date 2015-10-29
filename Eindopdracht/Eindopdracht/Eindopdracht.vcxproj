@@ -142,6 +142,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <Text Include="enemy_options.txt" />
     <Text Include="held1.txt" />
     <Text Include="ReadMe.txt" />
     <Text Include="room_options.txt" />

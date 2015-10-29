@@ -3,10 +3,21 @@
 
 Room::Room(ROOM_TYPE type, std::string description) : isVisited_(true), type_(type), description_(description)
 {
+	enemies_ = new std::vector<Enemy*>();
+	items_ = new std::vector<Item*>();
+	traps_ = new std::vector<Trap*>();
 }
 
 Room::~Room()
 {
+	delete enemies_;
+	enemies_ = nullptr;
+
+	delete items_;
+	items_ = nullptr;
+
+	delete traps_;
+	traps_ = nullptr;
 }
 
 void Room::showDescription()
@@ -21,6 +32,19 @@ void Room::showExits()
 	for (it_type iterator = exits_.begin(); iterator != exits_.end(); ++iterator) {
 		std::cout << iterator->first;
 		if (iterator != --exits_.end()) {
+			std::cout << ", ";
+		}
+	}
+	std::cout << "\n";
+}
+
+
+void Room::showEnemies()
+{
+	std::cout << "\nVijhanden: ";
+	for (int i = 0; i < enemies_->size(); i++) {
+		std::cout << enemies_->at(i)->getType();
+		if (i != enemies_->size() - 1) {
 			std::cout << ", ";
 		}
 	}
@@ -51,6 +75,12 @@ bool Room::handleAction(std::vector<std::string> action)
 void Room::addExit(std::string name, Room* room)
 {
 	exits_[name] = room;
+}
+
+
+void Room::addEnemy(Enemy* enemy)
+{
+	enemies_->push_back(enemy);
 }
 
 Room* Room::getExit(std::string name)

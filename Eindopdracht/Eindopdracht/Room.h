@@ -24,12 +24,15 @@ class Room
 
 		void showDescription();
 		void showExits();
+		void showEnemies();
 
 		void getActions(std::vector<std::string>* actions);
 		bool handleAction(std::vector<std::string> action);
 
 		void addExit(std::string name, Room* room);
 		Room* getExit(std::string name);
+		
+		void addEnemy(Enemy* enemy);
 
 		bool getIsVisited();
 		void setIsVisited(bool isVisited);
@@ -49,9 +52,9 @@ class Room
 
 		std::map<std::string, Room*> exits_;
 
-		std::vector<Enemy> enemies_;
-		std::vector<Item> items_;
-		std::vector<Trap> traps_;
+		std::vector<Enemy*>* enemies_ = nullptr;
+		std::vector<Item*>* items_ = nullptr;
+		std::vector<Trap*>* traps_ = nullptr;
 };
 
 #endif
