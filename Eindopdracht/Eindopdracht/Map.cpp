@@ -114,7 +114,7 @@ void Map::createMap()
 }
 
 // Iets andere manier van een map genereren.
-void Map::createMap2()
+/*void Map::createMap2()
 {
 	// Aantal rooms per verdieping
 	int numRooms = xSize_ * ySize_;
@@ -187,7 +187,7 @@ void Map::generateRoom(int x, int y, int z)
 		else if (currentExit == "zuid")
 			y--;
 	}
-}
+}*/
 
 
 void Map::showMap(Room* currentRoom)

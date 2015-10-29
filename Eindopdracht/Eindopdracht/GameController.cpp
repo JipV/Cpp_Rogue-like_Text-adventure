@@ -55,19 +55,19 @@ void GameController::startGame()
 			hero_->goToNextRoom(hero_->getCurrentRoom());
 		}
 		else if(action.compare("vecht") == 0) {
-			// vecht
+			hero_->fight();
 		}
 		else if (action.compare("vlucht") == 0) {
-			// vlucht
+			hero_->flee(hero_->getCurrentRoom());
 		}
 		else if (action.compare("zoek") == 0) {
-			// zoek
+			hero_->search();
 		}
 		else if (action.compare("rust uit") == 0) {
-			// rust uit
+			hero_->rest();
 		}
 		else if (action.compare("bekijk spullen") == 0) {
-			// bekijk spullen
+			hero_->viewItems();
 		}
 		else if (action.compare("bekijk kaart") == 0) {
 			map_->showMap(hero_->getCurrentRoom());

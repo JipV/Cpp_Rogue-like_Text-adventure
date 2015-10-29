@@ -18,6 +18,11 @@ class Hero
 		~Hero();
 
 		void goToNextRoom(Room* currentRoom);
+		void fight();
+		void flee(Room* currentRoom);
+		void search();
+		void rest();
+		void viewItems();
 
 		void addItem(Item item);
 		void removeItem(Item item);

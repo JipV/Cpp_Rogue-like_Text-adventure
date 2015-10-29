@@ -64,6 +64,33 @@ void Hero::goToNextRoom(Room* currentRoom)
 	currentRoom_->showExits();
 }
 
+void Hero::fight()
+{
+	//VECHT
+}
+
+void Hero::flee(Room* currentRoom)
+{
+	goToNextRoom(currentRoom);
+
+	// EVENTUEEL VIJANDEN DIE ACHTERVOLGEN
+}
+
+void Hero::search()
+{
+	//ZOEK
+}
+
+void Hero::rest()
+{
+	//RUST UIT
+}
+
+void Hero::viewItems()
+{
+	//BEKIJK ITEMS
+}
+
 void Hero::addItem(Item item)
 {
 	items_.push_back(item);
