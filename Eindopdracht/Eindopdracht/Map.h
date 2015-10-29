@@ -12,7 +12,6 @@ class Map
 		~Map();
 		
 		void createMap();
-		void createMap2();
 		void showMap(Room* currentRoom);
 
 		void addRoom(Room* room, int x, int y, int z);
@@ -28,12 +27,13 @@ class Map
 	
 	private:
 		void generateRoom(int x, int y, int z);
+		bool isNull(int x, int y, int z);
 
 		int xSize_;
 		int ySize_;
 		int zSize_;
 
-		Room* rooms_ = nullptr;
+		Room** rooms_ = nullptr;
 		Room* startLocation_ = nullptr;
 
 		int index(int x, int y, int z);
