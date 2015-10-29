@@ -42,7 +42,7 @@ void Room::showExits()
 void Room::showEnemies()
 {
 	std::cout << "\nVijhanden: ";
-	for (int i = 0; i < enemies_->size(); i++) {
+	for (size_t i = 0; i < enemies_->size(); i++) {
 		std::cout << enemies_->at(i)->getType();
 		if (i != enemies_->size() - 1) {
 			std::cout << ", ";

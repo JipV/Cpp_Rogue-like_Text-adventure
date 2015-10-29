@@ -1,8 +1,6 @@
 #ifndef __TRAP_H__
 #define __TRAP_H__
 
-#include "string"
-
 class Trap
 {
 	public:

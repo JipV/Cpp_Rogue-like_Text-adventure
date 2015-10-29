@@ -1,7 +1,6 @@
 #include "stdafx.h"
 #include "Hero.h"
-
-#include "iostream"
+#include "Room.h"
 
 Hero::Hero(std::string name)
 {

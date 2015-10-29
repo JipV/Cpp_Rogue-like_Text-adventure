@@ -1,9 +1,7 @@
 #include "stdafx.h"
 #include "GameController.h"
+#include "Room.h"
 #include "Enemy.h"
-
-#include "vector"
-
 #include "Random.h"
 
 GameController::GameController()

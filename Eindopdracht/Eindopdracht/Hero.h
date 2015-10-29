@@ -1,14 +1,12 @@
 #ifndef __HERO_H__
 #define __HERO_H__
 
-#include "Room.h"
+class Room;
+
 #include "Weapon.h"
 #include "Armour.h"
 #include "Shield.h"
 #include "Item.h"
-
-#include "string"
-#include "vector"
 
 class Hero
 {

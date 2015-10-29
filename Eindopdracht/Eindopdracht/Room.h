@@ -1,7 +1,6 @@
 #ifndef __ROOM_H__
 #define __ROOM_H__
 
-#include "Room.h"
 #include "Enemy.h"
 #include "Item.h"
 #include "Trap.h"
