@@ -22,7 +22,7 @@ Hero::~Hero()
 
 void Hero::goToNextRoom(Room* currentRoom)
 {
-	std::cout << "\nWelke richting?.\n";
+	std::cout << "\nWelke richting?\n";
 	std::cout << "[";
 
 	std::map<std::string, Room*> exits = currentRoom->getExits();
@@ -41,7 +41,7 @@ void Hero::goToNextRoom(Room* currentRoom)
 	std::getline(std::cin, direction);
 
 	std::map<std::string, Room*>::iterator it = exits.find(direction);
-	while (it != exits.end()) {
+	while (it == exits.end()) {
 		std::cout << "\nIngevoerde richting is niet herkent. Voer opnieuw een richting in.\n";
 		std::cout << "[";
 

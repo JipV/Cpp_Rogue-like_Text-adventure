@@ -4,8 +4,13 @@
 #include "iostream"
 #include "fstream"
 
+#include "random"
+
 GameController::GameController()
 {
+	std::random_device dev;
+	std::default_random_engine dre{ dev() };
+
 	isRunning_ = false;
 }
 
@@ -73,7 +78,7 @@ void GameController::startGame()
 			// bekijk spullen
 		}
 		else if (action.compare("bekijk kaart") == 0) {
-			map_->showMap();
+			map_->showMap(hero_->getCurrentRoom());
 		}
 	}
 }

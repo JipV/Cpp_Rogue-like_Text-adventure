@@ -12,7 +12,7 @@ class Map
 		~Map();
 		
 		void createMap();
-		void showMap();
+		void showMap(Room* currentRoom);
 
 		void addRoom(Room* room, int x, int y, int z);
 		Room* getRoom(int x, int y, int z);

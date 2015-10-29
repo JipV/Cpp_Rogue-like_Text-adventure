@@ -3,8 +3,10 @@
 
 #include "iostream"
 #include "string"
+
 #include "stdlib.h"
 #include "time.h"
+#include "windows.h"
 
 Map::Map()
 	: xSize_{ 0 }, ySize_{ 0 }, zSize_{ 0 }, rooms_{ nullptr }
@@ -26,7 +28,9 @@ Map::~Map()
 	rooms_ = nullptr;
 }
 
-void Map::createMap() // ER WORDT NOG NIET VOOR GEZORGT DAT ALLE RUIMTES BEREIKBAAR ZIJN
+// DE KAMERS WORDEN NOG NIET GOED GELINKT
+// ER WORDT NOG NIET VOOR GEZORGT DAT ALLE RUIMTES BEREIKBAAR ZIJN
+void Map::createMap() 
 {
 	// Maak kamers aan
 	for (int z = 0; z < zSize_; z++)
@@ -106,7 +110,7 @@ void Map::createMap() // ER WORDT NOG NIET VOOR GEZORGT DAT ALLE RUIMTES BEREIKB
 
 }
 
-void Map::showMap()
+void Map::showMap(Room* currentRoom)
 {
 	std::cout << "\nKerker kaart: \n";
 
@@ -118,6 +122,11 @@ void Map::showMap()
 			for (int x = 0; x < xSize_; x++)
 			{
 				Room* room = getRoom(x, y, z);
+
+				if (room == currentRoom) {
+					SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 2);
+				}
+
 				if (room->getIsVisited())
 				{
 					// Teken kamer
@@ -139,6 +148,8 @@ void Map::showMap()
 							std::cout << 'E';
 							break;
 					}
+
+					SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 15);
 
 					// Teken uitgang van west naar oost
 					if (room->getExits().count("oost"))
