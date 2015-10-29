@@ -62,6 +62,7 @@ void Hero::goToNextRoom(Room* currentRoom)
 	currentRoom_ = exits.find(direction)->second;
 	currentRoom_->showDescription();
 	currentRoom_->showExits();
+	currentRoom_->showEnemies();
 }
 
 void Hero::fight()

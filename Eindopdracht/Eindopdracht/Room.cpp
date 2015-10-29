@@ -9,6 +9,10 @@
 
 Room::Room()
 {
+	enemies_ = new std::vector<Enemy*>();
+	items_ = new std::vector<Item*>();
+	traps_ = new std::vector<Trap*>();
+
 	std::string line;
 	std::ifstream input_file("room_options.txt");
 	if (input_file) {
@@ -45,17 +49,25 @@ Room::Room()
 	type_ = NormalRoom;
 
 	description_ = "Beschrijving: ";
-	description_ += sizeOptions_.at(Random::getRandomNumber(0, sizeOptions_.size() - 1)) + " ";
-	description_ += floorOptions_.at(Random::getRandomNumber(0, floorOptions_.size() - 1)) + " ";
-	description_ += decorOptions_.at(Random::getRandomNumber(0, decorOptions_.size() - 1)) + " ";
-	description_ += chestOptions_.at(Random::getRandomNumber(0, chestOptions_.size() - 1)) + " ";
-	description_ += tidyOptions_.at(Random::getRandomNumber(0, tidyOptions_.size() - 1)) + " ";
-	description_ += lightingOptions_.at(Random::getRandomNumber(0, lightingOptions_.size() - 1)) + " ";
-	description_ += atmosphereOptions_.at(Random::getRandomNumber(0, atmosphereOptions_.size() - 1)) + " ";
+	description_ += sizeOptions_.at(Random::getRandomNumber(0, (int)sizeOptions_.size() - 1)) + " ";
+	description_ += floorOptions_.at(Random::getRandomNumber(0, (int)floorOptions_.size() - 1)) + " ";
+	description_ += decorOptions_.at(Random::getRandomNumber(0, (int)decorOptions_.size() - 1)) + " ";
+	description_ += chestOptions_.at(Random::getRandomNumber(0, (int)chestOptions_.size() - 1)) + " ";
+	description_ += tidyOptions_.at(Random::getRandomNumber(0, (int)tidyOptions_.size() - 1)) + " ";
+	description_ += lightingOptions_.at(Random::getRandomNumber(0, (int)lightingOptions_.size() - 1)) + " ";
+	description_ += atmosphereOptions_.at(Random::getRandomNumber(0, (int)atmosphereOptions_.size() - 1)) + " ";
 }
 
 Room::~Room()
 {
+	delete enemies_;
+	enemies_ = nullptr;
+
+	delete items_;
+	items_ = nullptr;
+
+	delete traps_;
+	traps_ = nullptr;
 }
 
 void Room::showDescription()
@@ -76,9 +88,26 @@ void Room::showExits()
 	std::cout << "\n";
 }
 
+void Room::showEnemies()
+{
+	std::cout << "\nVijhanden: ";
+	for (int i = 0; i < enemies_->size(); i++) {
+		std::cout << enemies_->at(i)->getType();
+		/*if (i != enemies_->size() - 1) {
+			std::cout << ", ";
+		}*/
+	}
+	std::cout << "\n";
+}
+
 void Room::addExit(std::string name, Room* room)
 {
 	exits_[name] = room;
+}
+
+void Room::addEnemy(Enemy* enemy)
+{
+	enemies_->push_back(enemy);
 }
 
 bool Room::getIsVisited()

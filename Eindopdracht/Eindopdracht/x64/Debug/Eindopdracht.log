@@ -1,8 +1,8 @@
-﻿Build started 29-10-2015 14:43:15.
+﻿Build started 29-10-2015 21:15:50.
      1>Project "C:\Users\Jip\Documents\School\C++1\Text_Adventure\Eindopdracht\Eindopdracht\Eindopdracht.vcxproj" on node 2 (Build target(s)).
      1>ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\x86_amd64\CL.exe /c /ZI /nologo /W3 /WX- /sdl /Od /D _DEBUG /D _CONSOLE /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Yu"stdafx.h" /Fp"x64\Debug\Eindopdracht.pch" /Fo"x64\Debug\\" /Fd"x64\Debug\vc140.pdb" /Gd /TP /errorReport:prompt Hero.cpp
-         Hero.cpp
+         C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\x86_amd64\CL.exe /c /ZI /nologo /W3 /WX- /sdl /Od /D _DEBUG /D _CONSOLE /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Yu"stdafx.h" /Fp"x64\Debug\Eindopdracht.pch" /Fo"x64\Debug\\" /Fd"x64\Debug\vc140.pdb" /Gd /TP /errorReport:prompt GameController.cpp
+         GameController.cpp
        Link:
          C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\x86_amd64\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\Jip\Documents\School\C++1\Text_Adventure\Eindopdracht\x64\Debug\Eindopdracht.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /Debug /PDB:"C:\Users\Jip\Documents\School\C++1\Text_Adventure\Eindopdracht\x64\Debug\Eindopdracht.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\Jip\Documents\School\C++1\Text_Adventure\Eindopdracht\x64\Debug\Eindopdracht.lib" /MACHINE:X64 x64\Debug\Armour.obj
          x64\Debug\Enemy.obj
@@ -22,4 +22,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:08.75
+Time Elapsed 00:00:01.16
