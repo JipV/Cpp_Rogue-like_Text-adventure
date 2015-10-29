@@ -5,8 +5,6 @@
 #include "Armour.h"
 #include "Shield.h"
 
-#include "string"
-
 class Enemy
 {
 	public:
