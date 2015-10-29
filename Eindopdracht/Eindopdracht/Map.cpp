@@ -1,124 +1,33 @@
 #include "stdafx.h"
 #include "Map.h"
 #include "Random.h"
-
-Map::Map()
-	: xSize_{ 0 }, ySize_{ 0 }, zSize_{ 0 }, rooms_{ nullptr }
-{
-}
+#include "Room.h"
+#include "Hero.h"
+#include "RoomGenerator.h"
 
 Map::Map(int xSize, int ySize, int zSize)
 	: xSize_{ xSize }, ySize_{ ySize }, zSize_{ zSize }, rooms_{ nullptr }
 {
-	rooms_ = new Room[getSize()];
+	roomGenerator_ = new RoomGenerator();
+	rooms_ = new Room*[getSize()]();
 	createMap();
 }
 
 Map::~Map()
 {
+	// rooms_ is een array van pointers, eerst moet dus alle inhoud verwijderd worden. delete[] rooms_; is niet genoeg.
+	for (int i = 0; i < index(xSize_ - 1, ySize_ - 1, zSize_ - 1); i++)
+		delete rooms_[i];
+
 	delete[] rooms_;
 	rooms_ = nullptr;
+
+	delete roomGenerator_;
+	roomGenerator_ = nullptr;
 }
 
-// DE KAMERS WORDEN NOG NIET GOED GELINKT
-// ER WORDT NOG NIET VOOR GEZORGT DAT ALLE RUIMTES BEREIKBAAR ZIJN
 void Map::createMap()
 {
-	// Maak kamers aan
-	for (int z = 0; z < zSize_; z++)
-	{
-		for (int y = 0; y < ySize_; y++)
-		{
-			for (int x = 0; x < xSize_; x++)
-			{
-				addRoom(new Room(), x, y, z);
-			}
-		}
-	}
-
-	// Start locatie
-	startLocation_ = getRoom(Random::getRandomNumber(0, xSize_ - 1),
-		Random::getRandomNumber(0, ySize_ - 1),
-		0);
-	startLocation_->setType(Room::ROOM_TYPE::StartLocation);
-
-	// Locatie eindvijhand
-	getRoom(Random::getRandomNumber(0, xSize_ - 1),
-		Random::getRandomNumber(0, ySize_ - 1),
-		zSize_ - 1)
-		->setType(Room::ROOM_TYPE::EndEnemy);
-	// ER WORDT NOG EINDVIJHAND TOEGEVOEGD AAN DE KAMER
-
-	// Maak trappen aan
-	for (int z = 1; z < zSize_; z++)
-	{
-		int randomXPosition = Random::getRandomNumber(0, xSize_ - 1);
-		int randomYPosition = Random::getRandomNumber(0, ySize_ - 1);
-		Room* currentRoom = getRoom(randomXPosition, randomYPosition, z);
-		Room* roomUp = getRoom(randomXPosition, randomYPosition, z - 1);
-
-		// Alleen normale rooms kunnen een trap worden, alleen start/end room bestaan nu dus als het goed is zijn er genoeg kamers vrij om een trap te worden
-		while (currentRoom->getType() != Room::ROOM_TYPE::NormalRoom ||
-			roomUp->getType() != Room::ROOM_TYPE::NormalRoom)
-		{
-			randomXPosition = Random::getRandomNumber(0, xSize_ - 1);
-			randomYPosition = Random::getRandomNumber(0, ySize_ - 1);
-			currentRoom = getRoom(randomXPosition, randomYPosition, z);
-			roomUp = getRoom(randomXPosition, randomYPosition, z - 1);
-		}
-
-		currentRoom->addExit("boven", roomUp);
-		roomUp->addExit("beneden", currentRoom);
-
-		currentRoom->setType(Room::ROOM_TYPE::StairsUp);
-		roomUp->setType(Room::ROOM_TYPE::StairsDown);
-	}
-
-	// Maak gangen aan
-	for (int z = 0; z < zSize_; z++)
-	{
-		for (int y = 0; y < ySize_; y++)
-		{
-			for (int x = 0; x < xSize_; x++)
-			{
-				Room* currentRoom = getRoom(x, y, z);
-
-				// Gangen naar oost en west
-				if (x + 1 < xSize_) {
-					Room* roomEast = getRoom(x + 1, y, z);
-
-					//if (rand() % 2 == 1)
-					if (Random::getRandomNumber(0, 1) == 1)
-					{
-						currentRoom->addExit("oost", roomEast);
-						roomEast->addExit("west", currentRoom);
-					}
-				}
-
-				// Gangen naar noord en zuid
-				if (y + 1 < ySize_) {
-					Room* roomSouth = getRoom(x + 1, y, z);
-
-					//if (rand() % 2 == 1)
-					if (Random::getRandomNumber(0, 1) == 1)
-					{
-						currentRoom->addExit("zuid", roomSouth);
-						roomSouth->addExit("noord", currentRoom);
-					}
-				}
-			}
-
-		}
-	}
-
-}
-
-// Iets andere manier van een map genereren.
-/*void Map::createMap2()
-{
-	// Aantal rooms per verdieping
-	int numRooms = xSize_ * ySize_;
-
 	// Genereer een random startpositie
 	int x = Random::getRandomNumber(0, xSize_ - 1),
 	    y = Random::getRandomNumber(0, ySize_ - 1);
@@ -131,22 +40,29 @@ void Map::createMap()
 	for (int z = 0; z < getZSize(); z++)
 	{
 		// Eerste verdieping, start met een startlocation.
-		if (startLocation_ == nullptr)
+		if (z == 0)
 		{
-			startLocation_ = new Room();
-			startLocation_->setType(Room::ROOM_TYPE::StartLocation);
+			roomGenerator_->setSpecialRoom(endX, endY, Room::ROOM_TYPE::StartLocation);
+
+			startLocation_ = roomGenerator_->createRoom(x, y);
 
 			addRoom(startLocation_, x, y, z);
 		}
 		// Niet de eerste verdieping, maak een stairs up
 		else
 		{
+			roomGenerator_->setSpecialRoom(endX, endY, Room::ROOM_TYPE::StairsUp);
+
 			x = endX;
 			y = endY;
 
-			Room* stairsUp = new Room();
-			stairsUp->setType(Room::ROOM_TYPE::StairsUp);
+			Room* stairsUp = roomGenerator_->createRoom(x, y);
 			addRoom(stairsUp, x, y, z);
+
+			Room* stairsDown = getRoom(x, y, z - 1);
+
+			stairsUp->addExit("omhoog", stairsDown);
+			stairsDown->addExit("omlaag", stairsUp);
 		}
 
 		// Genereer random eindpositie die niet gelijk is aan de startpositie
@@ -157,37 +73,79 @@ void Map::createMap()
 			endY = Random::getRandomNumber(0, ySize_ - 1);
 		}
 
-		// Genereer de maze
+		if (z < zSize_ - 1)
+			roomGenerator_->setSpecialRoom(endX, endY, Room::ROOM_TYPE::StairsDown);
+		else
+			roomGenerator_->setSpecialRoom(endX, endY, Room::ROOM_TYPE::EndEnemy);
 
+		// Genereer de maze voor deze verdieping
+		generateRoom(x, y, z);
 	}
 }
 
+// Genereert een kamer en probeert kamers er rondomheen te genereren. 
+// Dit is een aangepast Depth-first-search algoritme
 void Map::generateRoom(int x, int y, int z)
 {
 	Room* currentRoom = getRoom(x, y, z);
 	if (currentRoom == nullptr) // Start positie/stairs down is al geset.
 	{
-		currentRoom = new Room();
+		currentRoom = roomGenerator_->createRoom(x, y);
 		addRoom(currentRoom, x, y, z);
 	}
 
-	std::string* possibleExits = new std::string[]{ "noord", "oost", "zuid", "west" };
+	std::array<std::string, 4> possibleExits = { "noord", "oost", "zuid", "west" };
 
 	for (int i = 3; i >= 0; i--)
 	{
 		// Kies een random exit om te verwerken
 		int exitToCheck = Random::getRandomNumber(0, i);
 		std::string currentExit = possibleExits[exitToCheck];
+		std::string oppositeExit = "";
 
 		// Zet de huidige exit op zijn plek. De huidige plek word niet meer gebruikt.
 		possibleExits[exitToCheck] = possibleExits[i];
 
+		int newX = x,
+			newY = y;
+
+		// Bereken nieuwe coordinaten en exit van de nieuwe room
 		if (currentExit == "noord")
-			y++;
+		{
+			newY--;
+			oppositeExit = "zuid";
+		}
 		else if (currentExit == "zuid")
-			y--;
+		{
+			oppositeExit = "noord";
+			newY++;
+		}
+		else if (currentExit == "oost")
+		{
+			oppositeExit = "west";
+			newX++;
+		}
+		else if (currentExit == "west")
+		{
+			oppositeExit = "oost";
+			newX--;
+		}
+
+		// Als de coordinaten geldig zijn, genereer een nieuwe kamer. 
+		if (newX >= 0 &&
+			newX < xSize_ &&
+			newY >= 0 &&
+			newY < ySize_ &&
+			isNull(newX, newY, z))
+		{
+			generateRoom(newX, newY, z); // Recursieve call om een nieuwe room te genereren
+			Room* newRoom = getRoom(newX, newY, z);
+
+			currentRoom->addExit(currentExit, newRoom);
+			newRoom->addExit(oppositeExit, currentRoom);
+		}
 	}
-}*/
+}
 
 
 void Map::showMap(Room* currentRoom)
@@ -233,17 +191,25 @@ void Map::showMap(Room* currentRoom)
 
 					// Teken uitgang van west naar oost
 					if (room->getExits().count("oost"))
-					{
 						std::cout << '-';
-					}
 					else
-					{
 						std::cout << ' ';
-					}
 				}
 				else
 				{
-					std::cout << ". ";
+					std::cout << ".";
+					
+					if (x < xSize_ - 1)
+					{
+						Room* eastRoom = getRoom(x + 1, y, z);
+						if (eastRoom->getIsVisited() &&
+							eastRoom->getExits().count("west"))
+							std::cout << '-';
+						else
+							std::cout << ' ';
+					}
+					else
+						std::cout << ' ';
 				}
 			}
 			std::cout << "\n";
@@ -255,13 +221,23 @@ void Map::showMap(Room* currentRoom)
 				if (room->getIsVisited())
 				{
 					if (room->getExits().count("zuid"))
-					{
 						std::cout << "| ";
+					else
+						std::cout << "  ";
+				}
+				else
+				{
+					if (y < ySize_-1)
+					{
+						Room* southRoom = getRoom(x, y + 1, z);
+						if (southRoom->getIsVisited() &&
+							southRoom->getExits().count("noord"))
+							std::cout << "| ";
+						else
+							std::cout << "  ";
 					}
 					else
-					{
 						std::cout << "  ";
-					}
 				}
 			}
 			std::cout << "\n";
@@ -278,29 +254,44 @@ void Map::showMap(Room* currentRoom)
 	std::cout << ".  : Niet bezocht \n";
 }
 
+void Map::getActions(std::vector<std::string>* actions)
+{
+	actions->push_back("kaart");
+}
+
+bool Map::handleAction(std::vector<std::string> action, Hero* hero)
+{
+	std::string command = action[0];
+
+	if (command == "kaart")
+	{
+		showMap(hero->getCurrentRoom());
+		return true;
+	}
+
+	return false;
+}
+
 void Map::addRoom(Room* room, int x, int y, int z)
 {
-	rooms_[index(x, y, z)] = *room;
+	rooms_[index(x, y, z)] = room;
+}
+
+bool Map::isNull(int x, int y, int z)
+{
+	Room* room = rooms_[index(x, y, z)];
+	bool result = rooms_[index(x, y, z)] == nullptr;
+	return result;
 }
 
 Room* Map::getRoom(int x, int y, int z)
 {
-	return &rooms_[index(x, y, z)];
+	return &*rooms_[index(x, y, z)];
 }
 
 Room* Map::getStartLocation()
 {
 	return startLocation_;
-
-	for (int x = 0; x < xSize_; x++)
-	{
-		Room* room = getRoom(x, 0, 0);
-		if (room->getType() == Room::ROOM_TYPE::StartLocation)
-		{
-			return room;
-		}
-	}
-	return nullptr;
 }
 
 int Map::getSize()

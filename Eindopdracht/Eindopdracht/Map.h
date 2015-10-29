@@ -1,42 +1,46 @@
 #ifndef __MAP_H__
 #define __MAP_H__
 
-#include "Room.h"
+class Room;
+class RoomGenerator;
+class Hero;
 
 class Map
 {
-	public:
+public:
+	Map(int xSize, int ySize, int zSize);
+	~Map();
 
-		Map();
-		Map(int xSize, int ySize, int zSize);
-		~Map();
-		
-		void createMap();
-		void createMap2();
-		void showMap(Room* currentRoom);
+	void createMap();
+	void showMap(Room* currentRoom);
 
-		void addRoom(Room* room, int x, int y, int z);
-		Room* getRoom(int x, int y, int z);
+	void getActions(std::vector<std::string>* actions);
+	bool handleAction(std::vector<std::string> action, Hero* hero);
 
-		Room* getStartLocation();
+	void addRoom(Room* room, int x, int y, int z);
+	Room* getRoom(int x, int y, int z);
 
-		int getSize();
+	Room* getStartLocation();
 
-		int getXSize();
-		int getYSize();
-		int getZSize();
-	
-	private:
-		void generateRoom(int x, int y, int z);
+	int getSize();
 
-		int xSize_;
-		int ySize_;
-		int zSize_;
+	int getXSize();
+	int getYSize();
+	int getZSize();
 
-		Room* rooms_ = nullptr;
-		Room* startLocation_ = nullptr;
+private:
+	int xSize_;
+	int ySize_;
+	int zSize_;
 
-		int index(int x, int y, int z);
+	Room** rooms_ = nullptr;
+	Room* startLocation_ = nullptr;
+
+	RoomGenerator* roomGenerator_;
+
+	int index(int x, int y, int z);
+	void generateRoom(int x, int y, int z);
+	bool isNull(int x, int y, int z);
 };
 
 #endif

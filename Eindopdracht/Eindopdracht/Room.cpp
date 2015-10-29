@@ -1,61 +1,11 @@
 #include "stdafx.h"
 #include "Room.h"
 
-#include "iostream"
-#include "fstream"
-#include "string"
-
-#include "Random.h"
-
-Room::Room()
+Room::Room(ROOM_TYPE type, std::string description) : isVisited_(true), type_(type), description_(description)
 {
 	enemies_ = new std::vector<Enemy*>();
 	items_ = new std::vector<Item*>();
 	traps_ = new std::vector<Trap*>();
-
-	std::string line;
-	std::ifstream input_file("room_options.txt");
-	if (input_file) {
-		while (getline(input_file, line)) {
-			std::string optionName = line.substr(0, line.find(":"));
-			std::string option = line.substr(line.find(":") + 1, line.length());
-
-			if (optionName.compare("size") == 0) {
-				sizeOptions_.push_back(option);
-			}
-			else if (optionName.compare("floor") == 0) {
-				floorOptions_.push_back(option);
-			}
-			else if (optionName.compare("decor") == 0) {
-				decorOptions_.push_back(option);
-			}
-			else if (optionName.compare("chest") == 0) {
-				chestOptions_.push_back(option);
-			}
-			else if (optionName.compare("tidy") == 0) {
-				tidyOptions_.push_back(option);
-			}
-			else if (optionName.compare("lighting") == 0) {
-				lightingOptions_.push_back(option);
-			}
-			else if (optionName.compare("atmosphere") == 0) {
-				atmosphereOptions_.push_back(option);
-			}
-		}
-	}
-	input_file.close();
-
-	isVisited_ = true;
-	type_ = NormalRoom;
-
-	description_ = "Beschrijving: ";
-	description_ += sizeOptions_.at(Random::getRandomNumber(0, (int)sizeOptions_.size() - 1)) + " ";
-	description_ += floorOptions_.at(Random::getRandomNumber(0, (int)floorOptions_.size() - 1)) + " ";
-	description_ += decorOptions_.at(Random::getRandomNumber(0, (int)decorOptions_.size() - 1)) + " ";
-	description_ += chestOptions_.at(Random::getRandomNumber(0, (int)chestOptions_.size() - 1)) + " ";
-	description_ += tidyOptions_.at(Random::getRandomNumber(0, (int)tidyOptions_.size() - 1)) + " ";
-	description_ += lightingOptions_.at(Random::getRandomNumber(0, (int)lightingOptions_.size() - 1)) + " ";
-	description_ += atmosphereOptions_.at(Random::getRandomNumber(0, (int)atmosphereOptions_.size() - 1)) + " ";
 }
 
 Room::~Room()
@@ -79,7 +29,7 @@ void Room::showExits()
 {
 	std::cout << "\nUitgangen: ";
 	typedef std::map<std::string, Room*>::iterator it_type;
-	for (it_type iterator = exits_.begin(); iterator != exits_.end(); iterator++) {
+	for (it_type iterator = exits_.begin(); iterator != exits_.end(); ++iterator) {
 		std::cout << iterator->first;
 		if (iterator != --exits_.end()) {
 			std::cout << ", ";
@@ -87,6 +37,7 @@ void Room::showExits()
 	}
 	std::cout << "\n";
 }
+
 
 void Room::showEnemies()
 {
@@ -100,14 +51,45 @@ void Room::showEnemies()
 	std::cout << "\n";
 }
 
+void Room::getActions(std::vector<std::string>* actions)
+{
+	actions->push_back("kijk rond");
+}
+
+bool Room::handleAction(std::vector<std::string> action)
+{
+	std::string command = action[0];
+
+	if (command == "kijk" &&
+		action.size() == 2 &&
+		action[1] == "rond")
+	{
+		showDescription();
+		showExits();
+		return true;
+	}
+	
+	return false;
+}
+
 void Room::addExit(std::string name, Room* room)
 {
 	exits_[name] = room;
 }
 
+
 void Room::addEnemy(Enemy* enemy)
 {
 	enemies_->push_back(enemy);
+}
+
+Room* Room::getExit(std::string name)
+{
+	if (exits_.count(name))
+	{
+		return exits_[name];
+	}
+	return nullptr;
 }
 
 bool Room::getIsVisited()

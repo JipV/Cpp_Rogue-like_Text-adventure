@@ -17,9 +17,9 @@ class Hero
 		Hero(std::string name);
 		~Hero();
 
-		void goToNextRoom(Room* currentRoom);
+		bool goToRoom(std::string direction);
 		void fight();
-		void flee(Room* currentRoom);
+		bool flee(std::string direction);
 		void search();
 		void rest();
 		void viewItems();
@@ -46,6 +46,9 @@ class Hero
 
 		int getMindfulness();
 		void setMindfulness(int mindfulness);
+
+		void getActions(std::vector<std::string>* actions);
+		bool handleAction(std::vector<std::string> action);
 
 		Room* getCurrentRoom();
 		void setCurrentRoom(Room* room);

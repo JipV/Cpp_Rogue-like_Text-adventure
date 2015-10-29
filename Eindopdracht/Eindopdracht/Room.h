@@ -6,10 +6,6 @@
 #include "Item.h"
 #include "Trap.h"
 
-#include "string"
-#include "map"
-#include "vector"
-
 class Room
 {
 	public:
@@ -23,13 +19,18 @@ class Room
 		};
 
 		Room();
+		Room(ROOM_TYPE type, std::string description);
 		~Room();
 
 		void showDescription();
 		void showExits();
 		void showEnemies();
 
+		void getActions(std::vector<std::string>* actions);
+		bool handleAction(std::vector<std::string> action);
+
 		void addExit(std::string name, Room* room);
+		Room* getExit(std::string name);
 		
 		void addEnemy(Enemy* enemy);
 
@@ -46,14 +47,6 @@ class Room
 		bool isVisited_;
 
 		ROOM_TYPE type_;
-
-		std::vector<std::string> sizeOptions_;
-		std::vector<std::string> floorOptions_;
-		std::vector<std::string> decorOptions_;
-		std::vector<std::string> chestOptions_;
-		std::vector<std::string> tidyOptions_;
-		std::vector<std::string> lightingOptions_;
-		std::vector<std::string> atmosphereOptions_;
 
 		std::string description_;
 

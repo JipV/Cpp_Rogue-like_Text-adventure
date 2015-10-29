@@ -9,17 +9,18 @@
 
 #include <stdio.h>
 #include <tchar.h>
-
-#include <iostream>
-#include <fstream>
-#include <string>
-
 #include <stdlib.h>
 #include <time.h>
 #include <windows.h>
 
+#include <iostream>
+#include <fstream>
+#include <sstream>
+#include <string>
+#include <iterator>
 #include <random>
 #include <stack>
-
+#include <array>
+#include <map>
 
 // TODO: reference additional headers your program requires here

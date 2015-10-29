@@ -20,49 +20,17 @@ Hero::~Hero()
 {
 }
 
-void Hero::goToNextRoom(Room* currentRoom)
+bool Hero::goToRoom(std::string direction)
 {
-	std::cout << "\nWelke richting?\n";
-	std::cout << "[";
+	Room* newRoom = currentRoom_->getExit(direction);
 
-	std::map<std::string, Room*> exits = currentRoom->getExits();
-	typedef std::map<std::string, Room*>::iterator it_type;
-	for (it_type iterator = exits.begin(); iterator != exits.end(); iterator++) {
-		std::cout << iterator->first;
-		if (iterator != --exits.end()) {
-			std::cout << " | ";
-		}
+	if (newRoom != nullptr)
+	{
+		setCurrentRoom(newRoom);
+		return true;
 	}
 
-	std::cout << "]\n";
-	std::cout << "\nRichting: ";
-	
-	std::string direction;
-	std::getline(std::cin, direction);
-
-	std::map<std::string, Room*>::iterator it = exits.find(direction);
-	while (it == exits.end()) {
-		std::cout << "\nIngevoerde richting is niet herkent. Voer opnieuw een richting in.\n";
-		std::cout << "[";
-
-		for (it_type iterator = exits.begin(); iterator != exits.end(); iterator++) {
-			std::cout << iterator->first;
-			if (iterator != --exits.end()) {
-				std::cout << " | ";
-			}
-		}
-
-		std::cout << "]\n";
-		std::cout << "\nRichting: ";
-
-		std::getline(std::cin, direction);
-		it = exits.find(direction);
-	}
-
-	currentRoom_ = exits.find(direction)->second;
-	currentRoom_->showDescription();
-	currentRoom_->showExits();
-	currentRoom_->showEnemies();
+	return false;
 }
 
 void Hero::fight()
@@ -70,11 +38,19 @@ void Hero::fight()
 	//VECHT
 }
 
-void Hero::flee(Room* currentRoom)
+bool Hero::flee(std::string direction)
 {
-	goToNextRoom(currentRoom);
+	// TODO: kans op vluchten/achtervolgd worden
 
-	// EVENTUEEL VIJANDEN DIE ACHTERVOLGEN
+	Room* newRoom = currentRoom_->getExit(direction);
+
+	if (newRoom != nullptr)
+	{
+		setCurrentRoom(newRoom);
+		return true;
+	}
+
+	return false;
 }
 
 void Hero::search()
@@ -174,6 +150,31 @@ void Hero::setMindfulness(int mindfulness)
 	mindfulness_ = mindfulness;
 }
 
+void Hero::getActions(std::vector<std::string>* actions)
+{
+	actions->push_back("loop [richting]");
+	actions->push_back("vlucht [richting]");
+
+	currentRoom_->getActions(actions);
+}
+
+
+bool Hero::handleAction(std::vector<std::string> action)
+{
+	std::string command = action[0];
+
+	if (command == "loop" && action.size() == 2)
+	{
+		return goToRoom(action[1]);
+	}
+	if (command == "vlucht" && action.size() == 2)
+	{
+		return flee(action[1]);
+	}
+
+	return currentRoom_->handleAction(action);
+}
+
 Room* Hero::getCurrentRoom()
 {
 	return currentRoom_;
@@ -182,6 +183,10 @@ Room* Hero::getCurrentRoom()
 void Hero::setCurrentRoom(Room* room)
 {
 	currentRoom_ = room;
+	currentRoom_->showDescription();
+	currentRoom_->showExits();
+	currentRoom_->showEnemies();
+	room->setIsVisited(true);
 }
 
 std::vector<Item> Hero::getItems()

@@ -63,57 +63,46 @@ void GameController::startGame()
 	hero_ = createHero();
 	createEnemies();
 
-	hero_->setCurrentRoom(map_->getStartLocation());
-
 	std::cout << "\nDe game begint nu.\n";
 
-	hero_->getCurrentRoom()->showDescription();
-	hero_->getCurrentRoom()->showExits();
-	hero_->getCurrentRoom()->showEnemies();
+	hero_->setCurrentRoom(map_->getStartLocation());
 
 	isRunning_ = true;
 	while (isRunning_) {
+		std::vector<std::string>* actions = new std::vector<std::string>();
+		hero_->getActions(actions);
+		map_->getActions(actions);
 
-		std::cout << "\nWat doe je?\n";
-		std::cout << "[loop verder | vecht | vlucht | zoek | rust uit | bekijk spullen | bekijk kaart]\n";
+		std::cout << "\nWat doe je?\n( ";
+		for (auto iterator = actions->begin(); iterator != actions->end(); ++iterator) {
+			std::cout << *iterator;
+			if (iterator != --actions->end()) {
+				std::cout << " | ";
+			}
+		}
+		std::cout << " )\n";
+
+		delete actions;
+
 		std::cout << "\nActie: ";
 
 		std::string action;
 		std::getline(std::cin, action);
 
-		while (	action.compare("loop verder") != 0 &&
-				action.compare("vecht") != 0 &&
-				action.compare("vlucht") != 0 &&
-				action.compare("zoek") != 0 &&
-				action.compare("rust uit") != 0 &&
-				action.compare("bekijk spullen") != 0 &&
-				action.compare("bekijk kaart") != 0) {
-			std::cout << "\nIngevoerde actie is niet herkent. Voer opnieuw een actie in.\n";
-			std::cout << "[loop verder | vecht | vlucht | zoek | rust uit | bekijk spullen | bekijk kaart]\n";
-			std::cout << "\nActie: ";
-			std::getline(std::cin, action);
+		std::vector<std::string> elems;
+		std::stringstream ss(action);
+		std::string item;
+		while (std::getline(ss, item, ' ')) {
+			elems.push_back(item);
 		}
 
-		if (action.compare("loop verder") == 0) {
-			hero_->goToNextRoom(hero_->getCurrentRoom());
-		}
-		else if(action.compare("vecht") == 0) {
-			hero_->fight();
-		}
-		else if (action.compare("vlucht") == 0) {
-			hero_->flee(hero_->getCurrentRoom());
-		}
-		else if (action.compare("zoek") == 0) {
-			hero_->search();
-		}
-		else if (action.compare("rust uit") == 0) {
-			hero_->rest();
-		}
-		else if (action.compare("bekijk spullen") == 0) {
-			hero_->viewItems();
-		}
-		else if (action.compare("bekijk kaart") == 0) {
-			map_->showMap(hero_->getCurrentRoom());
+		if (elems.size() >= 1)
+		{	// We kunnen geen lege acties afhandelen
+			if (!(hero_->handleAction(elems) ||
+				map_->handleAction(elems, hero_)))
+			{
+				std::cout << "actie \"" << action << "\" is niet geldig." << std::endl;
+			}
 		}
 	}
 }
