@@ -1,14 +1,14 @@
 monsters:rat,3,3,3,1
-monsters:scorpion,3,5,3,1
+monsters:schorpioen ,3,5,3,1
 monsters:wolf,5,7,5,1
-monsters:elephant,7,7,5,3
+monsters:olifant,7,7,5,3
 monsters:zombie,7,5,5,2
-monsters:human,10,10,7,1
+monsters:mens,10,10,7,1
 monsters:goblin,10,7,10,2
 monsters:gladiator,13,13,10,2
-bosses:giant,20,15,10,2
-bosses:dragon,20,13,15,1
+bosses:reus,20,15,10,2
+bosses:draak,20,13,15,1
 bosses:dino,20,10,13,3
-sizes:big,1,2,2,1
-sizes:normal,0,0,0,0
-sizes:small,-1,-2,-2,-1
+sizes:groot,1,2,2,1
+sizes:normaal,0,0,0,0
+sizes:klein,-1,-2,-2,-1

@@ -93,9 +93,9 @@ void Room::showEnemies()
 	std::cout << "\nVijhanden: ";
 	for (int i = 0; i < enemies_->size(); i++) {
 		std::cout << enemies_->at(i)->getType();
-		/*if (i != enemies_->size() - 1) {
+		if (i != enemies_->size() - 1) {
 			std::cout << ", ";
-		}*/
+		}
 	}
 	std::cout << "\n";
 }
