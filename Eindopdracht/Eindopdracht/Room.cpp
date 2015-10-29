@@ -4,6 +4,7 @@
 #include "iostream"
 #include "fstream"
 #include "string"
+
 #include "stdlib.h"
 #include "time.h"
 
@@ -60,6 +61,24 @@ Room::~Room()
 {
 }
 
+void Room::showDescription()
+{
+	std::cout << "\n" << description_ << "\n";
+}
+
+void Room::showExits()
+{
+	std::cout << "\nUitgangen: ";
+	typedef std::map<std::string, Room*>::iterator it_type;
+	for (it_type iterator = exits_.begin(); iterator != exits_.end(); iterator++) {
+		std::cout << iterator->first;
+		if (iterator != --exits_.end()) {
+			std::cout << ", ";
+		}
+	}
+	std::cout << "\n";
+}
+
 void Room::addExit(std::string name, Room* room)
 {
 	exits_[name] = room;
@@ -83,11 +102,6 @@ Room::ROOM_TYPE Room::getType()
 void Room::setType(ROOM_TYPE type)
 {
 	type_ = type;
-}
-
-std::string Room::getDescription()
-{
-	return description_;
 }
 
 std::map<std::string, Room*> Room::getExits()
