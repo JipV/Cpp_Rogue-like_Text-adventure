@@ -4,9 +4,9 @@
 #include "iostream"
 #include "string"
 
-#include "stdlib.h"
-#include "time.h"
 #include "windows.h"
+
+#include "Random.h"
 
 Map::Map()
 	: xSize_{ 0 }, ySize_{ 0 }, zSize_{ 0 }, rooms_{ nullptr }
@@ -17,8 +17,6 @@ Map::Map(int xSize, int ySize, int zSize)
 	: xSize_{ xSize }, ySize_{ ySize }, zSize_{ zSize }, rooms_{ nullptr }
 {
 	rooms_ = new Room[getSize()];
-
-	srand(time(NULL));
 	createMap();
 }
 
@@ -45,23 +43,27 @@ void Map::createMap()
 	}
 
 	// Start locatie
-	int randomXPosition = rand() % xSize_;
-	getRoom(randomXPosition, 0, 0)->setType(Room::ROOM_TYPE::StartLocation);
+	//int randomXPosition = rand() % xSize_;
+	//getRoom(randomXPosition, 0, 0)->setType(Room::ROOM_TYPE::StartLocation);
+	getRoom(Random::getRandomNumber(0, xSize_ - 1), 0, 0)->setType(Room::ROOM_TYPE::StartLocation);
 
 	// Locatie eindvijhand
-	randomXPosition = rand() % xSize_;
-	int randomYPosition = rand() % ySize_;
-	getRoom(randomXPosition, randomYPosition, zSize_ - 1)->setType(Room::ROOM_TYPE::EndEnemy);
+	//randomXPosition = rand() % xSize_;
+	//int randomYPosition = rand() % ySize_;
+	//getRoom(randomXPosition, randomYPosition, zSize_ - 1)->setType(Room::ROOM_TYPE::EndEnemy);
+	getRoom(Random::getRandomNumber(0, xSize_ - 1), Random::getRandomNumber(0, ySize_ - 1), zSize_ - 1)->setType(Room::ROOM_TYPE::EndEnemy);
 	// ER WORDT NOG EINDVIJHAND TOEGEVOEGD AAN DE KAMER
 
 	// Maak trappen aan
 	for (int z = 1; z < zSize_; z++)
 	{
-		int randomNumberOfStairs = rand() % (xSize_) + 1;
+		//int randomNumberOfStairs = rand() % (xSize_) + 1;
+		int randomNumberOfStairs = Random::getRandomNumber(0, xSize_);
 
 		for (int i = 0; i < randomNumberOfStairs; i++) // ER NOG VOOR WORDEN GEZORGD DAT ER EEN NORMAAL AANTAL TRAPPEN KUNNEN WORDEN TOEGEVOEGD (Nu kunnen het er in verhouding veel zijn)
 		{
-			int randomXPosition = rand() % xSize_;
+			//int randomXPosition = rand() % xSize_;
+			int randomXPosition = Random::getRandomNumber(0, xSize_);
 			Room* currentRoom = getRoom(randomXPosition, 0, z);
 			Room* roomUp = getRoom(randomXPosition, ySize_ - 1, z - 1);
 
@@ -86,7 +88,8 @@ void Map::createMap()
 				if (x + 1 < xSize_) {
 					Room* roomEast = getRoom(x + 1, y, z);
 
-					if (rand() % 2 == 1)
+					//if (rand() % 2 == 1)
+					if (Random::getRandomNumber(0, 1) == 1)
 					{
 						currentRoom->addExit("oost", roomEast);
 						roomEast->addExit("west", currentRoom);
@@ -97,7 +100,8 @@ void Map::createMap()
 				if (y + 1 < ySize_) {
 					Room* roomSouth = getRoom(x + 1, y, z);
 
-					if (rand() % 2 == 1)
+					//if (rand() % 2 == 1)
+					if (Random::getRandomNumber(0, 1) == 1)
 					{
 						currentRoom->addExit("zuid", roomSouth);
 						roomSouth->addExit("noord", currentRoom);
