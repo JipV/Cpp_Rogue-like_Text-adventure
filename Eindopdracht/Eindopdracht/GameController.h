@@ -6,21 +6,20 @@ class Hero;
 
 class GameController
 {
-	public:
+public:
+	GameController();
+	~GameController();
 
-		GameController();
-		~GameController();
+	void startGame();
 
-		void startGame();
-		Map* createMap();
-		Hero* createHero();
+private:
+	Map* map_ = nullptr;
+	Hero* hero_ = nullptr;
 
-	private:
+	bool isRunning_;
 
-		Map* map_ = nullptr;
-		Hero* hero_ = nullptr;
-
-		bool isRunning_;
+	Map* createMap();
+	Hero* createHero();
 };
 
 #endif
