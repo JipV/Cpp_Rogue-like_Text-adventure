@@ -156,10 +156,13 @@ void Hero::getActions(std::vector<std::string>* actions)
 	currentRoom_->getActions(actions);
 }
 
-
-bool Hero::handleAction(std::vector<std::string> action)
+bool Hero::handleAction(std::string fullCommand, std::vector<std::string> action)
 {
 	std::string command = action[0];
+
+	// Deze moet voor hero handle actions, gezien de acties onderbroken kunnen worden door traps
+	if (currentRoom_->handleAction(fullCommand, action))
+		return true;
 
 	if (command == "loop" && action.size() == 2)
 	{
@@ -176,7 +179,7 @@ bool Hero::handleAction(std::vector<std::string> action)
 		return false;
 	}
 
-	return currentRoom_->handleAction(action);
+	return false;
 }
 
 Room* Hero::getCurrentRoom()

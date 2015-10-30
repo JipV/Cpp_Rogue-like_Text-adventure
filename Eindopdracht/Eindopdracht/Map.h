@@ -14,7 +14,7 @@ public:
 	void showMap(Room* currentRoom);
 
 	void getActions(std::vector<std::string>* actions);
-	bool handleAction(std::vector<std::string> action, Hero* hero);
+	bool handleAction(std::string fullCommand, Hero* hero);
 
 	Room* getRoom(int x, int y, int z);
 	Room* getStartLocation();

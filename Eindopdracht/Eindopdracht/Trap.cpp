@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "Enemy.h"
 #include "Trap.h"
+#include "Random.h"
 
 // ReSharper disable once CppPossiblyUninitializedMember
 Trap::Trap() : triggered_(false),
@@ -12,7 +13,7 @@ damageOverTimeTurns_(0),
 roomDescription_(""),
 damageOverTimeMessage_(""),
 damageOverTimeDone_(""),
-triggerCommands_({ "any" })
+triggerCommands_({})
 {
 
 }
@@ -44,4 +45,31 @@ Trap::~Trap()
 	});
 
 	enemiesToSummon_.clear();
+}
+
+bool Trap::handleAction(std::string fullCommand, std::vector<std::string> action)
+{
+	if (triggered_)
+		return false;
+
+	if (triggerCommands_.size() == 0)
+		return tryTrigger();
+	
+	//TODO check if fullCommand is in list
+
+	return false;
+}
+
+bool Trap::tryTrigger()
+{
+	if (Random::getRandomNumber(1,100) > chanceToTrigger_)
+	{
+		triggered_ = true;
+		std::cout << triggerDescription_ << std::endl;
+		std::cout << "(traps doen nog niet echt iets, maar dit is een begin)\n";
+
+		return true;
+	}
+
+	return false;
 }

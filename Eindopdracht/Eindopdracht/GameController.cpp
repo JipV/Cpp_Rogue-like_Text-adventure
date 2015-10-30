@@ -58,8 +58,8 @@ void GameController::startGame()
 
 		if (elems.size() >= 1)
 		{	// We kunnen geen lege acties afhandelen
-			if (!(hero_->handleAction(elems) ||
-				map_->handleAction(elems, hero_)))
+			if (!(hero_->handleAction(action, elems) ||
+				map_->handleAction(action, hero_)))
 			{
 				if (elems[0] == "exit")
 					break;

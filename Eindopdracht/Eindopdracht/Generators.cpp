@@ -61,7 +61,7 @@ Trap* TrapGenerator::createTrap(int z)
 	if (Random::getRandomNumber(1,100) <= 10)
 	{
 		std::vector<Trap*> allowedTraps;
-		for (int i = z - 1; i <= z + 1; i++)
+		for (int i = z; i <= z + 2; i++)
 		{
 			allowedTraps.insert(allowedTraps.end(), possibleTraps_[i].begin(), possibleTraps_[i].end());
 		}

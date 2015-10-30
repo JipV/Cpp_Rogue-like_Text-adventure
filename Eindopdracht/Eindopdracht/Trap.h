@@ -5,12 +5,13 @@ class Enemy;
 
 class Trap
 {
-friend class TrapGenerator;
-	public:
-		Trap();
-		Trap(const Trap& rhs);
-		~Trap();
+	friend class TrapGenerator;
+public:
+	Trap();
+	Trap(const Trap& rhs);
+	~Trap();
 
+	bool handleAction(std::string fullCommand, std::vector<std::string> action);
 private:
 	bool triggered_;
 
@@ -29,6 +30,8 @@ private:
 
 	std::vector<std::string> triggerCommands_;
 	std::vector<Enemy*> enemiesToSummon_;
+
+	bool tryTrigger();
 };
 
 #endif

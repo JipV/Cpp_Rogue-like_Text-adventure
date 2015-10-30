@@ -131,11 +131,9 @@ void Map::getActions(std::vector<std::string>* actions)
 	actions->push_back("kaart");
 }
 
-bool Map::handleAction(std::vector<std::string> action, Hero* hero)
+bool Map::handleAction(std::string fullCommand, Hero* hero)
 {
-	std::string command = action[0];
-
-	if (command == "kaart")
+	if (fullCommand == "kaart")
 	{
 		showMap(hero->getCurrentRoom());
 		return true;

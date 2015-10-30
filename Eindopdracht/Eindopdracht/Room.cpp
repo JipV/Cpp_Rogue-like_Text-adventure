@@ -64,15 +64,23 @@ void Room::showDescription()
 void Room::getActions(std::vector<std::string>* actions)
 {
 	actions->push_back("kijk rond");
+	actions->push_back("doorzoek kamer");
 }
 
-bool Room::handleAction(std::vector<std::string> action)
+bool Room::handleAction(std::string fullCommand, std::vector<std::string> action)
 {
-	std::string command = action[0];
+	if (fullCommand == "doorzoek kamer")
+	{
+		// TODO, kamer doorzoeken.
+		return true;
+	}
 
-	if (command == "kijk" &&
-		action.size() == 2 &&
-		action[1] == "rond")
+	if (trap_ && trap_->handleAction(fullCommand, action))
+	{
+		return true;
+	}
+
+	if (fullCommand == "kijk rond")
 	{
 		showDescription();
 		return true;

@@ -7,7 +7,7 @@
 //   triggerDescription: text die wordt weergegeven als de val afgaat
 //   chanceToFind: kans (in procent) dat de val gevonden word bij doorzoeken kamer (default: 100)
 //   chanceToTrigger: kans (in procent) dat de val afgaat
-//   triggerCommand: kommagescheiden commandos welke de val af laten gaan (default: alles behalve "doorzoek kamer")
+//   triggerCommand: kommagescheiden commandos welke de val af laten gaan (default: alle actie commands)
 //
 //   directDamage: directe schade bij afgaan van de val (default: 0)
 //
