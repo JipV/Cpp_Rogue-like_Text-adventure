@@ -165,21 +165,24 @@ Room* RoomGenerator::createRoom(int x, int y, int z)
 	{
 	case Room::ROOM_TYPE::StairsDown:
 		result = new Room(createType, "Je staat in een kamer met een trap naar beneden.");
+		break;
 	case Room::ROOM_TYPE::StairsUp:
 		result = new Room(createType, "Je staat in een kamer met een trap naar boven.");
+		break;
 	case Room::ROOM_TYPE::EndEnemy:
 		result = new Room(createType, "Je staat in een grote kamer, het lijkt wel of hier ooit iets groots leefde...");
+		// TODO: add boss enemy
+		break;
 	case Room::ROOM_TYPE::StartLocation:
+		result = new Room(createType, generateDescription());
+		break;
 	case Room::ROOM_TYPE::NormalRoom:
 		result = new Room(createType, generateDescription());
+		addEnemies(result, z);
+		break;
 	default:
 		result = new Room(Room::ROOM_TYPE::NormalRoom, generateDescription());
-	}
-
-	int numEnemies = Random::getRandomNumber(0, 3);
-	for (int i = 0; i < numEnemies; i++)
-	{
-		result->addEnemy(enemyGenerator_->createEnemy(z));
+		break;
 	}
 
 	return result;
@@ -195,6 +198,15 @@ std::string RoomGenerator::generateDescription()
 		+ tidyOptions_.at(Random::getRandomNumber(0, tidyOptions_.size() - 1)) + " "
 		+ lightingOptions_.at(Random::getRandomNumber(0, lightingOptions_.size() - 1)) + " "
 		+ atmosphereOptions_.at(Random::getRandomNumber(0, atmosphereOptions_.size() - 1)) + " ";
+}
+
+void RoomGenerator::addEnemies(Room* room, int z)
+{
+	int numEnemies = Random::getRandomNumber(0, 3);
+	for (int i = 0; i < numEnemies; i++)
+	{
+		room->addEnemy(enemyGenerator_->createEnemy(z));
+	}
 }
 
 // ---------------------------- MAP GENERATOR ----------------------------

@@ -41,6 +41,7 @@ private:
 	std::vector<std::string> atmosphereOptions_;
 
 	std::string generateDescription();
+	void addEnemies(Room* room, int z);
 };
 
 class MapGenerator
