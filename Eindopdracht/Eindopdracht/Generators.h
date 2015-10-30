@@ -14,9 +14,10 @@ public:
 	Trap* createTrap(int z);
 
 private:
-	std::vector<Trap*> possibleTraps_;
+	std::map<int, std::vector<Trap*>> possibleTraps_;
 
 	void parseLine(std::string line, Trap* trap);
+	void saveTrap(Trap* trap);
 };
 
 class EnemyGenerator

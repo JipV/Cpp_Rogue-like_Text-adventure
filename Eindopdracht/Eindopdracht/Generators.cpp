@@ -31,8 +31,7 @@ TrapGenerator::TrapGenerator()
 		while (getline(input_file, line)) {
 			if (line.empty())
 			{
-				if (currentTrap != nullptr)
-					possibleTraps_.push_back(currentTrap);
+				saveTrap(currentTrap);
 				currentTrap = new Trap();
 			}
 			else if (line.find("//") != 0)
@@ -40,27 +39,38 @@ TrapGenerator::TrapGenerator()
 				parseLine(line, currentTrap);
 			}
 		}
-		possibleTraps_.push_back(currentTrap);
+		saveTrap(currentTrap);
 	}
 	input_file.close();
 }
 
 TrapGenerator::~TrapGenerator()
 {
-	std::for_each(possibleTraps_.begin(), possibleTraps_.end(), [](Trap* t)
+	for (auto it = possibleTraps_.begin(); it != possibleTraps_.end(); ++it)
 	{
-		delete t;
-	});
+		std::for_each(it->second.begin(), it->second.end(), [](Trap* t)
+		{
+			delete t;
+		});
+	}
 }
 
 Trap* TrapGenerator::createTrap(int z)
 {
 	//TODO: hoeveel kans willen we dat een kamer een val heeft?
-
 	if (Random::getRandomNumber(1,100) <= 10)
 	{
-		// Copy constructor
-		return new Trap(*possibleTraps_[0]);
+		std::vector<Trap*> allowedTraps;
+		for (int i = z - 1; i <= z + 1; i++)
+		{
+			allowedTraps.insert(allowedTraps.end(), possibleTraps_[i].begin(), possibleTraps_[i].end());
+		}
+
+		if (allowedTraps.size() > 0)
+		{
+			// Copy constructor
+			return new Trap(*allowedTraps[Random::getRandomNumber(0,allowedTraps.size()-1)]);
+		}
 	}
 
 	return nullptr;
@@ -106,6 +116,12 @@ void TrapGenerator::parseLine(std::string line, Trap* trap)
 		}
 			
 	}
+}
+
+void TrapGenerator::saveTrap(Trap* trap)
+{
+	if (trap != nullptr && trap->level_ != -1)
+		possibleTraps_[trap->level_].push_back(trap);
 }
 
 // ---------------------------- ENEMY GENERATOR ----------------------------
@@ -264,6 +280,7 @@ Room* RoomGenerator::createRoom(int x, int y, int z)
 	case Room::ROOM_TYPE::NormalRoom:
 		result = new Room(createType, generateDescription());
 		addEnemies(result, z);
+		addTraps(result, z);
 		break;
 	default:
 		result = new Room(Room::ROOM_TYPE::NormalRoom, generateDescription());

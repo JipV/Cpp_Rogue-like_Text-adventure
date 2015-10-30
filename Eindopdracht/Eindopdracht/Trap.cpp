@@ -4,6 +4,7 @@
 
 // ReSharper disable once CppPossiblyUninitializedMember
 Trap::Trap() : triggered_(false),
+level_(-1),
 chanceToFind_(100),
 directDamage_(0),
 damageOverTime_(0),
@@ -32,7 +33,7 @@ Trap::Trap(const Trap& rhs) :
 	damageOverTimeDone_(rhs.damageOverTimeDone_),
 	triggerCommands_(rhs.triggerCommands_)
 {
-	// TODO: copy enemies to summon manually
+	// TODO: copy enemies to summon
 }
 
 Trap::~Trap()
