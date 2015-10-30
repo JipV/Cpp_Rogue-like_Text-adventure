@@ -11,6 +11,7 @@ Hero::Hero(std::string name) : name_(name), level_(0), hp_(0), xp_(0), attack_(0
 
 Hero::~Hero()
 {
+	currentRoom_ = nullptr; // Rooms horen bij Map, die zal ze verwijderen
 }
 
 bool Hero::goToRoom(std::string direction)

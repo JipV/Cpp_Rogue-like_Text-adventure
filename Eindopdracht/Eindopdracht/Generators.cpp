@@ -47,9 +47,9 @@ TrapGenerator::TrapGenerator()
 
 TrapGenerator::~TrapGenerator()
 {
-	std::for_each(possibleTraps_.begin(), possibleTraps_.end(), [](Trap* e)
+	std::for_each(possibleTraps_.begin(), possibleTraps_.end(), [](Trap* t)
 	{
-		delete e;
+		delete t;
 	});
 }
 
@@ -60,7 +60,7 @@ Trap* TrapGenerator::createTrap(int z)
 	if (Random::getRandomNumber(1,100) <= 10)
 	{
 		// Copy constructor
-		return new Trap(*(possibleTraps_[0]));
+		return new Trap(*possibleTraps_[0]);
 	}
 
 	return nullptr;

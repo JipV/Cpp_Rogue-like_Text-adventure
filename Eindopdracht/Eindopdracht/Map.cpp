@@ -12,11 +12,12 @@ Map::Map(int xSize, int ySize, int zSize)
 Map::~Map()
 {
 	// rooms_ is een array van pointers, eerst moet dus alle inhoud verwijderd worden. delete[] rooms_; is niet genoeg.
-	for (int i = 0; i < index(xSize_ - 1, ySize_ - 1, zSize_ - 1); i++)
+	for (int i = 0; i <= index(xSize_ - 1, ySize_ - 1, zSize_ - 1); i++)
 		delete rooms_[i];
 
 	delete[] rooms_;
 	rooms_ = nullptr;
+	startLocation_ = nullptr; // Deze wordt al verwijderd samen met alle rooms
 }
 
 void Map::showMap(Room* currentRoom)

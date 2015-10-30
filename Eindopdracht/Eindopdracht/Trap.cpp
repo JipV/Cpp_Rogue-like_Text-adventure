@@ -37,5 +37,10 @@ Trap::Trap(const Trap& rhs) :
 
 Trap::~Trap()
 {
+	std::for_each(enemiesToSummon_.begin(), enemiesToSummon_.end(), [](Enemy* e)
+	{
+		delete e;
+	});
+
 	enemiesToSummon_.clear();
 }
