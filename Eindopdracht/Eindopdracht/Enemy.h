@@ -12,7 +12,7 @@ class Enemy
 		Enemy(std::string type, std::string size, int level, int maxHP, int chanceToHit, int chanceToDefend, int attack, int chanceHeroEscapes);
 		~Enemy();
 
-		void getAttackedByHero(int damage);
+		bool getAttackedByHero(int damage);
 
 		bool getIsDefeated();
 		

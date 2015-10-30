@@ -7,10 +7,12 @@ Hero::Hero(std::string name)
 {
 	name_ = name;
 	level_ = 0;
-	hp_ = 20;
+	maxHP_ = 20;
+	currentHP_ = 20;
 	xp_ = 0;
+	chanceToHit_ = 20;
+	chanceToDefend_ = 20;
 	attack_ = 1;
-	defense_ = 1;
 	mindfulness_ = 2;
 
 	items_ = std::vector<Item>();
@@ -39,25 +41,39 @@ void Hero::fight()
 {
 	std::vector<Enemy*>* enemies = currentRoom_->getEnemies();
 
+	/*
 	// Toon gegevens vijanden
 	for (int i = 0; i < enemies->size(); i++) {
 		std::cout << "\nHet aantal levenspunten van " << enemies->at(i)->getType() << " is " << enemies->at(i)->getCurrentHP();
 	}
 	std::cout << "\n";
+	*/
 
 	// Val vijanden aan
 	for (int i = 0; i < enemies->size(); i++) {
-		
-		//int number = Random::getRand	omNumber(0, 10);
-
-		std::cout << "\nJe valt " << enemies->at(i)->getType() << " aan en doet " << attack_ << " schade";
-		enemies->at(i)->getAttackedByHero(attack_);
+		if (Random::getRandomNumber(0, 100) <= chanceToHit_) {
+			if (enemies->at(i)->getAttackedByHero(attack_)) {
+				std::cout << "\nJe valt " << enemies->at(i)->getType() << " aan en doet " << attack_ << " schade.";
+				if (enemies->at(i)->getIsDefeated()) {
+					std::cout << "\nJe hebt " << enemies->at(i)->getType() << " verslagen.";
+					currentRoom_->removeEnemy(enemies->at(i));
+				}
+				else {
+					std::cout << "\nHet aantal levenspunten van " << enemies->at(i)->getType() << " is " << enemies->at(i)->getCurrentHP();
+				}
+			}
+			else {
+				std::cout << "\nJe valt " << enemies->at(i)->getType() << ", maar " << enemies->at(i)->getType() << " verdedigt zich, waardoor de aanval mislukt.";
+			}
+		}
+		else {
+			std::cout << "\nJe valt " << enemies->at(i)->getType() << " aan en mist.";
+		}
+		std::cout << "\n";
 	}
-	std::cout << "\n"; 
+	
 
-	enemies = currentRoom_->getEnemies();
-
-	// Toon gegevens vijanden
+	/*// Toon gegevens vijanden
 	for (int i = 0; i < enemies->size(); i++) {
 		if (enemies->at(i)->getIsDefeated()) {
 			std::cout << "\nJe hebt " << enemies->at(i)->getType() << " verslagen.";
@@ -67,7 +83,7 @@ void Hero::fight()
 			std::cout << "\nHet aantal levenspunten van " << enemies->at(i)->getType() << " is " << enemies->at(i)->getCurrentHP();
 		}
 	}
-	std::cout << "\n";
+	std::cout << "\n";*/
 
 	// Vijanden vallen aan
 	for (int i = 0; i < enemies->size(); i++) {
@@ -128,71 +144,6 @@ void Hero::removeItem(Item item)
 			break;
 		}
 	}*/
-}
-
-std::string Hero::getName()
-{
-	return name_;
-}
-
-int Hero::getLevel()
-{
-	return level_;
-}
-
-void Hero::setLevel(int level)
-{
-	level_ = level;
-}
-
-int Hero::getHP()
-{
-	return hp_;
-}
-
-void Hero::setHP(int hp)
-{
-	hp_ = hp;
-}
-
-int Hero::getXP()
-{
-	return xp_;
-}
-
-void Hero::setXP(int xp)
-{
-	xp_ = xp;
-}
-
-int Hero::getAttack()
-{
-	return attack_;
-}
-
-void Hero::setAttack(int attack)
-{
-	attack_ = attack;
-}
-
-int Hero::getDefense()
-{
-	return defense_;
-}
-
-void Hero::setDefense(int defense)
-{
-	defense_ = defense;
-}
-
-int Hero::getMindfulness()
-{
-	return mindfulness_;
-}
-
-void Hero::setMindfulness(int mindfulness)
-{
-	mindfulness_ = mindfulness;
 }
 
 void Hero::getActions(std::vector<std::string>* actions)

@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "Enemy.h"
+#include "Random.h"
 
 Enemy::Enemy(std::string type, std::string size, int level, int maxHP, int chanceToHit, int chanceToDefend, int attack, int chanceHeroEscapes)
 {
@@ -21,12 +22,16 @@ Enemy::~Enemy()
 {
 }
 
-void Enemy::getAttackedByHero(int damage)
+bool Enemy::getAttackedByHero(int damage)
 {
-	currentHP_ -= damage;
-	if (currentHP_ <= 0) {
-		isDefeated_ = true;
+	if (Random::getRandomNumber(0, 100) <= chanceToDefend_) {
+		currentHP_ -= damage;
+		if (currentHP_ <= 0) {
+			isDefeated_ = true;
+		}
+		return true;
 	}
+	return false;
 }
 
 bool Enemy::getIsDefeated()

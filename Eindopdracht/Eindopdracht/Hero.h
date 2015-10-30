@@ -25,26 +25,6 @@ class Hero
 		void addItem(Item item);
 		void removeItem(Item item);
 
-		std::string getName();
-		
-		int getLevel();
-		void setLevel(int level);
-		
-		int getHP();
-		void setHP(int hp);
-		
-		int getXP();
-		void setXP(int xp);
-
-		int getAttack();
-		void setAttack(int attack);
-
-		int getDefense();
-		void setDefense(int defense);
-
-		int getMindfulness();
-		void setMindfulness(int mindfulness);
-
 		void getActions(std::vector<std::string>* actions);
 		bool handleAction(std::vector<std::string> action);
 
@@ -57,10 +37,12 @@ class Hero
 
 		std::string name_;
 		int level_;
-		int hp_;
+		int maxHP_;
+		int currentHP_;
 		int xp_;
+		int chanceToHit_;
+		int chanceToDefend_;
 		int attack_;
-		int defense_;
 		int mindfulness_;
 
 		Room* currentRoom_;
