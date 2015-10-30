@@ -11,7 +11,7 @@ public:
 	TrapGenerator();
 	~TrapGenerator();
 
-	Trap* createTrap();
+	Trap* createTrap(int z);
 
 private:
 	std::vector<Trap*> possibleTraps_;
@@ -27,9 +27,9 @@ public:
 
 	Enemy* createEnemy(int z);
 private:
-	std::vector<std::string>* monsterOptions_ = nullptr;
-	std::vector<std::string>* bossesOptions_ = nullptr;
-	std::vector<std::string>* enemySizeOptions_ = nullptr;
+	std::vector<std::string> monsterOptions_;
+	std::vector<std::string> bossesOptions_;
+	std::vector<std::string> enemySizeOptions_;
 };
 
 class RoomGenerator
@@ -46,6 +46,7 @@ private:
 	Room::ROOM_TYPE specialType_;
 
 	EnemyGenerator* enemyGenerator_;
+	TrapGenerator* trapGenerator_;
 
 	std::vector<std::string> sizeOptions_;
 	std::vector<std::string> floorOptions_;
@@ -57,6 +58,7 @@ private:
 
 	std::string generateDescription();
 	void addEnemies(Room* room, int z);
+	void addTraps(Room* room, int z);
 };
 
 class MapGenerator
@@ -69,7 +71,6 @@ public:
 
 private:
 	RoomGenerator* roomGenerator_;
-	TrapGenerator* trapGenerator_;
 
 	Room* addRoom(int x, int y, int z, Map* map);
 };

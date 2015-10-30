@@ -8,6 +8,7 @@ class Trap
 friend class TrapGenerator;
 	public:
 		Trap();
+		Trap(const Trap& rhs);
 		~Trap();
 
 private:
@@ -27,8 +28,7 @@ private:
 		damageOverTimeDone_;
 
 	std::vector<std::string> triggerCommands_;
-
-	Enemy* enemyToSummon_;
+	std::vector<Enemy*> enemiesToSummon_;
 };
 
 #endif

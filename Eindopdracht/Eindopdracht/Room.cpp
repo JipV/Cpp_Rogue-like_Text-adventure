@@ -8,19 +8,26 @@ Room::Room(ROOM_TYPE type, std::string description) : isVisited_(true), type_(ty
 {
 	enemies_ = new std::vector<Enemy*>();
 	items_ = new std::vector<Item*>();
-	traps_ = new std::vector<Trap*>();
 }
 
 Room::~Room()
 {
+	std::for_each(enemies_->begin(), enemies_->end(), [](Enemy* e)
+	{
+		delete e;
+	});
 	delete enemies_;
 	enemies_ = nullptr;
 
+	std::for_each(items_->begin(), items_->end(), [](Item* i)
+	{
+		delete i;
+	});
 	delete items_;
 	items_ = nullptr;
 
-	delete traps_;
-	traps_ = nullptr;
+	delete trap_;
+	trap_ = nullptr;
 }
 
 void Room::showDescription()
@@ -83,6 +90,11 @@ void Room::addExit(std::string name, Room* room)
 void Room::addEnemy(Enemy* enemy)
 {
 	enemies_->push_back(enemy);
+}
+
+void Room::setTrap(Trap* trap)
+{
+	trap_ = trap;
 }
 
 bool Room::hasEnemies()

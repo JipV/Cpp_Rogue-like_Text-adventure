@@ -50,10 +50,11 @@ class Room
 
 		std::vector<Enemy*>* enemies_ = nullptr;
 		std::vector<Item*>* items_ = nullptr;
-		std::vector<Trap*>* traps_ = nullptr;
+		Trap* trap_ = nullptr;
 
 		void addExit(std::string name, Room* room);
 		void addEnemy(Enemy* enemy);
+		void setTrap(Trap* trap);
 };
 
 #endif

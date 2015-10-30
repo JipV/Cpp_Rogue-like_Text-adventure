@@ -53,14 +53,14 @@ summonMonster:skelet,7,7,5,3
 summonMonster:skelet,7,7,5,3
 
 // Trapped chest
-level:8
+level:9
 roomDescription:Er staat een kist in de hoek van de kamer.
 findDescription:Deze trap is onvindbaar.
 triggerDescription:Je opent de kist en er schiet een klein pijltje uit. Er ontstaat een brandend gevoel waar je geraakt bent.
 triggerCommand:open kist
 chanceToFind:0
 chanceToTrigger:100
-damageOverTime:4
+damageOverTime:5
 damageOverTimeTurns:3
 damageOverTimeMessage:Het brandende gevoel houd nog steeds aan.
 damageOverTimeDone:Het brandende gevoel trekt weg

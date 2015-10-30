@@ -47,11 +47,22 @@ TrapGenerator::TrapGenerator()
 
 TrapGenerator::~TrapGenerator()
 {
-	
+	std::for_each(possibleTraps_.begin(), possibleTraps_.end(), [](Trap* e)
+	{
+		delete e;
+	});
 }
 
-Trap* TrapGenerator::createTrap()
+Trap* TrapGenerator::createTrap(int z)
 {
+	//TODO: hoeveel kans willen we dat een kamer een val heeft?
+
+	if (Random::getRandomNumber(1,100) <= 10)
+	{
+		// Copy constructor
+		return new Trap(*(possibleTraps_[0]));
+	}
+
 	return nullptr;
 }
 
@@ -101,9 +112,9 @@ void TrapGenerator::parseLine(std::string line, Trap* trap)
 
 EnemyGenerator::EnemyGenerator()
 {
-	monsterOptions_ = new std::vector<std::string>();
-	bossesOptions_ = new std::vector<std::string>();
-	enemySizeOptions_ = new std::vector<std::string>();
+	monsterOptions_ = std::vector<std::string>();
+	bossesOptions_ = std::vector<std::string>();
+	enemySizeOptions_ = std::vector<std::string>();
 
 	std::string line;
 	std::ifstream input_file("enemy_options.txt");
@@ -113,13 +124,13 @@ EnemyGenerator::EnemyGenerator()
 			std::string option = line.substr(line.find(":") + 1, line.length());
 
 			if (optionName.compare("monsters") == 0) {
-				monsterOptions_->push_back(option);
+				monsterOptions_.push_back(option);
 			}
 			else if (optionName.compare("bosses") == 0) {
-				bossesOptions_->push_back(option);
+				bossesOptions_.push_back(option);
 			}
 			else if (optionName.compare("sizes") == 0) {
-				enemySizeOptions_->push_back(option);
+				enemySizeOptions_.push_back(option);
 			}
 		}
 	}
@@ -128,20 +139,12 @@ EnemyGenerator::EnemyGenerator()
 
 EnemyGenerator::~EnemyGenerator()
 {
-	delete monsterOptions_;
-	monsterOptions_ = nullptr;
-
-	delete bossesOptions_;
-	bossesOptions_ = nullptr;
-
-	delete enemySizeOptions_;
-	enemySizeOptions_ = nullptr;
 }
 
 Enemy* EnemyGenerator::createEnemy(int z)
 {
 	// Bepaal het soort monster
-	std::string monsterOption = monsterOptions_->at(Random::getRandomNumber(0, static_cast<int>(monsterOptions_->size()) - 1));
+	std::string monsterOption = monsterOptions_.at(Random::getRandomNumber(0, static_cast<int>(monsterOptions_.size()) - 1));
 	std::vector<std::string> monsterData = std::vector<std::string>();
 
 	split(monsterOption, ',', monsterData);
@@ -153,7 +156,7 @@ Enemy* EnemyGenerator::createEnemy(int z)
 	std::string monsterChanceHeroEscapes = monsterData.at(4);
 
 	// Bepaal de grootte van het monster
-	std::string enemySizeOption = enemySizeOptions_->at(Random::getRandomNumber(0, static_cast<int>(enemySizeOptions_->size()) - 1));
+	std::string enemySizeOption = enemySizeOptions_.at(Random::getRandomNumber(0, static_cast<int>(enemySizeOptions_.size()) - 1));
 	std::vector<std::string> enemySizeData = std::vector<std::string>();
 
 	split(enemySizeOption, ',', enemySizeData);
@@ -216,11 +219,13 @@ RoomGenerator::RoomGenerator() : x_(-1), y_(-1), specialType_(Room::ROOM_TYPE::N
 	input_file.close();
 
 	enemyGenerator_ = new EnemyGenerator();
+	trapGenerator_ = new TrapGenerator();
 }
 
 RoomGenerator::~RoomGenerator()
 {
 	delete enemyGenerator_;
+	delete trapGenerator_;
 }
 
 void RoomGenerator::setSpecialRoom(int x, int y, Room::ROOM_TYPE type)
@@ -289,18 +294,25 @@ void RoomGenerator::addEnemies(Room* room, int z)
 	}
 }
 
+void RoomGenerator::addTraps(Room* room, int z)
+{
+	Trap* trap = trapGenerator_->createTrap(z);
+
+	if (trap != nullptr)
+		room->setTrap(trap);
+}
+
 // ---------------------------- MAP GENERATOR ----------------------------
 
 MapGenerator::MapGenerator()
 {
 	roomGenerator_ = new RoomGenerator();
-	trapGenerator_ = new TrapGenerator();
 }
 
 MapGenerator::~MapGenerator()
 {
 	delete roomGenerator_;
-	delete trapGenerator_;
+	roomGenerator_ = nullptr;
 }
 
 Map* MapGenerator::generateMap(int xSize, int ySize, int zSize)
