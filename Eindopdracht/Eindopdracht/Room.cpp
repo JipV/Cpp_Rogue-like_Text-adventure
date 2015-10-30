@@ -114,12 +114,7 @@ Room::ROOM_TYPE Room::getType()
 	return type_;
 }
 
-void Room::setType(ROOM_TYPE type)
-{
-	type_ = type;
-}
-
-std::map<std::string, Room*> Room::getExits()
+std::map<std::string, Room*> Room::getAllExits()
 {
 	return exits_;
 }

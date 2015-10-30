@@ -7,8 +7,9 @@ class Trap;
 
 class Room
 {
+	friend class MapGenerator;
+	friend class RoomGenerator;
 	public:
-
 		enum ROOM_TYPE {
 			StartLocation,
 			NormalRoom,
@@ -25,19 +26,17 @@ class Room
 		void getActions(std::vector<std::string>* actions);
 		bool handleAction(std::vector<std::string> action);
 
-		void addExit(std::string name, Room* room);
 		Room* getExit(std::string name);
-		
-		void addEnemy(Enemy* enemy);
+		std::map<std::string, Room*> getAllExits();
+
 		bool hasEnemies();
 
 		bool getIsVisited();
 		void setIsVisited(bool isVisited);
 
 		ROOM_TYPE getType();
-		void setType(ROOM_TYPE type);
 
-		std::map<std::string, Room*> getExits();
+		
 
 	private:
 
@@ -52,6 +51,9 @@ class Room
 		std::vector<Enemy*>* enemies_ = nullptr;
 		std::vector<Item*>* items_ = nullptr;
 		std::vector<Trap*>* traps_ = nullptr;
+
+		void addExit(std::string name, Room* room);
+		void addEnemy(Enemy* enemy);
 };
 
 #endif
