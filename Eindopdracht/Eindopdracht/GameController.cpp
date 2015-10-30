@@ -3,6 +3,8 @@
 #include "Room.h"
 #include "Enemy.h"
 #include "Random.h"
+#include "Hero.h"
+#include "Map.h"
 
 GameController::GameController()
 {

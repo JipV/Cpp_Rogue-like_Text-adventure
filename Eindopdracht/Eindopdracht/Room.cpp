@@ -1,5 +1,8 @@
 #include "stdafx.h"
 #include "Room.h"
+#include "Enemy.h"
+#include "Trap.h"
+#include "Item.h"
 
 Room::Room(ROOM_TYPE type, std::string description) : isVisited_(true), type_(type), description_(description)
 {

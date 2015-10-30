@@ -1,8 +1,8 @@
 #ifndef __GAMECONTROLLER_H__
 #define __GAMECONTROLLER_H__
 
-#include "Map.h"
-#include "Hero.h"
+class Map;
+class Hero;
 
 class GameController
 {

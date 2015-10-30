@@ -1,9 +1,9 @@
 #ifndef __ROOM_H__
 #define __ROOM_H__
 
-#include "Enemy.h"
-#include "Item.h"
-#include "Trap.h"
+class Enemy;
+class Item;
+class Trap;
 
 class Room
 {
@@ -17,7 +17,6 @@ class Room
 			EndEnemy
 		};
 
-		Room();
 		Room(ROOM_TYPE type, std::string description);
 		~Room();
 
