@@ -1,17 +1,11 @@
 #include "stdafx.h"
 #include "Hero.h"
 #include "Room.h"
+#include "Random.h"
 
-Hero::Hero(std::string name)
+// ReSharper disable once CppPossiblyUninitializedMember
+Hero::Hero(std::string name) : name_(name), level_(0), hp_(0), xp_(0), attack_(0), defense_(0), mindfulness_(0)
 {
-	name_ = name;
-	level_ = 0;
-	hp_ = 0;
-	xp_ = 0;
-	attack_ = 0;
-	defense_ = 0;
-	mindfulness_ = 0;
-
 	items_ = std::vector<Item>();
 }
 
@@ -39,17 +33,19 @@ void Hero::fight()
 
 bool Hero::flee(std::string direction)
 {
-	// TODO: kans op vluchten/achtervolgd worden
-
-	Room* newRoom = currentRoom_->getExit(direction);
-
-	if (newRoom != nullptr)
+	// TODO: kans op vluchten/achtervolgd worden goed gedaan
+	if (Random::getRandomNumber(0,2) != 0)
 	{
-		setCurrentRoom(newRoom);
-		return true;
+		if (goToRoom(direction))
+		{
+			std::cout << "Je rent weg, er zijn geen monsters die je volgen." << std::endl;
+			return true;
+		}
+		return false;
 	}
-
-	return false;
+	
+	std::cout << "Je probeert weg te rennen maar de vijand houd je tegen!" << std::endl;
+	return true;
 }
 
 void Hero::search()
