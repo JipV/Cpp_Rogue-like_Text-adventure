@@ -24,7 +24,7 @@ Enemy::~Enemy()
 
 bool Enemy::getAttackedByHero(int damage)
 {
-	if (Random::getRandomNumber(0, 100) <= chanceToDefend_) {
+	if (Random::getRandomNumber(0, 100) > chanceToDefend_) {
 		currentHP_ -= damage;
 		if (currentHP_ <= 0) {
 			isDefeated_ = true;
@@ -47,6 +47,16 @@ std::string Enemy::getType()
 int Enemy::getCurrentHP()
 {
 	return currentHP_;
+}
+
+int Enemy::getChanceToHit()
+{
+	return chanceToHit_;
+}
+
+int Enemy::getAttack()
+{
+	return attack_;
 }
 
 int Enemy::getChanceHeroEscapes()

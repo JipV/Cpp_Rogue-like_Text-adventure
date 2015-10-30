@@ -22,8 +22,10 @@ class Hero
 		void rest();
 		void viewItems();
 
-		void addItem(Item item);
-		void removeItem(Item item);
+		void getAttackedByEnemies();
+
+		void addItem(Item* item);
+		void removeItem(Item* item);
 
 		void getActions(std::vector<std::string>* actions);
 		bool handleAction(std::vector<std::string> action);
@@ -31,9 +33,11 @@ class Hero
 		Room* getCurrentRoom();
 		void setCurrentRoom(Room* room);
 
-		std::vector<Item> getItems();
+		std::vector<Item*>* getItems();
 
 	private:
+
+		bool isDefeated_;
 
 		std::string name_;
 		int level_;
@@ -51,7 +55,7 @@ class Hero
 		Armour armour_;
 		Shield shield_;
 
-		std::vector<Item> items_;
+		std::vector<Item*>* items_;
 };
 
 #endif

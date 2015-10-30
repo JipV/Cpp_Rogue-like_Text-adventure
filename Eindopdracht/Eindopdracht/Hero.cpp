@@ -15,13 +15,18 @@ Hero::Hero(std::string name)
 	attack_ = 1;
 	mindfulness_ = 2;
 
-	items_ = std::vector<Item>();
+	items_ = new std::vector<Item*>();
 }
 
 Hero::~Hero()
 {
 	delete currentRoom_;
 	currentRoom_ = nullptr;
+
+	for (int i = 0; i < items_->size(); i++)
+		delete items_->at(i);
+	delete items_;
+	items_ = nullptr;
 }
 
 bool Hero::goToRoom(std::string direction)
@@ -40,14 +45,6 @@ bool Hero::goToRoom(std::string direction)
 void Hero::fight()
 {
 	std::vector<Enemy*>* enemies = currentRoom_->getEnemies();
-
-	/*
-	// Toon gegevens vijanden
-	for (int i = 0; i < enemies->size(); i++) {
-		std::cout << "\nHet aantal levenspunten van " << enemies->at(i)->getType() << " is " << enemies->at(i)->getCurrentHP();
-	}
-	std::cout << "\n";
-	*/
 
 	// Val vijanden aan
 	for (int i = 0; i < enemies->size(); i++) {
@@ -72,28 +69,14 @@ void Hero::fight()
 		std::cout << "\n";
 	}
 	
-
-	/*// Toon gegevens vijanden
-	for (int i = 0; i < enemies->size(); i++) {
-		if (enemies->at(i)->getIsDefeated()) {
-			std::cout << "\nJe hebt " << enemies->at(i)->getType() << " verslagen.";
-			currentRoom_->removeEnemy(enemies->at(i));
-		}
-		else {
-			std::cout << "\nHet aantal levenspunten van " << enemies->at(i)->getType() << " is " << enemies->at(i)->getCurrentHP();
-		}
-	}
-	std::cout << "\n";*/
+	std::cout << "\n";
 
 	// Vijanden vallen aan
-	for (int i = 0; i < enemies->size(); i++) {
-	}
+	getAttackedByEnemies();
 }
 
 bool Hero::flee(std::string direction)
 {
-	// TODO: WANNEER ONTSNAPPEN NIET LUKT, HEEFT DAT GEVOLGEN (vijhanden vallen aan)
-
 	Room* newRoom = currentRoom_->getExit(direction);
 
 	if (newRoom != nullptr)
@@ -101,6 +84,10 @@ bool Hero::flee(std::string direction)
 		for (int i = 0; i < currentRoom_->getEnemies()->size(); i++) {
 			if (Random::getRandomNumber(0, 100) <= currentRoom_->getEnemies()->at(i)->getChanceHeroEscapes()) {
 				std::cout << "\nJe wordt tegengehouden door een vijand en kunt daardoor niet vluchten.\n";
+
+				// Vijanden vallen aan
+				getAttackedByEnemies();
+
 				return true;
 			}
 		}
@@ -129,21 +116,50 @@ void Hero::viewItems()
 	//BEKIJK ITEMS
 }
 
-void Hero::addItem(Item item)
+void Hero::getAttackedByEnemies()
 {
-	items_.push_back(item);
+	// TODO: GAME OVER
+
+	for (int i = 0; i < currentRoom_->getEnemies()->size(); i++) {
+		if (!isDefeated_) {
+			Enemy* enemy = currentRoom_->getEnemies()->at(i);
+			std::cout << "\nJe wordt aangevallen door " << enemy->getType();
+
+			if (Random::getRandomNumber(0, 100) <= enemy->getChanceToHit()) {
+				if (Random::getRandomNumber(0, 100) <= chanceToDefend_) {
+					std::cout << ", maar je verdedigt je, waardoor de aanval mislukt.\n";
+				}
+				else {
+					currentHP_ -= enemy->getAttack();
+					if (currentHP_ <= 0) {
+						currentHP_ = 0;
+						isDefeated_ = true;
+					}
+					std::cout << " en verliest daardoor " << enemy->getAttack();
+					if (enemy->getAttack() == 1) {
+						std::cout << " levenspunt.\n";
+					}
+					else {
+						std::cout << " levenspunten.\n";
+					}
+				}
+			}
+			else {
+				std::cout << ", maar hij mist.\n";
+			}
+		}
+	}
+	std::cout << "\nJe hebt nog " << currentHP_ << " levenspunten over.\n";
 }
 
-void Hero::removeItem(Item item)
+void Hero::addItem(Item* item)
 {
-	/*for (std::vector<Item>::iterator it = items_.begin(); it != items_.end(); it++)
-	{
-		if (*it == item)
-		{
-			items_.erase(it);
-			break;
-		}
-	}*/
+	items_->push_back(item);
+}
+
+void Hero::removeItem(Item* item)
+{
+	items_->erase(std::remove(items_->begin(), items_->end(), item), items_->end());
 }
 
 void Hero::getActions(std::vector<std::string>* actions)
@@ -195,7 +211,7 @@ void Hero::setCurrentRoom(Room* room)
 	room->setIsVisited(true);
 }
 
-std::vector<Item> Hero::getItems()
+std::vector<Item*>* Hero::getItems()
 {
 	return items_;
 }

@@ -18,6 +18,8 @@ class Enemy
 		
 		std::string getType();
 		int getCurrentHP();
+		int getChanceToHit();
+		int getAttack();
 		int getChanceHeroEscapes();
 
 	private:
