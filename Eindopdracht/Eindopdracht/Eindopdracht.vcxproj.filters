@@ -25,6 +25,9 @@
     <Text Include="enemy_options.txt">
       <Filter>Resource Files</Filter>
     </Text>
+    <Text Include="traps.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">

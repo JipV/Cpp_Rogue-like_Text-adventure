@@ -3,6 +3,21 @@
 
 class Map;
 class Enemy;
+class Trap;
+
+class TrapGenerator
+{
+public:
+	TrapGenerator();
+	~TrapGenerator();
+
+	Trap* createTrap();
+
+private:
+	std::vector<Trap*> possibleTraps_;
+
+	void parseLine(std::string line, Trap* trap);
+};
 
 class EnemyGenerator
 {
@@ -54,6 +69,7 @@ public:
 
 private:
 	RoomGenerator* roomGenerator_;
+	TrapGenerator* trapGenerator_;
 
 	Room* addRoom(int x, int y, int z, Map* map);
 };

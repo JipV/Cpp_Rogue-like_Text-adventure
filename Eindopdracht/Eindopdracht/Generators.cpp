@@ -3,6 +3,7 @@
 #include "Random.h"
 #include "Map.h"
 #include "Enemy.h"
+#include "Trap.h"
 
 void split(const std::string& s, char delim, std::vector<std::string>& v) {
 	int i = 0;
@@ -14,6 +15,85 @@ void split(const std::string& s, char delim, std::vector<std::string>& v) {
 
 		if (pos == std::string::npos)
 			v.push_back(s.substr(i, s.length()));
+	}
+}
+
+// ---------------------------- TRAP GENERATOR ----------------------------
+
+TrapGenerator::TrapGenerator()
+{
+	std::string line;
+	std::ifstream input_file("traps.txt");
+
+	Trap* currentTrap = nullptr;
+
+	if (input_file) {
+		while (getline(input_file, line)) {
+			if (line.empty())
+			{
+				if (currentTrap != nullptr)
+					possibleTraps_.push_back(currentTrap);
+				currentTrap = new Trap();
+			}
+			else if (line.find("//") != 0)
+			{
+				parseLine(line, currentTrap);
+			}
+		}
+		possibleTraps_.push_back(currentTrap);
+	}
+	input_file.close();
+}
+
+TrapGenerator::~TrapGenerator()
+{
+	
+}
+
+Trap* TrapGenerator::createTrap()
+{
+	return nullptr;
+}
+
+void TrapGenerator::parseLine(std::string line, Trap* trap)
+{
+	std::vector<std::string> splitLine = std::vector<std::string>();
+	split(line, ':', splitLine);
+
+	if (splitLine.size() == 2)
+	{
+		std::string type = splitLine[0];
+		std::string value = splitLine[1];
+
+		if (type == "level")
+			trap->level_ = std::stoi(value);
+		else if (type == "roomDescription")
+			trap->roomDescription_ = value;
+		else if (type == "findDescription")
+			trap->findDescription_ = value;
+		else if (type == "triggerDescription")
+			trap->triggerDescription_ = value;
+		else if (type == "chanceToFind")
+			trap->chanceToFind_ = std::stoi(value);
+		else if (type == "chanceToTrigger")
+			trap->chanceToTrigger_ = std::stoi(value);
+		else if (type == "triggerCommand")
+			split(value, ',', trap->triggerCommands_);
+		else if (type == "directDamage")
+			trap->directDamage_ = std::stoi(value);
+		else if (type == "damageOverTime")
+			trap->damageOverTime_ = std::stoi(value);
+		else if (type == "damageOverTimeTurns")
+			trap->damageOverTimeTurns_ = std::stoi(value);
+		else if (type == "damageOverTimeMessage")
+			trap->damageOverTimeMessage_ = value;
+		else if (type == "damageOverTimeDone")
+			trap->damageOverTimeDone_ = value;
+		else if (type == "summonMonster")
+		{
+			//TODO: generate monster
+		}
+			
 	}
 }
 
@@ -214,11 +294,13 @@ void RoomGenerator::addEnemies(Room* room, int z)
 MapGenerator::MapGenerator()
 {
 	roomGenerator_ = new RoomGenerator();
+	trapGenerator_ = new TrapGenerator();
 }
 
 MapGenerator::~MapGenerator()
 {
 	delete roomGenerator_;
+	delete trapGenerator_;
 }
 
 Map* MapGenerator::generateMap(int xSize, int ySize, int zSize)

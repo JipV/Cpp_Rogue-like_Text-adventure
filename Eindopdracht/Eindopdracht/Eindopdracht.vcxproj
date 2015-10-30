@@ -146,6 +146,7 @@
     <Text Include="held1.txt" />
     <Text Include="ReadMe.txt" />
     <Text Include="room_options.txt" />
+    <Text Include="traps.txt" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Armour.h" />

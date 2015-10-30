@@ -1,0 +1,66 @@
+// Traps zijn gescheiden door witregels
+// Regels die beginnen met // worden genegeerd
+// Mogelijke waarden (waarden zonder default zijn verplicht)
+//   level: het nivau van de val, zoals bij monsters
+//   roomDescription: text die bij de kamerbeschrijving erbij komt (default geen tekst)
+//   findDescription: text die wordt weergegeven als de val gevonden wordt
+//   triggerDescription: text die wordt weergegeven als de val afgaat
+//   chanceToFind: kans (in procent) dat de val gevonden word bij doorzoeken kamer (default: 100)
+//   chanceToTrigger: kans (in procent) dat de val afgaat
+//   triggerCommand: kommagescheiden commandos welke de val af laten gaan (default: alles behalve "doorzoek kamer")
+//
+//   directDamage: directe schade bij afgaan van de val (default: 0)
+//
+//   damageOverTime: schade bij elk commando voor damageOverTimeTurns commandos (default: 0)
+//   damageOverTimeTurns: hoeveel beurten de schade doorgaat (default: 0)
+//   damageOverTimeMessage: Bericht dat wordt weergegeven bij damageOverTime (default: "")
+//   damageOverTimeDone: Bericht dat wordt weegegeven als de damage over is (default: "")
+//
+//   summonMonster: summoned een monster (gegevens zoals in enemy_options.txt) (default: geen monster)
+
+// Arrow trap
+level:5
+findDescription:Je ziet een draadje over de vloer lopen en sleuven in de muur. Je zorgt dat je de val niet meer af laat gaan.
+triggerDescription:Je voelt een draadje tegen je been en er schiet een pijl uit de muur die je raakt!
+chanceToFind:50
+chanceToTrigger:75
+directDamage:8
+
+// Vallende steen
+level:2
+findDescription:Je kijkt omhoog en ziet een steen in het plafond loskomen, je kan hem nog net ontwijken.
+triggerDescription:Een steen uit het plafond komt los en valt op je hoofd!
+chanceToFind:75
+chanceToTrigger:25
+directDamage:5
+
+// Bear trap
+level:4
+findDescription:Je merkt dat er een draadje naar een luik in het plafond loopt, boven het luik hoor je iets grommen. Je blijft weg van het draadje.
+triggerDescription:Berenval! Er valt een erg verwarde beer uit een luik in het plafond, hij kijkt niet erg blij.
+chanceToFind:60
+chanceToTrigger:75
+summonMonster:beer,7,5,5,2
+
+// Skeleton trap
+level:6
+roomDescription:Er ligt een stapel botten op de vloer.
+findDescription:Je hebt het onmogelijke gedaan! Deze val is helemaal niet te vinden.
+triggerDescription:De botten op de vloer beginnen te bewegen en staan op.
+chanceToFind:0
+chanceToTrigger:40
+summonMonster:skelet,7,7,5,3
+summonMonster:skelet,7,7,5,3
+
+// Trapped chest
+level:8
+roomDescription:Er staat een kist in de hoek van de kamer.
+findDescription:Deze trap is onvindbaar.
+triggerDescription:Je opent de kist en er schiet een klein pijltje uit. Er ontstaat een brandend gevoel waar je geraakt bent.
+triggerCommand:open kist
+chanceToFind:0
+chanceToTrigger:100
+damageOverTime:4
+damageOverTimeTurns:3
+damageOverTimeMessage:Het brandende gevoel houd nog steeds aan.
+damageOverTimeDone:Het brandende gevoel trekt weg
