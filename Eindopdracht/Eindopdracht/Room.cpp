@@ -83,6 +83,11 @@ void Room::addEnemy(Enemy* enemy)
 	enemies_->push_back(enemy);
 }
 
+bool Room::hasEnemies()
+{
+	return (enemies_->size() > 0);
+}
+
 Room* Room::getExit(std::string name)
 {
 	if (exits_.count(name))

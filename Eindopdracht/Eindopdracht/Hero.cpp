@@ -151,8 +151,10 @@ void Hero::setMindfulness(int mindfulness)
 
 void Hero::getActions(std::vector<std::string>* actions)
 {
-	actions->push_back("loop [richting]");
-	actions->push_back("vlucht [richting]");
+	if (currentRoom_->hasEnemies())
+		actions->push_back("vlucht [richting]");
+	else
+		actions->push_back("loop [richting]");
 
 	currentRoom_->getActions(actions);
 }
@@ -164,11 +166,17 @@ bool Hero::handleAction(std::vector<std::string> action)
 
 	if (command == "loop" && action.size() == 2)
 	{
+		if (currentRoom_->hasEnemies())
+			return false;
+
 		return goToRoom(action[1]);
 	}
 	if (command == "vlucht" && action.size() == 2)
 	{
-		return flee(action[1]);
+		if (currentRoom_->hasEnemies())
+			return flee(action[1]);
+
+		return false;
 	}
 
 	return currentRoom_->handleAction(action);
