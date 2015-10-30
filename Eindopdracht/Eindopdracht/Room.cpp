@@ -91,6 +91,11 @@ void Room::addEnemy(Enemy* enemy)
 	enemies_->push_back(enemy);
 }
 
+void Room::removeEnemy(Enemy* enemy)
+{
+	enemies_->erase(std::remove(enemies_->begin(), enemies_->end(), enemy), enemies_->end());
+}
+
 Room* Room::getExit(std::string name)
 {
 	if (exits_.count(name))

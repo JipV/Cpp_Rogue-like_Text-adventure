@@ -9,20 +9,30 @@ class Enemy
 {
 	public:
 
-		Enemy(std::string type, std::string size, int level, int hp, int attack, int defense, int chanceHeroEscapes);
+		Enemy(std::string type, std::string size, int level, int maxHP, int chanceToHit, int chanceToDefend, int attack, int chanceHeroEscapes);
 		~Enemy();
 
+		void getAttackedByHero(int damage);
+
+		bool getIsDefeated();
+		
 		std::string getType();
+		int getCurrentHP();
 		int getChanceHeroEscapes();
 
 	private:
 
+		bool isDefeated_;
+
 		std::string type_;
 		std::string size_;
+		
 		int level_;
-		int hp_;
+		int maxHP_;
+		int currentHP_;
+		int chanceToHit_;
+		int chanceToDefend_;
 		int attack_;
-		int defense_;
 		int chanceHeroEscapes_;
 
 		Weapon weapon_;

@@ -234,10 +234,12 @@ void GameController::createEnemies()
 					split(monsterOption, ',', monsterData);
 					
 					std::string monsterType = monsterData.at(0);
-					std::string monsterHP = monsterData.at(1);
-					std::string monsterAttack = monsterData.at(2);
-					std::string monsterDefense = monsterData.at(3);
-					std::string monsterChanceHeroEscapes = monsterData.at(4);
+					std::string monsterLevel = monsterData.at(1);
+					std::string monsterMaxHP = monsterData.at(2);
+					std::string monsterChanceToHit = monsterData.at(3);
+					std::string monsterChanceToDefend = monsterData.at(4);
+					std::string monsterAttack = monsterData.at(5);
+					std::string monsterChanceHeroEscapes = monsterData.at(6);
 
 					// Bepaal de grootte van het monster
 					std::string enemySizeOption = enemySizeOptions_->at(Random::getRandomNumber(0, (int)enemySizeOptions_->size() - 1));
@@ -246,24 +248,22 @@ void GameController::createEnemies()
 					split(enemySizeOption, ',', enemySizeData);
 
 					std::string enemySizeType = enemySizeData.at(0);
-					std::string enemySizeHP = enemySizeData.at(1);
-					std::string enemySizeAttack = enemySizeData.at(2);
-					std::string enemySizeDefense = enemySizeData.at(3);
-					std::string enemySizeChanceHeroEscapes = enemySizeData.at(4);
+					std::string enemySizeLevel = enemySizeData.at(1);
+					std::string enemySizeMaxHP = enemySizeData.at(2);
+					std::string enemySizeChanceToHit = enemySizeData.at(3);
+					std::string enemySizeChanceToDefend = enemySizeData.at(4);
+					std::string enemySizeAttack = enemySizeData.at(5);
+					std::string enemySizeChanceHeroEscapes = enemySizeData.at(6);
 
 					// Bepaal de benodigde gegevens
-					int totalHP = std::stoi(monsterHP) + std::stoi(enemySizeHP);
+					int totalLevel = std::stoi(monsterLevel) + std::stoi(enemySizeLevel);
+					int totalMaxHP = std::stoi(monsterMaxHP) + std::stoi(enemySizeMaxHP);
+					int totalChanceToHit = std::stoi(monsterChanceToHit) + std::stoi(enemySizeChanceToHit);
+					int totalChanceToDefend = std::stoi(monsterChanceToDefend) + std::stoi(enemySizeChanceToDefend);
 					int totalAttack = std::stoi(monsterAttack) + std::stoi(enemySizeAttack);
-					int totalDefense = std::stoi(monsterDefense) + std::stoi(enemySizeDefense);
 					int totalChanceHeroEscapes = std::stoi(monsterChanceHeroEscapes) + std::stoi(enemySizeChanceHeroEscapes);
 
-					int min = 1;
-					if ((z - 2) > 1) {
-						min = (z - 2);
-					}
-					int level = Random::getRandomNumber(min, z + 1);
-
-					room->addEnemy(new Enemy(monsterType, enemySizeType, level, totalHP, totalAttack, totalDefense, totalChanceHeroEscapes));
+					room->addEnemy(new Enemy(monsterType, enemySizeType, totalLevel, totalMaxHP, totalChanceToHit, totalChanceToDefend, totalAttack, totalChanceHeroEscapes));
 				}
 			}
 		}

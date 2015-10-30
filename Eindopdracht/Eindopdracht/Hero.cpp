@@ -7,11 +7,11 @@ Hero::Hero(std::string name)
 {
 	name_ = name;
 	level_ = 0;
-	hp_ = 0;
+	hp_ = 20;
 	xp_ = 0;
-	attack_ = 0;
-	defense_ = 0;
-	mindfulness_ = 0;
+	attack_ = 1;
+	defense_ = 1;
+	mindfulness_ = 2;
 
 	items_ = std::vector<Item>();
 }
@@ -37,26 +37,59 @@ bool Hero::goToRoom(std::string direction)
 
 void Hero::fight()
 {
-	//VECHT
+	std::vector<Enemy*>* enemies = currentRoom_->getEnemies();
+
+	// Toon gegevens vijanden
+	for (int i = 0; i < enemies->size(); i++) {
+		std::cout << "\nHet aantal levenspunten van " << enemies->at(i)->getType() << " is " << enemies->at(i)->getCurrentHP();
+	}
+	std::cout << "\n";
+
+	// Val vijanden aan
+	for (int i = 0; i < enemies->size(); i++) {
+		
+		//int number = Random::getRand	omNumber(0, 10);
+
+		std::cout << "\nJe valt " << enemies->at(i)->getType() << " aan en doet " << attack_ << " schade";
+		enemies->at(i)->getAttackedByHero(attack_);
+	}
+	std::cout << "\n"; 
+
+	enemies = currentRoom_->getEnemies();
+
+	// Toon gegevens vijanden
+	for (int i = 0; i < enemies->size(); i++) {
+		if (enemies->at(i)->getIsDefeated()) {
+			std::cout << "\nJe hebt " << enemies->at(i)->getType() << " verslagen.";
+			currentRoom_->removeEnemy(enemies->at(i));
+		}
+		else {
+			std::cout << "\nHet aantal levenspunten van " << enemies->at(i)->getType() << " is " << enemies->at(i)->getCurrentHP();
+		}
+	}
+	std::cout << "\n";
+
+	// Vijanden vallen aan
+	for (int i = 0; i < enemies->size(); i++) {
+	}
 }
 
 bool Hero::flee(std::string direction)
 {
-	// TODO: WANNEER ONTSNAPPEN NIET LUKT, HEEFT DAT GEVOLGEN (vijhanden vallen aan?)
+	// TODO: WANNEER ONTSNAPPEN NIET LUKT, HEEFT DAT GEVOLGEN (vijhanden vallen aan)
 
 	Room* newRoom = currentRoom_->getExit(direction);
 
 	if (newRoom != nullptr)
 	{
 		for (int i = 0; i < currentRoom_->getEnemies()->size(); i++) {
-			int number = Random::getRandomNumber(0, 10);
-			if (number <= currentRoom_->getEnemies()->at(i)->getChanceHeroEscapes()) {
-				std::cout << "\nJe wordt tegengehouden.\n";
+			if (Random::getRandomNumber(0, 100) <= currentRoom_->getEnemies()->at(i)->getChanceHeroEscapes()) {
+				std::cout << "\nJe wordt tegengehouden door een vijand en kunt daardoor niet vluchten.\n";
 				return true;
 			}
 		}
 		
-		std::cout << "\nHet lukt je te ontsnappen.\n";
+		std::cout << "\nHet lukt de vijanden niet om je tegen te houden, waardoor het lukt je om te vluchten.\n";
 		setCurrentRoom(newRoom);
 
 		return true;
@@ -164,9 +197,12 @@ void Hero::setMindfulness(int mindfulness)
 
 void Hero::getActions(std::vector<std::string>* actions)
 {
-	actions->push_back("loop [richting]");
 	if (currentRoom_->getEnemies()->size() > 0) {
 		actions->push_back("vlucht [richting]");
+		actions->push_back("vecht");
+	}
+	else {
+		actions->push_back("loop [richting]");
 	}
 
 	currentRoom_->getActions(actions);
@@ -184,6 +220,11 @@ bool Hero::handleAction(std::vector<std::string> action)
 	if (command == "vlucht" && action.size() == 2)
 	{
 		return flee(action[1]);
+	}
+	if (command == "vecht")
+	{
+		fight();
+		return true;
 	}
 
 	return currentRoom_->handleAction(action);

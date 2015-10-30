@@ -32,6 +32,7 @@ class Room
 		Room* getExit(std::string name);
 		
 		void addEnemy(Enemy* enemy);
+		void removeEnemy(Enemy* enemy);
 
 		bool getIsVisited();
 		void setIsVisited(bool isVisited);
