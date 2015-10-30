@@ -13,6 +13,7 @@ class Enemy
 		~Enemy();
 
 		std::string getType();
+		int getChanceHeroEscapes();
 
 	private:
 

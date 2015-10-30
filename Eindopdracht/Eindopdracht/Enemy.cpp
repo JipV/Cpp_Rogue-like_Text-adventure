@@ -20,3 +20,8 @@ std::string Enemy::getType()
 {
 	return type_;
 }
+
+int Enemy::getChanceHeroEscapes()
+{
+	return chanceHeroEscapes_;
+}

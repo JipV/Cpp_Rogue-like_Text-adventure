@@ -40,6 +40,7 @@ class Room
 		void setType(ROOM_TYPE type);
 
 		std::map<std::string, Room*> getExits();
+		std::vector<Enemy*>* getEnemies();
 
 	private:
 

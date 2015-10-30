@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "Hero.h"
 #include "Room.h"
+#include "Random.h"
 
 Hero::Hero(std::string name)
 {
@@ -17,6 +18,8 @@ Hero::Hero(std::string name)
 
 Hero::~Hero()
 {
+	delete currentRoom_;
+	currentRoom_ = nullptr;
 }
 
 bool Hero::goToRoom(std::string direction)
@@ -39,13 +42,23 @@ void Hero::fight()
 
 bool Hero::flee(std::string direction)
 {
-	// TODO: kans op vluchten/achtervolgd worden
+	// TODO: WANNEER ONTSNAPPEN NIET LUKT, HEEFT DAT GEVOLGEN (vijhanden vallen aan?)
 
 	Room* newRoom = currentRoom_->getExit(direction);
 
 	if (newRoom != nullptr)
 	{
+		for (int i = 0; i < currentRoom_->getEnemies()->size(); i++) {
+			int number = Random::getRandomNumber(0, 10);
+			if (number <= currentRoom_->getEnemies()->at(i)->getChanceHeroEscapes()) {
+				std::cout << "\nJe wordt tegengehouden.\n";
+				return true;
+			}
+		}
+		
+		std::cout << "\nHet lukt je te ontsnappen.\n";
 		setCurrentRoom(newRoom);
+
 		return true;
 	}
 
@@ -152,7 +165,9 @@ void Hero::setMindfulness(int mindfulness)
 void Hero::getActions(std::vector<std::string>* actions)
 {
 	actions->push_back("loop [richting]");
-	actions->push_back("vlucht [richting]");
+	if (currentRoom_->getEnemies()->size() > 0) {
+		actions->push_back("vlucht [richting]");
+	}
 
 	currentRoom_->getActions(actions);
 }

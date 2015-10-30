@@ -10,12 +10,18 @@ Room::Room(ROOM_TYPE type, std::string description) : isVisited_(true), type_(ty
 
 Room::~Room()
 {
+	for (int i = 0; i < enemies_->size(); i++)
+		delete enemies_->at(i);
 	delete enemies_;
 	enemies_ = nullptr;
 
+	for (int i = 0; i < items_->size(); i++)
+		delete items_->at(i);
 	delete items_;
 	items_ = nullptr;
 
+	for (int i = 0; i < traps_->size(); i++)
+		delete traps_->at(i);
 	delete traps_;
 	traps_ = nullptr;
 }
@@ -41,14 +47,16 @@ void Room::showExits()
 
 void Room::showEnemies()
 {
-	std::cout << "\nVijhanden: ";
-	for (size_t i = 0; i < enemies_->size(); i++) {
-		std::cout << enemies_->at(i)->getType();
-		if (i != enemies_->size() - 1) {
-			std::cout << ", ";
+	if (enemies_->size() > 0) {
+		std::cout << "\nVijhanden: ";
+		for (size_t i = 0; i < enemies_->size(); i++) {
+			std::cout << enemies_->at(i)->getType();
+			if (i != enemies_->size() - 1) {
+				std::cout << ", ";
+			}
 		}
+		std::cout << "\n";
 	}
-	std::cout << "\n";
 }
 
 void Room::getActions(std::vector<std::string>* actions)
@@ -115,4 +123,9 @@ void Room::setType(ROOM_TYPE type)
 std::map<std::string, Room*> Room::getExits()
 {
 	return exits_;
+}
+
+std::vector<Enemy*>* Room::getEnemies()
+{
+	return enemies_;
 }
