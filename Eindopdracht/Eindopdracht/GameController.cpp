@@ -5,6 +5,7 @@
 #include "Random.h"
 #include "Hero.h"
 #include "Map.h"
+#include "Generators.h"
 
 GameController::GameController()
 {
@@ -122,7 +123,8 @@ Map* GameController::createMap()
 	std::getline(std::cin, zSize);
 
 	// ER MOET NOG WORDEN GECHECKT OF ER GELDIGE WAARDEN ZIJN INGEVOERD
-	return new Map(std::stoi(xSize), std::stoi(ySize), std::stoi(zSize));
+	return MapGenerator().generateMap(std::stoi(xSize), std::stoi(ySize), std::stoi(zSize));
+	//return new Map(std::stoi(xSize), std::stoi(ySize), std::stoi(zSize));
 }
 
 Hero* GameController::createHero()

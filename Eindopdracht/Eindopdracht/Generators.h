@@ -1,6 +1,23 @@
 #pragma once
 #include "Room.h"
 
+class Map;
+class RoomGenerator;
+
+class MapGenerator
+{
+public:
+	MapGenerator();
+	~MapGenerator();
+
+	Map* generateMap(int xSize, int ySize, int zSize);
+
+private:
+	RoomGenerator* roomGenerator_;
+
+	Room* addRoom(int x, int y, int z, Map* map);
+};
+
 class RoomGenerator
 {
 public:
