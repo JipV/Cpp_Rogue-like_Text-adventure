@@ -12,7 +12,7 @@ class Enemy
 		Enemy(std::string type, std::string size, int level, int hp, int attack, int defense, int chanceHeroEscapes);
 		~Enemy();
 
-		std::string getType();
+		std::string getType() const;
 
 	private:
 
@@ -30,6 +30,8 @@ class Enemy
 
 		std::string description_;
 };
+
+std::ostream& operator<<(std::ostream& os, const Enemy& obj);
 
 #endif
 

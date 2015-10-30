@@ -22,33 +22,33 @@ Room::~Room()
 
 void Room::showDescription()
 {
-	std::cout << "\n" << description_ << "\n";
-}
+	std::cout << description_ << std::endl
+		<< std::endl
 
-void Room::showExits()
-{
-	std::cout << "\nUitgangen: ";
-	typedef std::map<std::string, Room*>::iterator it_type;
-	for (it_type iterator = exits_.begin(); iterator != exits_.end(); ++iterator) {
+		<< "Uitgangen: ";
+	for (auto iterator = exits_.begin(); iterator != exits_.end(); ++iterator) 
+	{
 		std::cout << iterator->first;
 		if (iterator != --exits_.end()) {
 			std::cout << ", ";
 		}
 	}
-	std::cout << "\n";
-}
+	std::cout << "." << std::endl
+		<< std::endl;
 
-
-void Room::showEnemies()
-{
-	std::cout << "\nVijhanden: ";
-	for (size_t i = 0; i < enemies_->size(); i++) {
-		std::cout << enemies_->at(i)->getType();
-		if (i != enemies_->size() - 1) {
-			std::cout << ", ";
+	if (enemies_->size() > 0)
+	{
+		std::cout << "Vijanden: ";
+		for (auto iterator = enemies_->begin(); iterator != enemies_->end(); ++iterator)
+		{
+			std::cout << **iterator;
+			if (iterator != --enemies_->end())
+				std::cout << ", ";
 		}
+		std::cout << "." << std::endl
+			<< std::endl;
 	}
-	std::cout << "\n";
+
 }
 
 void Room::getActions(std::vector<std::string>* actions)
@@ -65,7 +65,6 @@ bool Room::handleAction(std::vector<std::string> action)
 		action[1] == "rond")
 	{
 		showDescription();
-		showExits();
 		return true;
 	}
 	

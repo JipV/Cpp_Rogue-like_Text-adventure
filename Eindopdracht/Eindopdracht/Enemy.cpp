@@ -16,7 +16,14 @@ Enemy::~Enemy()
 {
 }
 
-std::string Enemy::getType()
+std::string Enemy::getType() const
 {
 	return type_;
+}
+
+// Hierdoor werkt std::cout << Enemy
+std::ostream& operator<<(std::ostream& os, const Enemy& enemy)
+{
+	os << enemy.getType();
+	return os;
 }

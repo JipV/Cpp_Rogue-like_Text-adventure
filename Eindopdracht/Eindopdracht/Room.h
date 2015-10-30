@@ -22,8 +22,6 @@ class Room
 		~Room();
 
 		void showDescription();
-		void showExits();
-		void showEnemies();
 
 		void getActions(std::vector<std::string>* actions);
 		bool handleAction(std::vector<std::string> action);

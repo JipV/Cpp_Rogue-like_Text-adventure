@@ -191,8 +191,6 @@ void Hero::setCurrentRoom(Room* room)
 {
 	currentRoom_ = room;
 	currentRoom_->showDescription();
-	currentRoom_->showExits();
-	currentRoom_->showEnemies();
 	room->setIsVisited(true);
 }
 
