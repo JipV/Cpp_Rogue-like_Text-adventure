@@ -61,6 +61,8 @@ void GameController::startGame()
 			if (!(hero_->handleAction(elems) ||
 				map_->handleAction(elems, hero_)))
 			{
+				if (elems[0] == "exit")
+					break;
 				std::cout << "actie \"" << action << "\" is niet geldig." << std::endl;
 			}
 		}
