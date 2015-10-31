@@ -140,7 +140,7 @@ TrapGenerator::~TrapGenerator()
 Trap* TrapGenerator::createTrap(int z)
 {
 	//TODO: hoeveel kans willen we dat een kamer een val heeft?
-	if (Random::getRandomNumber(1,100) <= 10)
+	if (Random::getRandomNumber(1, 100) <= 10)
 	{
 		std::vector<Trap*> allowedTraps;
 		for (int i = z; i <= z + 2; i++)
@@ -151,7 +151,7 @@ Trap* TrapGenerator::createTrap(int z)
 		if (allowedTraps.size() > 0)
 		{
 			// Copy constructor
-			return new Trap(*allowedTraps[Random::getRandomNumber(0,allowedTraps.size()-1)]);
+			return new Trap(*allowedTraps[Random::getRandomNumber(0, allowedTraps.size() - 1)]);
 		}
 	}
 
@@ -203,80 +203,6 @@ void TrapGenerator::saveTrap(Trap* trap)
 {
 	if (trap != nullptr && trap->level_ != -1)
 		possibleTraps_[trap->level_].push_back(trap);
-}
-
-// ---------------------------- ENEMY GENERATOR ----------------------------
-
-EnemyGenerator::EnemyGenerator()
-{
-	monsterOptions_ = std::vector<std::string>();
-	bossesOptions_ = std::vector<std::string>();
-	enemySizeOptions_ = std::vector<std::string>();
-
-	std::string line;
-	std::ifstream input_file("enemy_options.txt");
-	if (input_file) {
-		while (getline(input_file, line)) {
-			std::string optionName = line.substr(0, line.find(":"));
-			std::string option = line.substr(line.find(":") + 1, line.length());
-
-			if (optionName.compare("monsters") == 0) {
-				monsterOptions_.push_back(option);
-			}
-			else if (optionName.compare("bosses") == 0) {
-				bossesOptions_.push_back(option);
-			}
-			else if (optionName.compare("sizes") == 0) {
-				enemySizeOptions_.push_back(option);
-			}
-		}
-	}
-	input_file.close();
-}
-
-EnemyGenerator::~EnemyGenerator()
-{
-}
-
-Enemy* EnemyGenerator::createEnemy(int z)
-{
-	// Bepaal het soort monster
-	std::string monsterOption = monsterOptions_.at(Random::getRandomNumber(0, static_cast<int>(monsterOptions_.size()) - 1));
-	std::vector<std::string> monsterData = std::vector<std::string>();
-
-	split(monsterOption, ',', monsterData);
-
-	std::string monsterType = monsterData.at(0);
-	std::string monsterLevel = monsterData.at(1);
-	std::string monsterMaxHP = monsterData.at(2);
-	std::string monsterChanceToHit = monsterData.at(3);
-	std::string monsterChanceToDefend = monsterData.at(4);
-	std::string monsterAttack = monsterData.at(5);
-	std::string monsterChanceHeroEscapes = monsterData.at(6);
-
-	// Bepaal de grootte van het monster
-	std::string enemySizeOption = enemySizeOptions_.at(Random::getRandomNumber(0, static_cast<int>(enemySizeOptions_.size()) - 1));
-	std::vector<std::string> enemySizeData = std::vector<std::string>();
-
-	split(enemySizeOption, ',', enemySizeData);
-
-	std::string enemySizeType = enemySizeData.at(0);
-	std::string enemySizeLevel = enemySizeData.at(1);
-	std::string enemySizeMaxHP = enemySizeData.at(2);
-	std::string enemySizeChanceToHit = enemySizeData.at(3);
-	std::string enemySizeChanceToDefend = enemySizeData.at(4);
-	std::string enemySizeAttack = enemySizeData.at(5);
-	std::string enemySizeChanceHeroEscapes = enemySizeData.at(6);
-
-	// Bepaal de benodigde gegevens
-	int totalLevel = std::stoi(monsterLevel) + std::stoi(enemySizeLevel);
-	int totalMaxHP = std::stoi(monsterMaxHP) + std::stoi(enemySizeMaxHP);
-	int totalChanceToHit = std::stoi(monsterChanceToHit) + std::stoi(enemySizeChanceToHit);
-	int totalChanceToDefend = std::stoi(monsterChanceToDefend) + std::stoi(enemySizeChanceToDefend);
-	int totalAttack = std::stoi(monsterAttack) + std::stoi(enemySizeAttack);
-	int totalChanceHeroEscapes = std::stoi(monsterChanceHeroEscapes) + std::stoi(enemySizeChanceHeroEscapes);
-
-	return new Enemy(monsterType, enemySizeType, totalLevel, totalMaxHP, totalChanceToHit, totalChanceToDefend, totalAttack, totalChanceHeroEscapes);
 }
 
 // ---------------------------- WEAPON GENERATOR ----------------------------

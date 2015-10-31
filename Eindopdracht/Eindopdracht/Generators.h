@@ -23,6 +23,7 @@ private:
 	std::vector<std::string> enemySizeOptions_;
 };
 
+
 class TrapGenerator
 {
 public:
@@ -46,6 +47,8 @@ public:
 	~EnemyGenerator();
 
 	Enemy* createEnemy(int z);
+	Enemy* createEnemy(std::string stats);
+	Enemy* modifyEnemy(Enemy* enemy, std::string modifiers);
 private:
 	std::vector<std::string> monsterOptions_;
 	std::vector<std::string> bossesOptions_;

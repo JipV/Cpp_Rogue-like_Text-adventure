@@ -116,7 +116,7 @@ void Room::removeEnemy(Enemy* enemy)
 
 void Room::addItem(Item* item)
 {
-	items_->push_back(item);
+	items_.push_back(item);
 }
 
 void Room::setTrap(Trap* trap)
