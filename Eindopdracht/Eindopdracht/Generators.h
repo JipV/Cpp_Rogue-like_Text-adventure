@@ -75,3 +75,16 @@ private:
 
 	Room* addRoom(int x, int y, int z, Map* map);
 };
+
+class WeaponGenerator
+{
+public:
+	WeaponGenerator();
+	~WeaponGenerator();
+
+	Weapon* createWeapon();
+
+private:
+	std::vector<std::string> weaponOptions_;
+	std::vector<std::string> weaponMaterialOptions_;
+};

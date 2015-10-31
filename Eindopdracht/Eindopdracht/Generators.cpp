@@ -455,3 +455,61 @@ Room* MapGenerator::addRoom(int x, int y, int z, Map* map)
 
 	return currentRoom;
 }
+
+// ---------------------------- WEAPON GENERATOR ----------------------------
+
+WeaponGenerator::WeaponGenerator()
+{
+	weaponOptions_ = std::vector<std::string>();
+	weaponMaterialOptions_ = std::vector<std::string>();
+
+	std::string line;
+	std::ifstream input_file("items_options.txt");
+	if (input_file) {
+		while (getline(input_file, line)) {
+			std::string optionName = line.substr(0, line.find(":"));
+			std::string option = line.substr(line.find(":") + 1, line.length());
+
+			if (optionName.compare("weapon") == 0) {
+				weaponOptions_.push_back(option);
+			}
+			else if (optionName.compare("weaponMaterial") == 0) {
+				weaponMaterialOptions_.push_back(option);
+			}
+		}
+	}
+	input_file.close();
+}
+
+WeaponGenerator::~WeaponGenerator()
+{
+}
+
+Weapon* WeaponGenerator::createWeapon()
+{
+	// Bepaal het soort wapen
+	std::string weaponOption = weaponOptions_.at(Random::getRandomNumber(0, static_cast<int>(weaponOptions_.size()) - 1));
+	std::vector<std::string> weaponData = std::vector<std::string>();
+
+	split(weaponOption, ',', weaponData);
+
+	std::string weaponType = weaponData.at(0);
+	std::string weaponLevel = weaponData.at(1);
+	std::string weaponAttack = weaponData.at(2);
+
+	// Bepaal het materiaal van het wapen
+	std::string weaponMaterialOption = weaponMaterialOptions_.at(Random::getRandomNumber(0, static_cast<int>(weaponMaterialOptions_.size()) - 1));
+	std::vector<std::string> weaponMaterialData = std::vector<std::string>();
+
+	split(weaponMaterialOption, ',', weaponMaterialData);
+
+	std::string weaponMaterialType = weaponMaterialData.at(0);
+	std::string weaponMaterialLevel = weaponMaterialData.at(1);
+	std::string weaponMaterialAttack = weaponMaterialData.at(2);
+
+	// Bepaal de benodigde gegevens
+	int totalLevel = std::stoi(weaponLevel) + std::stoi(weaponMaterialLevel);
+	int totalAttack = std::stoi(weaponAttack) + std::stoi(weaponMaterialAttack);
+
+	return new Weapon(weaponType, totalLevel, totalAttack);
+}

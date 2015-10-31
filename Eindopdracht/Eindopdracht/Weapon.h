@@ -5,31 +5,14 @@ class Weapon
 {
 	public:
 
-		enum WEAPON_TYPE {
-			Sword,
-			Poleaxe,
-			Dagger,
-			Club,
-			Hammer
-		};
-
-		enum WEAPON_MATERIAL {
-			Wood,
-			Iron,
-			Steel,
-			Diamond
-		}; 
-
-		Weapon();
+		Weapon(std::string type, int level, int attack);
 		~Weapon();
 
 	private:
 
-		WEAPON_TYPE type_;
-		WEAPON_MATERIAL material_;
-		int damage_;
-		int attackBonus_;
-		int minimumLevel_;
+		std::string type_;
+		int level_;
+		int attack_;
 };
 
 #endif

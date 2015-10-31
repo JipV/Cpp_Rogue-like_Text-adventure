@@ -1,0 +1,8 @@
+weapon:zwaard,8,5
+weapon:bijl,6,4
+weapon:dolk,4,3
+weapon:knuppel,2,2
+weaponMaterial:hout,-1,-1
+weaponMaterial:ijzer,0,0
+weaponMaterial:staal,1,1
+weaponMaterial:diamant,2,2
