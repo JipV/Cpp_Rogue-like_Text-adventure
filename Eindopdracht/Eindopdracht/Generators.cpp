@@ -159,43 +159,47 @@ EnemyGenerator::~EnemyGenerator()
 
 Enemy* EnemyGenerator::createEnemy(int z)
 {
-	// Bepaal het soort monster
-	std::string monsterOption = monsterOptions_.at(Random::getRandomNumber(0, static_cast<int>(monsterOptions_.size()) - 1));
-	std::vector<std::string> monsterData = std::vector<std::string>();
-
-	split(monsterOption, ',', monsterData);
-
-	std::string monsterType = monsterData.at(0);
-	std::string monsterLevel = monsterData.at(1);
-	std::string monsterMaxHP = monsterData.at(2);
-	std::string monsterChanceToHit = monsterData.at(3);
-	std::string monsterChanceToDefend = monsterData.at(4);
-	std::string monsterAttack = monsterData.at(5);
-	std::string monsterChanceHeroEscapes = monsterData.at(6);
+	// Maak een enemy aan
+	Enemy* result = createEnemy(monsterOptions_.at(Random::getRandomNumber(0, static_cast<int>(monsterOptions_.size()) - 1)));
 
 	// Bepaal de grootte van het monster
-	std::string enemySizeOption = enemySizeOptions_.at(Random::getRandomNumber(0, static_cast<int>(enemySizeOptions_.size()) - 1));
-	std::vector<std::string> enemySizeData = std::vector<std::string>();
+	result = modifyEnemy(result, enemySizeOptions_.at(Random::getRandomNumber(0, static_cast<int>(enemySizeOptions_.size()) - 1)));
 
-	split(enemySizeOption, ',', enemySizeData);
+	return result;
+}
 
-	std::string enemySizeType = enemySizeData.at(0);
-	std::string enemySizeLevel = enemySizeData.at(1);
-	std::string enemySizeMaxHP = enemySizeData.at(2);
-	std::string enemySizeChanceToHit = enemySizeData.at(3);
-	std::string enemySizeChanceToDefend = enemySizeData.at(4);
-	std::string enemySizeAttack = enemySizeData.at(5);
-	std::string enemySizeChanceHeroEscapes = enemySizeData.at(6);
+Enemy* EnemyGenerator::createEnemy(std::string stats)
+{
+	std::vector<std::string> monsterData = std::vector<std::string>();
 
-	// Bepaal de benodigde gegevens
-	int totalLevel = std::stoi(monsterLevel) + std::stoi(enemySizeLevel);
-	int totalMaxHP = std::stoi(monsterMaxHP) + std::stoi(enemySizeMaxHP);
-	int totalChanceToHit = std::stoi(monsterChanceToHit) + std::stoi(enemySizeChanceToHit);
-	int totalChanceToDefend = std::stoi(monsterChanceToDefend) + std::stoi(enemySizeChanceToDefend);
-	int totalAttack = std::stoi(monsterAttack) + std::stoi(enemySizeAttack);
-	int totalChanceHeroEscapes = std::stoi(monsterChanceHeroEscapes) + std::stoi(enemySizeChanceHeroEscapes);
+	split(stats, ',', monsterData);
 
-	return new Enemy(monsterType, enemySizeType, totalLevel, totalMaxHP, totalChanceToHit, totalChanceToDefend, totalAttack, totalChanceHeroEscapes);
+	return new Enemy(monsterData.at(0),
+		"normaal", 
+		std::stoi(monsterData.at(1)),
+		std::stoi(monsterData.at(2)),
+		std::stoi(monsterData.at(3)),
+		std::stoi(monsterData.at(4)),
+		std::stoi(monsterData.at(5)),
+		std::stoi(monsterData.at(6)));
+}
+
+Enemy* EnemyGenerator::modifyEnemy(Enemy* enemy, std::string modifiers)
+{
+	std::vector<std::string> modifierData = std::vector<std::string>();
+
+	split(modifiers, ',', modifierData);
+
+	enemy->size_ = modifierData.at(0);
+	enemy->level_ += std::stoi(modifierData.at(1));
+	enemy->maxHP_ += std::stoi(modifierData.at(2));
+	enemy->currentHP_ += std::stoi(modifierData.at(2));
+	enemy->chanceToHit_ += std::stoi(modifierData.at(3));
+	enemy->chanceToDefend_ += std::stoi(modifierData.at(4));
+	enemy->attack_ += std::stoi(modifierData.at(5));
+	enemy->chanceHeroEscapes_ += std::stoi(modifierData.at(6));
+
+	return enemy;
 }
 
 // ---------------------------- ROOM GENERATOR ----------------------------
