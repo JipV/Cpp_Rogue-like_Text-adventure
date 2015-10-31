@@ -5,21 +5,6 @@ class Map;
 class Enemy;
 class Trap;
 
-class TrapGenerator
-{
-public:
-	TrapGenerator();
-	~TrapGenerator();
-
-	Trap* createTrap(int z);
-
-private:
-	std::map<int, std::vector<Trap*>> possibleTraps_;
-
-	void parseLine(std::string line, Trap* trap);
-	void saveTrap(Trap* trap);
-};
-
 class EnemyGenerator
 {
 public:
@@ -34,6 +19,22 @@ private:
 	std::vector<std::string> monsterOptions_;
 	std::vector<std::string> bossesOptions_;
 	std::vector<std::string> enemySizeOptions_;
+};
+
+class TrapGenerator
+{
+public:
+	TrapGenerator(EnemyGenerator* enemyGenerator);
+	~TrapGenerator();
+
+	Trap* createTrap(int z);
+
+private:
+	EnemyGenerator* enemyGenerator_;
+	std::map<int, std::vector<Trap*>> possibleTraps_;
+
+	void parseLine(std::string line, Trap* trap);
+	void saveTrap(Trap* trap);
 };
 
 class RoomGenerator

@@ -30,6 +30,7 @@ class Room
 		Room* getExit(std::string name);
 		std::map<std::string, Room*> getAllExits();
 		
+		void addEnemy(Enemy* enemy);
 		void removeEnemy(Enemy* enemy);
 		bool hasEnemies();
 		std::vector<Enemy*>* getEnemies();
@@ -53,7 +54,6 @@ class Room
 		Trap* trap_ = nullptr;
 
 		void addExit(std::string name, Room* room);
-		void addEnemy(Enemy* enemy);
 		void setTrap(Trap* trap);
 };
 

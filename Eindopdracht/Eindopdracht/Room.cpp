@@ -75,7 +75,7 @@ bool Room::handleAction(std::string fullCommand, std::vector<std::string> action
 		return true;
 	}
 
-	if (trap_ && trap_->handleAction(fullCommand, action, hero))
+	if (trap_ && trap_->handleAction(fullCommand, action, hero, this))
 	{
 		return true;
 	}

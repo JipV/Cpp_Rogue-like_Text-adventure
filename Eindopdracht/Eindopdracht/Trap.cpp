@@ -3,6 +3,7 @@
 #include "Trap.h"
 #include "Random.h"
 #include "Hero.h"
+#include "Room.h"
 
 // ReSharper disable once CppPossiblyUninitializedMember
 Trap::Trap() : triggered_(false),
@@ -14,7 +15,8 @@ damageOverTimeTurns_(0),
 roomDescription_(""),
 damageOverTimeMessage_(""),
 damageOverTimeDone_(""),
-triggerCommands_({})
+triggerCommands_({}),
+enemiesToSummon_({})
 {
 
 }
@@ -35,7 +37,12 @@ Trap::Trap(const Trap& rhs) :
 	damageOverTimeDone_(rhs.damageOverTimeDone_),
 	triggerCommands_(rhs.triggerCommands_)
 {
-	// TODO: copy enemies to summon
+	enemiesToSummon_ = {};
+
+	std::for_each(rhs.enemiesToSummon_.begin(), rhs.enemiesToSummon_.end(), [this](Enemy* e)
+	{
+		enemiesToSummon_.push_back(new Enemy(*e));
+	});
 }
 
 Trap::~Trap()
@@ -48,19 +55,19 @@ Trap::~Trap()
 	enemiesToSummon_.clear();
 }
 
-bool Trap::handleAction(std::string fullCommand, std::vector<std::string> action, Hero* hero)
+bool Trap::handleAction(std::string fullCommand, std::vector<std::string> action, Hero* hero, Room* room)
 {
 	if (triggered_)
 		return false;
 
 	if (triggerCommands_.empty() ||
 		std::find(triggerCommands_.begin(), triggerCommands_.end(), "fullCommand") != triggerCommands_.end())
-		return tryTrigger(hero);
+		return tryTrigger(hero, room);
 
 	return false;
 }
 
-bool Trap::tryTrigger(Hero* hero)
+bool Trap::tryTrigger(Hero* hero, Room* room)
 {
 	if (!triggered_ && Random::getRandomNumber(1,100) <= chanceToTrigger_)
 	{
@@ -81,12 +88,11 @@ bool Trap::tryTrigger(Hero* hero)
 
 		if (!enemiesToSummon_.empty())
 		{
-			std::cout << "Enemies summonen werkt nog niet..." << std::endl;
-
-			// TODO: summon enemies
+			std::for_each(enemiesToSummon_.begin(), enemiesToSummon_.end(), [room](Enemy* e)
+			{
+				room->addEnemy(e);
+			});
 		}
-
-
 
 		return true;
 	}
