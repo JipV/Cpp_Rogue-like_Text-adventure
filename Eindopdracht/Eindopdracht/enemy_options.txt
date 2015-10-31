@@ -3,7 +3,7 @@ monsters:schorpioen,2,3,30,30,3,30
 monsters:wolf,4,5,50,50,3,30
 monsters:olifant,4,7,30,50,2,70
 monsters:zombie,6,7,50,50,3,50
-monsters:mens,8,7,70,70,4,30
+monsters:man,8,7,70,70,4,30
 monsters:goblin,9,10,70,70,4,50
 monsters:gladiator,9,13,70,70,4,50
 bosses:dino,12,15,50,70,5,70
