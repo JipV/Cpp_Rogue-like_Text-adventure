@@ -28,16 +28,15 @@ class Room
 
 		Room* getExit(std::string name);
 		std::map<std::string, Room*> getAllExits();
-
+		
+		void removeEnemy(Enemy* enemy);
 		bool hasEnemies();
+		std::vector<Enemy*>* getEnemies();
 
 		bool getIsVisited();
 		void setIsVisited(bool isVisited);
 
 		ROOM_TYPE getType();
-
-		
-
 	private:
 
 		bool isVisited_;

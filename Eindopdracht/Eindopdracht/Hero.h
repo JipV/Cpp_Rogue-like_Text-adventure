@@ -15,28 +15,10 @@ class Hero
 		Hero(std::string name);
 		~Hero();
 
-		void addItem(Item item);
-		void removeItem(Item item);
+		void getAttackedByEnemies();
 
-		std::string getName();
-		
-		int getLevel();
-		void setLevel(int level);
-		
-		int getHP();
-		void setHP(int hp);
-		
-		int getXP();
-		void setXP(int xp);
-
-		int getAttack();
-		void setAttack(int attack);
-
-		int getDefense();
-		void setDefense(int defense);
-
-		int getMindfulness();
-		void setMindfulness(int mindfulness);
+		void addItem(Item* item);
+		void removeItem(Item* item);
 
 		void getActions(std::vector<std::string>* actions);
 		bool handleAction(std::string fullCommand, std::vector<std::string> action);
@@ -44,15 +26,19 @@ class Hero
 		Room* getCurrentRoom();
 		void setCurrentRoom(Room* room);
 
-		std::vector<Item> getItems();
+		std::vector<Item*>* getItems();
 
 	private:
+		bool isDefeated_;
+
 		std::string name_;
 		int level_;
-		int hp_;
+		int maxHP_;
+		int currentHP_;
 		int xp_;
+		int chanceToHit_;
+		int chanceToDefend_;
 		int attack_;
-		int defense_;
 		int mindfulness_;
 
 		Room* currentRoom_;
@@ -61,7 +47,7 @@ class Hero
 		Armour armour_;
 		Shield shield_;
 
-		std::vector<Item> items_;
+		std::vector<Item*>* items_;
 
 		bool goToRoom(std::string direction);
 		void fight();

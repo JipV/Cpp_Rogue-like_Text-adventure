@@ -58,7 +58,6 @@ void Room::showDescription()
 		std::cout << "." << std::endl
 			<< std::endl;
 	}
-
 }
 
 void Room::getActions(std::vector<std::string>* actions)
@@ -100,6 +99,12 @@ void Room::addEnemy(Enemy* enemy)
 	enemies_->push_back(enemy);
 }
 
+
+void Room::removeEnemy(Enemy* enemy)
+{
+	enemies_->erase(std::remove(enemies_->begin(), enemies_->end(), enemy), enemies_->end());
+}
+
 void Room::setTrap(Trap* trap)
 {
 	trap_ = trap;
@@ -137,4 +142,9 @@ Room::ROOM_TYPE Room::getType()
 std::map<std::string, Room*> Room::getAllExits()
 {
 	return exits_;
+}
+
+std::vector<Enemy*>* Room::getEnemies()
+{
+	return enemies_;
 }

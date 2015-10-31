@@ -91,20 +91,20 @@ Map* GameController::createMap()
 Hero* GameController::createHero()
 {
 	std::cout << "\nWil je spelen met een nieuwe held of met een eerder opgeslagen held?\n";
-	std::cout << "[new | load]\n";
+	std::cout << "[nieuw | laden]\n";
 	std::cout << "\nActie: ";
 
 	std::string action;
 	std::getline(std::cin, action);
 
-	while (action.compare("new") != 0 && action.compare("load") != 0) {
+	while (action.compare("nieuw") != 0 && action.compare("laden") != 0) {
 		std::cout << "\nIngevoerde actie is niet herkent. Voor opnieuw een actie in.\n";
-		std::cout << "[new | load]\n";
+		std::cout << "[nieuw | laden]\n";
 		std::cout << "\nActie: ";
 		std::getline(std::cin, action);
 	}
 
-	if (action.compare("new") == 0) {
+	if (action.compare("nieuw") == 0) {
 		std::cout << "\nWat is de naam van de nieuwe held?\n";
 		std::cout << "\nNaam: ";
 		std::string name;
@@ -120,7 +120,7 @@ Hero* GameController::createHero()
 
 		return new Hero(name);
 	}
-	else if (action.compare("load") == 0) {
+	else if (action.compare("laden") == 0) {
 		std::cout << "\nWat is de naam van held?\n";
 		std::cout << "\nNaam: ";
 		std::string name;
@@ -142,7 +142,7 @@ Hero* GameController::createHero()
 			std::string propertyName = line.substr(0, line.find(":"));
 			std::string propertyValue = line.substr(line.find(":") + 1, line.length());
 
-			if (propertyName == "level") {
+			/*if (propertyName == "level") {
 				newHero->setLevel(std::stoi(propertyValue));
 			}
 			else if (propertyName == "hp") {
@@ -159,7 +159,7 @@ Hero* GameController::createHero()
 			}
 			else if (propertyName == "mindfulness") {
 				newHero->setMindfulness(std::stoi(propertyValue));
-			}
+			}*/
 		}
 		input_file.close();
 
