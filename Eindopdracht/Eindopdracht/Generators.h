@@ -4,6 +4,8 @@
 class Map;
 class Enemy;
 class Trap;
+class Weapon;
+class Shield;
 
 class EnemyGenerator
 {
@@ -37,6 +39,40 @@ private:
 	void saveTrap(Trap* trap);
 };
 
+class WeaponGenerator
+{
+public:
+	WeaponGenerator();
+	~WeaponGenerator();
+
+	Weapon* createWeapon(int z);
+
+private:
+	std::vector<std::string> weaponOptions_;
+	std::vector<std::string> weaponMaterialOptions_;
+
+	std::vector<Weapon*> possibleWeapons_;
+
+	Weapon* parseLine(std::string weaponOption, std::string weaponMaterialOption);
+};
+
+class ShieldGenerator
+{
+public:
+	ShieldGenerator();
+	~ShieldGenerator();
+
+	Shield* createShield(int z);
+
+private:
+	std::vector<std::string> shieldSizeOptions_;
+	std::vector<std::string> shieldMaterialOptions_;
+
+	std::vector<Shield*> possibleShields_;
+
+	Shield* parseLine(std::string shieldSizeOption, std::string shieldMaterialOption);
+};
+
 class RoomGenerator
 {
 public:
@@ -52,6 +88,8 @@ private:
 
 	EnemyGenerator* enemyGenerator_;
 	TrapGenerator* trapGenerator_;
+	WeaponGenerator* weaponGenerator_;
+	ShieldGenerator* shieldGenerator_;
 
 	std::vector<std::string> sizeOptions_;
 	std::vector<std::string> floorOptions_;
@@ -63,6 +101,8 @@ private:
 
 	std::string generateDescription();
 	void addEnemies(Room* room, int z);
+	void addWeapon(Room* room, int z);
+	void addShield(Room* room, int z);
 	void addTraps(Room* room, int z);
 };
 

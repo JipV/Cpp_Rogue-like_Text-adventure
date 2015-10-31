@@ -4,6 +4,8 @@
 #include "Map.h"
 #include "Enemy.h"
 #include "Trap.h"
+#include "Weapon.h"
+#include "Shield.h"
 
 void split(const std::string& s, char delim, std::vector<std::string>& v) {
 	int i = 0;
@@ -138,7 +140,7 @@ TrapGenerator::~TrapGenerator()
 Trap* TrapGenerator::createTrap(int z)
 {
 	//TODO: hoeveel kans willen we dat een kamer een val heeft?
-	if (Random::getRandomNumber(1,100) <= 10)
+	if (Random::getRandomNumber(1, 100) <= 10)
 	{
 		std::vector<Trap*> allowedTraps;
 		for (int i = z; i <= z + 2; i++)
@@ -149,7 +151,7 @@ Trap* TrapGenerator::createTrap(int z)
 		if (allowedTraps.size() > 0)
 		{
 			// Copy constructor
-			return new Trap(*allowedTraps[Random::getRandomNumber(0,allowedTraps.size()-1)]);
+			return new Trap(*allowedTraps[Random::getRandomNumber(0, allowedTraps.size() - 1)]);
 		}
 	}
 
@@ -203,6 +205,172 @@ void TrapGenerator::saveTrap(Trap* trap)
 		possibleTraps_[trap->level_].push_back(trap);
 }
 
+// ---------------------------- WEAPON GENERATOR ----------------------------
+
+WeaponGenerator::WeaponGenerator()
+{
+	weaponOptions_ = std::vector<std::string>();
+	weaponMaterialOptions_ = std::vector<std::string>();
+
+	std::string line;
+	std::ifstream input_file("weapon_options.txt");
+	if (input_file) {
+		while (getline(input_file, line)) {
+			std::string optionName = line.substr(0, line.find(":"));
+			std::string option = line.substr(line.find(":") + 1, line.length());
+
+			if (optionName.compare("weapon") == 0) {
+				weaponOptions_.push_back(option);
+			}
+			else if (optionName.compare("weaponMaterial") == 0) {
+				weaponMaterialOptions_.push_back(option);
+			}
+		}
+	}
+	input_file.close();
+
+	for (size_t i = 0; i < weaponOptions_.size(); i++) {
+		for (size_t j = 0; j < weaponMaterialOptions_.size(); j++) {
+			possibleWeapons_.push_back(parseLine(weaponOptions_.at(i), weaponMaterialOptions_.at(i)));
+		}
+	}
+
+}
+
+WeaponGenerator::~WeaponGenerator()
+{
+}
+
+Weapon* WeaponGenerator::parseLine(std::string weaponOption, std::string weaponMaterialOption)
+{
+	// Gegevens soort wapen
+	std::vector<std::string> weaponData = std::vector<std::string>();
+
+	split(weaponOption, ',', weaponData);
+
+	std::string weaponType = weaponData.at(0);
+	std::string weaponLevel = weaponData.at(1);
+	std::string weaponAttack = weaponData.at(2);
+
+	// Gegevens materiaal van het wapen
+	std::vector<std::string> weaponMaterialData = std::vector<std::string>();
+
+	split(weaponMaterialOption, ',', weaponMaterialData);
+
+	std::string weaponMaterialType = weaponMaterialData.at(0);
+	std::string weaponMaterialLevel = weaponMaterialData.at(1);
+	std::string weaponMaterialAttack = weaponMaterialData.at(2);
+
+	// Bepaal de benodigde gegevens
+	int totalLevel = std::stoi(weaponLevel) + std::stoi(weaponMaterialLevel);
+	int totalAttack = std::stoi(weaponAttack) + std::stoi(weaponMaterialAttack);
+
+	return new Weapon(weaponType, totalLevel, totalAttack);
+}
+
+Weapon* WeaponGenerator::createWeapon(int z)
+{
+	//TODO: hoeveel kans willen we dat een kamer een wapen heeft?
+	if (Random::getRandomNumber(1, 100) <= 20)
+	{
+		std::vector<Weapon*> allowedWeapons;
+		for (int i = z; i <= z + 2; i++)
+		{
+			allowedWeapons.insert(allowedWeapons.end(), possibleWeapons_.begin(), possibleWeapons_.end());
+		}
+
+		if (allowedWeapons.size() > 0)
+		{
+			return allowedWeapons[Random::getRandomNumber(0, allowedWeapons.size() - 1)];
+		}
+	}
+
+	return nullptr;
+}
+
+// ---------------------------- SHIELD GENERATOR ----------------------------
+
+ShieldGenerator::ShieldGenerator()
+{
+	shieldSizeOptions_ = std::vector<std::string>();
+	shieldMaterialOptions_ = std::vector<std::string>();
+
+	std::string line;
+	std::ifstream input_file("shield_options.txt");
+	if (input_file) {
+		while (getline(input_file, line)) {
+			std::string optionName = line.substr(0, line.find(":"));
+			std::string option = line.substr(line.find(":") + 1, line.length());
+
+			if (optionName.compare("shieldSize") == 0) {
+				shieldSizeOptions_.push_back(option);
+			}
+			else if (optionName.compare("shieldMaterial") == 0) {
+				shieldMaterialOptions_.push_back(option);
+			}
+		}
+	}
+	input_file.close();
+
+	for (size_t i = 0; i < shieldSizeOptions_.size(); i++) {
+		for (size_t j = 0; j < shieldMaterialOptions_.size(); j++) {
+			possibleShields_.push_back(parseLine(shieldSizeOptions_.at(i), shieldMaterialOptions_.at(i)));
+		}
+	}
+
+}
+
+ShieldGenerator::~ShieldGenerator()
+{
+}
+
+Shield* ShieldGenerator::parseLine(std::string shieldSizeOption, std::string shieldMaterialOption)
+{
+	// Gegevens grootte van het schild
+	std::vector<std::string> shieldSizeData = std::vector<std::string>();
+
+	split(shieldSizeOption, ',', shieldSizeData);
+
+	std::string shieldSize = shieldSizeData.at(0);
+	std::string shieldSizeLevel = shieldSizeData.at(1);
+	std::string shieldSizeAttack = shieldSizeData.at(2);
+
+	// Gegevens materiaal van het wapen
+	std::vector<std::string> shieldMaterialData = std::vector<std::string>();
+
+	split(shieldMaterialOption, ',', shieldMaterialData);
+
+	std::string shieldMaterialType = shieldMaterialData.at(0);
+	std::string shieldMaterialLevel = shieldMaterialData.at(1);
+	std::string shieldMaterialAttack = shieldMaterialData.at(2);
+
+	// Bepaal de benodigde gegevens
+	int totalLevel = std::stoi(shieldSizeLevel) + std::stoi(shieldMaterialLevel);
+	int totalAttack = std::stoi(shieldSizeAttack) + std::stoi(shieldMaterialAttack);
+
+	return new Shield(shieldSize, totalLevel, totalAttack);
+}
+
+Shield* ShieldGenerator::createShield(int z)
+{
+	//TODO: hoeveel kans willen we dat een kamer een schild heeft?
+	if (Random::getRandomNumber(1, 100) <= 20)
+	{
+		std::vector<Shield*> allowedShields;
+		for (int i = z; i <= z + 2; i++)
+		{
+			allowedShields.insert(allowedShields.end(), possibleShields_.begin(), possibleShields_.end());
+		}
+
+		if (allowedShields.size() > 0)
+		{
+			return allowedShields[Random::getRandomNumber(0, allowedShields.size() - 1)];
+		}
+	}
+
+	return nullptr;
+}
+
 // ---------------------------- ROOM GENERATOR ----------------------------
 
 RoomGenerator::RoomGenerator() : x_(-1), y_(-1), specialType_(Room::ROOM_TYPE::NormalRoom)
@@ -240,12 +408,16 @@ RoomGenerator::RoomGenerator() : x_(-1), y_(-1), specialType_(Room::ROOM_TYPE::N
 	input_file.close();
 
 	enemyGenerator_ = new EnemyGenerator();
+	weaponGenerator_ = new WeaponGenerator();
+	shieldGenerator_ = new ShieldGenerator();
 	trapGenerator_ = new TrapGenerator(enemyGenerator_);
 }
 
 RoomGenerator::~RoomGenerator()
 {
 	delete trapGenerator_;
+	delete weaponGenerator_;
+	delete shieldGenerator_;
 	delete enemyGenerator_;
 }
 
@@ -286,6 +458,8 @@ Room* RoomGenerator::createRoom(int x, int y, int z)
 		result = new Room(createType, generateDescription(), z);
 		addEnemies(result, z);
 		addTraps(result, z);
+		addWeapon(result, z);
+		addShield(result, z);
 		break;
 	default:
 		result = new Room(Room::ROOM_TYPE::NormalRoom, generateDescription(), z);
@@ -322,6 +496,22 @@ void RoomGenerator::addTraps(Room* room, int z)
 
 	if (trap != nullptr)
 		room->setTrap(trap);
+}
+
+void RoomGenerator::addWeapon(Room* room, int z)
+{
+	Weapon* weapon = weaponGenerator_->createWeapon(z);
+
+	if (weapon != nullptr)
+		room->addItem(weapon);
+}
+
+void RoomGenerator::addShield(Room* room, int z)
+{
+	Shield* shield = shieldGenerator_->createShield(z);
+
+	if (shield != nullptr)
+		room->addItem(shield);
 }
 
 // ---------------------------- MAP GENERATOR ----------------------------
@@ -460,3 +650,4 @@ Room* MapGenerator::addRoom(int x, int y, int z, Map* map)
 
 	return currentRoom;
 }
+

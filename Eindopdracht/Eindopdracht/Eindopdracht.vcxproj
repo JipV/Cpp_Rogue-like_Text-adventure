@@ -144,12 +144,13 @@
   <ItemGroup>
     <Text Include="enemy_options.txt" />
     <Text Include="held1.txt" />
+    <Text Include="shield_options.txt" />
+    <Text Include="weapon_options.txt" />
     <Text Include="ReadMe.txt" />
     <Text Include="room_options.txt" />
     <Text Include="traps.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Armour.h" />
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="GameController.h" />
     <ClInclude Include="Hero.h" />
@@ -165,7 +166,6 @@
     <ClInclude Include="Weapon.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Armour.cpp" />
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="GameController.cpp" />
     <ClCompile Include="Hero.cpp" />

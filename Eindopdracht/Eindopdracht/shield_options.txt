@@ -1,0 +1,7 @@
+shieldSize:klein,3,1,2
+shieldSize:normaal,6,4
+shieldSize:groot,9,5,6
+shieldMaterial:hout,-1,-1
+shieldMaterial:ijzer,0,0
+shieldMaterial:staal,1,1
+shieldMaterial:diamant,2,2

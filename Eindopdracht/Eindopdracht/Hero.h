@@ -4,7 +4,6 @@
 class Room;
 
 #include "Weapon.h"
-#include "Armour.h"
 #include "Shield.h"
 #include "Item.h"
 
@@ -43,10 +42,6 @@ class Hero
 		int mindfulness_;
 
 		Room* currentRoom_;
-
-		Weapon weapon_;
-		Armour armour_;
-		Shield shield_;
 
 		std::vector<Item*>* items_;
 

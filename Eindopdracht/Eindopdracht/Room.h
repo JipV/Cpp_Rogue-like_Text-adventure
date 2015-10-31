@@ -57,6 +57,7 @@ class Room
 		Trap* trap_ = nullptr;
 
 		void addExit(std::string name, Room* room);
+		void addItem(Item* item);
 		void setTrap(Trap* trap);
 };
 
