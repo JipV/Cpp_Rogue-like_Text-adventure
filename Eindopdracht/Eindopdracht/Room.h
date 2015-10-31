@@ -19,10 +19,12 @@ class Room
 			EndEnemy
 		};
 
-		Room(ROOM_TYPE type, std::string description);
+		Room(ROOM_TYPE type, std::string description, int level);
 		~Room();
 
 		void showDescription();
+
+		int getLevel();
 
 		void getActions(std::vector<std::string>* actions);
 		bool handleAction(std::string fullCommand, std::vector<std::string> action, Hero* hero);
@@ -42,6 +44,7 @@ class Room
 	private:
 
 		bool isVisited_;
+		int level_;
 
 		ROOM_TYPE type_;
 
