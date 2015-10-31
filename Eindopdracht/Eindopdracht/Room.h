@@ -35,7 +35,7 @@ class Room
 		void addEnemy(Enemy* enemy);
 		void removeEnemy(Enemy* enemy);
 		bool hasEnemies();
-		std::vector<Enemy*>* getEnemies();
+		std::vector<Enemy*> getEnemies();
 
 		bool getIsVisited();
 		void setIsVisited(bool isVisited);
@@ -52,8 +52,8 @@ class Room
 
 		std::map<std::string, Room*> exits_;
 
-		std::vector<Enemy*>* enemies_ = nullptr;
-		std::vector<Item*>* items_ = nullptr;
+		std::vector<Enemy*> enemies_;
+		std::vector<Item*> items_;
 		Trap* trap_ = nullptr;
 
 		void addExit(std::string name, Room* room);

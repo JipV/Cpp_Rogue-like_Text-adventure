@@ -7,25 +7,21 @@
 
 Room::Room(ROOM_TYPE type, std::string description, int level) : isVisited_(false), level_(level), type_(type), description_(description)
 {
-	enemies_ = new std::vector<Enemy*>();
-	items_ = new std::vector<Item*>();
+	enemies_ = std::vector<Enemy*>();
+	items_ = std::vector<Item*>();
 }
 
 Room::~Room()
 {
-	std::for_each(enemies_->begin(), enemies_->end(), [](Enemy* e)
+	std::for_each(enemies_.begin(), enemies_.end(), [](Enemy* e)
 	{
 		delete e;
 	});
-	delete enemies_;
-	enemies_ = nullptr;
 
-	std::for_each(items_->begin(), items_->end(), [](Item* i)
+	std::for_each(items_.begin(), items_.end(), [](Item* i)
 	{
 		delete i;
 	});
-	delete items_;
-	items_ = nullptr;
 
 	delete trap_;
 	trap_ = nullptr;
@@ -50,13 +46,13 @@ void Room::showDescription()
 	std::cout << "." << std::endl
 		<< std::endl;
 
-	if (enemies_->size() > 0)
+	if (enemies_.size() > 0)
 	{
 		std::cout << "Vijanden: ";
-		for (auto iterator = enemies_->begin(); iterator != enemies_->end(); ++iterator)
+		for (auto iterator = enemies_.begin(); iterator != enemies_.end(); ++iterator)
 		{
 			std::cout << **iterator;
-			if (iterator != --enemies_->end())
+			if (iterator != --enemies_.end())
 				std::cout << ", ";
 		}
 		std::cout << "." << std::endl
@@ -105,13 +101,13 @@ void Room::addExit(std::string name, Room* room)
 
 void Room::addEnemy(Enemy* enemy)
 {
-	enemies_->push_back(enemy);
+	enemies_.push_back(enemy);
 }
 
 
 void Room::removeEnemy(Enemy* enemy)
 {
-	enemies_->erase(std::remove(enemies_->begin(), enemies_->end(), enemy), enemies_->end());
+	enemies_.erase(std::remove(enemies_.begin(), enemies_.end(), enemy), enemies_.end());
 }
 
 void Room::setTrap(Trap* trap)
@@ -121,7 +117,7 @@ void Room::setTrap(Trap* trap)
 
 bool Room::hasEnemies()
 {
-	return (enemies_->size() > 0);
+	return (enemies_.size() > 0);
 }
 
 Room* Room::getExit(std::string name)
@@ -153,7 +149,7 @@ std::map<std::string, Room*> Room::getAllExits()
 	return exits_;
 }
 
-std::vector<Enemy*>* Room::getEnemies()
+std::vector<Enemy*> Room::getEnemies()
 {
 	return enemies_;
 }

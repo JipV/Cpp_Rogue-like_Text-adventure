@@ -44,27 +44,27 @@ bool Hero::goToRoom(std::string direction)
 
 void Hero::fight()
 {
-	std::vector<Enemy*>* enemies = currentRoom_->getEnemies();
+	std::vector<Enemy*> enemies = currentRoom_->getEnemies();
 
 	// Val vijanden aan
-	for (size_t i = 0; i < enemies->size(); i++) {
+	for (size_t i = 0; i < enemies.size(); i++) {
 		if (Random::getRandomNumber(0, 100) <= chanceToHit_) {
-			if (enemies->at(i)->getAttackedByHero(attack_)) {
-				std::cout << "\nJe valt " << enemies->at(i)->getType() << " aan en doet " << attack_ << " schade.";
-				if (enemies->at(i)->getIsDefeated()) {
-					std::cout << "\nJe hebt " << enemies->at(i)->getType() << " verslagen.";
-					currentRoom_->removeEnemy(enemies->at(i));
+			if (enemies.at(i)->getAttackedByHero(attack_)) {
+				std::cout << "\nJe valt " << enemies.at(i)->getType() << " aan en doet " << attack_ << " schade.";
+				if (enemies.at(i)->getIsDefeated()) {
+					std::cout << "\nJe hebt " << enemies.at(i)->getType() << " verslagen.";
+					currentRoom_->removeEnemy(enemies.at(i));
 				}
 				else {
-					std::cout << "\nHet aantal levenspunten van " << enemies->at(i)->getType() << " is " << enemies->at(i)->getCurrentHP();
+					std::cout << "\nHet aantal levenspunten van " << enemies.at(i)->getType() << " is " << enemies.at(i)->getCurrentHP();
 				}
 			}
 			else {
-				std::cout << "\nJe valt " << enemies->at(i)->getType() << ", maar " << enemies->at(i)->getType() << " verdedigt zich, waardoor de aanval mislukt.";
+				std::cout << "\nJe valt " << enemies.at(i)->getType() << ", maar " << enemies.at(i)->getType() << " verdedigt zich, waardoor de aanval mislukt.";
 			}
 		}
 		else {
-			std::cout << "\nJe valt " << enemies->at(i)->getType() << " aan en mist.";
+			std::cout << "\nJe valt " << enemies.at(i)->getType() << " aan en mist.";
 		}
 		std::cout << "\n";
 	}
@@ -81,8 +81,8 @@ bool Hero::flee(std::string direction)
 
 	if (newRoom) // nullptr == false
 	{
-		for (size_t i = 0; i < currentRoom_->getEnemies()->size(); i++) {
-			if (Random::getRandomNumber(0, 100) <= currentRoom_->getEnemies()->at(i)->getChanceHeroEscapes()) {
+		for (size_t i = 0; i < currentRoom_->getEnemies().size(); i++) {
+			if (Random::getRandomNumber(0, 100) <= currentRoom_->getEnemies().at(i)->getChanceHeroEscapes()) {
 				std::cout << "\nJe wordt tegengehouden door een vijand en kunt daardoor niet vluchten.\n";
 
 				// Vijanden vallen aan
@@ -120,9 +120,9 @@ void Hero::getAttackedByEnemies()
 {
 	// TODO: GAME OVER
 
-	for (size_t i = 0; i < currentRoom_->getEnemies()->size(); i++) {
+	for (size_t i = 0; i < currentRoom_->getEnemies().size(); i++) {
 		if (!isDefeated_) {
-			Enemy* enemy = currentRoom_->getEnemies()->at(i);
+			Enemy* enemy = currentRoom_->getEnemies().at(i);
 			std::cout << "\nJe wordt aangevallen door " << enemy->getType();
 
 			if (Random::getRandomNumber(0, 100) <= enemy->getChanceToHit()) {
