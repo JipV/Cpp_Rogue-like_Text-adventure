@@ -40,7 +40,7 @@ findDescription:Je merkt dat er een draadje naar een luik in het plafond loopt, 
 triggerDescription:Berenval! Er valt een erg verwarde beer uit een luik in het plafond, hij kijkt niet erg blij.
 chanceToFind:60
 chanceToTrigger:75
-summonMonster:beer,7,5,5,2
+summonMonster:beer,4,7,30,50,2,70
 
 // Skeleton trap
 level:6
@@ -49,8 +49,8 @@ findDescription:Je hebt het onmogelijke gedaan! Deze val is helemaal niet te vin
 triggerDescription:De botten op de vloer beginnen te bewegen en staan op.
 chanceToFind:0
 chanceToTrigger:40
-summonMonster:skelet,7,7,5,3
-summonMonster:skelet,7,7,5,3
+summonMonster:skelet,6,7,50,50,3,50
+summonMonster:skelet,6,7,50,50,3,50
 
 // Trapped chest
 level:9

@@ -7,6 +7,7 @@
 
 class Enemy
 {
+	friend class EnemyGenerator;
 	public:
 
 		Enemy(std::string type, std::string size, int level, int maxHP, int chanceToHit, int chanceToDefend, int attack, int chanceHeroEscapes);

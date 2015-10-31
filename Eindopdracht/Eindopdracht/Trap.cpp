@@ -2,6 +2,8 @@
 #include "Enemy.h"
 #include "Trap.h"
 #include "Random.h"
+#include "Hero.h"
+#include "Room.h"
 
 // ReSharper disable once CppPossiblyUninitializedMember
 Trap::Trap() : triggered_(false),
@@ -13,7 +15,8 @@ damageOverTimeTurns_(0),
 roomDescription_(""),
 damageOverTimeMessage_(""),
 damageOverTimeDone_(""),
-triggerCommands_({})
+triggerCommands_({}),
+enemiesToSummon_({})
 {
 
 }
@@ -34,7 +37,12 @@ Trap::Trap(const Trap& rhs) :
 	damageOverTimeDone_(rhs.damageOverTimeDone_),
 	triggerCommands_(rhs.triggerCommands_)
 {
-	// TODO: copy enemies to summon
+	enemiesToSummon_ = {};
+
+	std::for_each(rhs.enemiesToSummon_.begin(), rhs.enemiesToSummon_.end(), [this](Enemy* e)
+	{
+		enemiesToSummon_.push_back(new Enemy(*e));
+	});
 }
 
 Trap::~Trap()
@@ -47,26 +55,50 @@ Trap::~Trap()
 	enemiesToSummon_.clear();
 }
 
-bool Trap::handleAction(std::string fullCommand, std::vector<std::string> action)
+bool Trap::handleAction(std::string fullCommand, std::vector<std::string> action, Hero* hero, Room* room)
 {
 	if (triggered_)
 		return false;
 
-	if (triggerCommands_.size() == 0)
-		return tryTrigger();
-	
-	//TODO check if fullCommand is in list
+	if (triggerCommands_.empty() ||
+		std::find(triggerCommands_.begin(), triggerCommands_.end(), "fullCommand") != triggerCommands_.end())
+		return tryTrigger(hero, room);
 
 	return false;
 }
 
-bool Trap::tryTrigger()
+void Trap::showRoomDescription()
 {
-	if (Random::getRandomNumber(1,100) > chanceToTrigger_)
+	if (!triggered_)
+		std::cout << roomDescription_;
+}
+
+bool Trap::tryTrigger(Hero* hero, Room* room)
+{
+	if (!triggered_ && Random::getRandomNumber(1,100) <= chanceToTrigger_)
 	{
 		triggered_ = true;
 		std::cout << triggerDescription_ << std::endl;
-		std::cout << "(traps doen nog niet echt iets, maar dit is een begin)\n";
+
+		if (directDamage_)
+		{
+			std::cout << "De val doet " << directDamage_ << " schade." << std::endl;
+			hero->takeDirectDamage(directDamage_);
+		}
+
+		if (damageOverTime_ && damageOverTimeTurns_)
+		{
+			std::cout << "damage over time werkt nog niet..." << std::endl;
+			// TODO: damage over time
+		}
+
+		if (!enemiesToSummon_.empty())
+		{
+			std::for_each(enemiesToSummon_.begin(), enemiesToSummon_.end(), [room](Enemy* e)
+			{
+				room->addEnemy(e);
+			});
+		}
 
 		return true;
 	}

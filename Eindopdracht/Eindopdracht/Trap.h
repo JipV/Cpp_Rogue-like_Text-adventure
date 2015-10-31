@@ -1,7 +1,9 @@
 #ifndef __TRAP_H__
 #define __TRAP_H__
 
+class Room;
 class Enemy;
+class Hero;
 
 class Trap
 {
@@ -11,7 +13,8 @@ public:
 	Trap(const Trap& rhs);
 	~Trap();
 
-	bool handleAction(std::string fullCommand, std::vector<std::string> action);
+	bool handleAction(std::string fullCommand, std::vector<std::string> action, Hero* hero, Room* room);
+	void showRoomDescription();
 private:
 	bool triggered_;
 
@@ -31,7 +34,7 @@ private:
 	std::vector<std::string> triggerCommands_;
 	std::vector<Enemy*> enemiesToSummon_;
 
-	bool tryTrigger();
+	bool tryTrigger(Hero* hero, Room* room);
 };
 
 #endif
