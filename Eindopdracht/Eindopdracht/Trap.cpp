@@ -67,6 +67,12 @@ bool Trap::handleAction(std::string fullCommand, std::vector<std::string> action
 	return false;
 }
 
+void Trap::showRoomDescription()
+{
+	if (!triggered_)
+		std::cout << roomDescription_;
+}
+
 bool Trap::tryTrigger(Hero* hero, Room* room)
 {
 	if (!triggered_ && Random::getRandomNumber(1,100) <= chanceToTrigger_)

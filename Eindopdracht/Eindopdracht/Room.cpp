@@ -33,9 +33,12 @@ Room::~Room()
 
 void Room::showDescription()
 {
-	std::cout << description_ << std::endl
-		<< std::endl
+	std::cout << description_;
+	
+	if (trap_)
+		trap_->showRoomDescription();
 
+	std:: cout << std::endl << std::endl
 		<< "Uitgangen: ";
 	for (auto iterator = exits_.begin(); iterator != exits_.end(); ++iterator) 
 	{
