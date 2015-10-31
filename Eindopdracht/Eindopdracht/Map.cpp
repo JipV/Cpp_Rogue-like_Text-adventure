@@ -24,96 +24,95 @@ void Map::showMap(Room* currentRoom)
 {
 	std::cout << "\nKerker kaart: \n";
 
-	for (int z = 0; z < zSize_; z++)
-	{
-		for (int y = 0; y < ySize_; y++)
-		{
-			// Teken kamers + gangen van west naar oost
-			for (int x = 0; x < xSize_; x++)
-			{
-				Room* room = getRoom(x, y, z);
+	int z = currentRoom->getLevel();
 
-				if (room == currentRoom) {
-					SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 2);
+	for (int y = 0; y < ySize_; y++)
+	{
+		// Teken kamers + gangen van west naar oost
+		for (int x = 0; x < xSize_; x++)
+		{
+			Room* room = getRoom(x, y, z);
+
+			if (room == currentRoom) {
+				SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 2);
+			}
+
+			if (room->getIsVisited())
+			{
+				// Teken kamer
+				switch (room->getType())
+				{
+				case Room::ROOM_TYPE::StartLocation:
+					std::cout << 'S';
+					break;
+				case Room::ROOM_TYPE::NormalRoom:
+					std::cout << 'N';
+					break;
+				case Room::ROOM_TYPE::StairsDown:
+					std::cout << 'L';
+					break;
+				case Room::ROOM_TYPE::StairsUp:
+					std::cout << 'H';
+					break;
+				case Room::ROOM_TYPE::EndEnemy:
+					std::cout << 'E';
+					break;
 				}
 
-				if (room->getIsVisited())
+				SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 15);
+
+				// Teken uitgang van west naar oost
+				if (room->getAllExits().count("oost"))
+					std::cout << '-';
+				else
+					std::cout << ' ';
+			}
+			else
+			{
+				std::cout << ".";
+					
+				if (x < xSize_ - 1)
 				{
-					// Teken kamer
-					switch (room->getType())
-					{
-					case Room::ROOM_TYPE::StartLocation:
-						std::cout << 'S';
-						break;
-					case Room::ROOM_TYPE::NormalRoom:
-						std::cout << 'N';
-						break;
-					case Room::ROOM_TYPE::StairsDown:
-						std::cout << 'L';
-						break;
-					case Room::ROOM_TYPE::StairsUp:
-						std::cout << 'H';
-						break;
-					case Room::ROOM_TYPE::EndEnemy:
-						std::cout << 'E';
-						break;
-					}
-
-					SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 15);
-
-					// Teken uitgang van west naar oost
-					if (room->getAllExits().count("oost"))
+					Room* eastRoom = getRoom(x + 1, y, z);
+					if (eastRoom->getIsVisited() &&
+						eastRoom->getAllExits().count("west"))
 						std::cout << '-';
 					else
 						std::cout << ' ';
 				}
 				else
-				{
-					std::cout << ".";
-					
-					if (x < xSize_ - 1)
-					{
-						Room* eastRoom = getRoom(x + 1, y, z);
-						if (eastRoom->getIsVisited() &&
-							eastRoom->getAllExits().count("west"))
-							std::cout << '-';
-						else
-							std::cout << ' ';
-					}
-					else
-						std::cout << ' ';
-				}
+					std::cout << ' ';
 			}
-			std::cout << "\n";
+		}
+		std::cout << "\n";
 
-			// Teken gangen van noord naar zuid
-			for (int x = 0; x < xSize_; x++)
+		// Teken gangen van noord naar zuid
+		for (int x = 0; x < xSize_; x++)
+		{
+			Room* room = getRoom(x, y, z);
+			if (room->getIsVisited())
 			{
-				Room* room = getRoom(x, y, z);
-				if (room->getIsVisited())
+				if (room->getAllExits().count("zuid"))
+					std::cout << "| ";
+				else
+					std::cout << "  ";
+			}
+			else
+			{
+				if (y < ySize_-1)
 				{
-					if (room->getAllExits().count("zuid"))
+					Room* southRoom = getRoom(x, y + 1, z);
+					if (southRoom->getIsVisited() &&
+						southRoom->getAllExits().count("noord"))
 						std::cout << "| ";
 					else
 						std::cout << "  ";
 				}
 				else
-				{
-					if (y < ySize_-1)
-					{
-						Room* southRoom = getRoom(x, y + 1, z);
-						if (southRoom->getIsVisited() &&
-							southRoom->getAllExits().count("noord"))
-							std::cout << "| ";
-						else
-							std::cout << "  ";
-					}
-					else
-						std::cout << "  ";
-				}
+					std::cout << "  ";
 			}
-			std::cout << "\n";
 		}
+		std::cout << "\n";
 	}
 
 	std::cout << "Legenda: \n";
@@ -133,6 +132,7 @@ void Map::getActions(std::vector<std::string>* actions)
 
 bool Map::handleAction(std::string fullCommand, Hero* hero)
 {
+	// Acties hier kunnen nooit onderbroken worden door een val, dit lijkt mij ook niet de bedoeling.
 	if (fullCommand == "kaart")
 	{
 		showMap(hero->getCurrentRoom());

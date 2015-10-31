@@ -44,6 +44,11 @@ std::string Enemy::getType() const
 	return type_;
 }
 
+std::string Enemy::getSize() const
+{
+	return size_;
+}
+
 int Enemy::getCurrentHP()
 {
 	return currentHP_;
@@ -67,6 +72,8 @@ int Enemy::getChanceHeroEscapes()
 // Hierdoor werkt std::cout << Enemy
 std::ostream& operator<<(std::ostream& os, const Enemy& enemy)
 {
+	if (enemy.getSize() != "normaal")
+		os << enemy.getSize() << " ";
 	os << enemy.getType();
 	return os;
 }

@@ -4,6 +4,7 @@
 class Enemy;
 class Item;
 class Trap;
+class Hero;
 
 class Room
 {
@@ -18,20 +19,23 @@ class Room
 			EndEnemy
 		};
 
-		Room(ROOM_TYPE type, std::string description);
+		Room(ROOM_TYPE type, std::string description, int level);
 		~Room();
 
 		void showDescription();
 
+		int getLevel();
+
 		void getActions(std::vector<std::string>* actions);
-		bool handleAction(std::string fullCommand, std::vector<std::string> action);
+		bool handleAction(std::string fullCommand, std::vector<std::string> action, Hero* hero);
 
 		Room* getExit(std::string name);
 		std::map<std::string, Room*> getAllExits();
 		
+		void addEnemy(Enemy* enemy);
 		void removeEnemy(Enemy* enemy);
 		bool hasEnemies();
-		std::vector<Enemy*>* getEnemies();
+		std::vector<Enemy*> getEnemies();
 
 		bool getIsVisited();
 		void setIsVisited(bool isVisited);
@@ -40,6 +44,7 @@ class Room
 	private:
 
 		bool isVisited_;
+		int level_;
 
 		ROOM_TYPE type_;
 
@@ -47,8 +52,8 @@ class Room
 
 		std::map<std::string, Room*> exits_;
 
-		std::vector<Enemy*>* enemies_ = nullptr;
-		std::vector<Item*>* items_ = nullptr;
+		std::vector<Enemy*> enemies_;
+		std::vector<Item*> items_;
 		Trap* trap_ = nullptr;
 
 		void addExit(std::string name, Room* room);

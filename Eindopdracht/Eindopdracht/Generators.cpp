@@ -20,9 +20,87 @@ void split(const std::string& s, char delim, std::vector<std::string>& v) {
 	}
 }
 
+// ---------------------------- ENEMY GENERATOR ----------------------------
+
+EnemyGenerator::EnemyGenerator()
+{
+	monsterOptions_ = std::vector<std::string>();
+	bossesOptions_ = std::vector<std::string>();
+	enemySizeOptions_ = std::vector<std::string>();
+
+	std::string line;
+	std::ifstream input_file("enemy_options.txt");
+	if (input_file) {
+		while (getline(input_file, line)) {
+			std::string optionName = line.substr(0, line.find(":"));
+			std::string option = line.substr(line.find(":") + 1, line.length());
+
+			if (optionName.compare("monsters") == 0) {
+				monsterOptions_.push_back(option);
+			}
+			else if (optionName.compare("bosses") == 0) {
+				bossesOptions_.push_back(option);
+			}
+			else if (optionName.compare("sizes") == 0) {
+				enemySizeOptions_.push_back(option);
+			}
+		}
+	}
+	input_file.close();
+}
+
+EnemyGenerator::~EnemyGenerator()
+{
+}
+
+Enemy* EnemyGenerator::createEnemy(int z)
+{
+	// Maak een enemy aan
+	Enemy* result = createEnemy(monsterOptions_.at(Random::getRandomNumber(0, static_cast<int>(monsterOptions_.size()) - 1)));
+
+	// Bepaal de grootte van het monster
+	result = modifyEnemy(result, enemySizeOptions_.at(Random::getRandomNumber(0, static_cast<int>(enemySizeOptions_.size()) - 1)));
+
+	return result;
+}
+
+Enemy* EnemyGenerator::createEnemy(std::string stats)
+{
+	std::vector<std::string> monsterData = std::vector<std::string>();
+
+	split(stats, ',', monsterData);
+
+	return new Enemy(monsterData.at(0),
+		"normaal",
+		std::stoi(monsterData.at(1)),
+		std::stoi(monsterData.at(2)),
+		std::stoi(monsterData.at(3)),
+		std::stoi(monsterData.at(4)),
+		std::stoi(monsterData.at(5)),
+		std::stoi(monsterData.at(6)));
+}
+
+Enemy* EnemyGenerator::modifyEnemy(Enemy* enemy, std::string modifiers)
+{
+	std::vector<std::string> modifierData = std::vector<std::string>();
+
+	split(modifiers, ',', modifierData);
+
+	enemy->size_ = modifierData.at(0);
+	enemy->level_ += std::stoi(modifierData.at(1));
+	enemy->maxHP_ += std::stoi(modifierData.at(2));
+	enemy->currentHP_ += std::stoi(modifierData.at(2));
+	enemy->chanceToHit_ += std::stoi(modifierData.at(3));
+	enemy->chanceToDefend_ += std::stoi(modifierData.at(4));
+	enemy->attack_ += std::stoi(modifierData.at(5));
+	enemy->chanceHeroEscapes_ += std::stoi(modifierData.at(6));
+
+	return enemy;
+}
+
 // ---------------------------- TRAP GENERATOR ----------------------------
 
-TrapGenerator::TrapGenerator()
+TrapGenerator::TrapGenerator(EnemyGenerator* enemyGenerator) : enemyGenerator_(enemyGenerator)
 {
 	std::string line;
 	std::ifstream input_file("traps.txt");
@@ -48,6 +126,8 @@ TrapGenerator::TrapGenerator()
 
 TrapGenerator::~TrapGenerator()
 {
+	enemyGenerator_ = nullptr; // RoomGenerator ruimt deze op
+
 	for (auto it = possibleTraps_.begin(); it != possibleTraps_.end(); ++it)
 	{
 		std::for_each(it->second.begin(), it->second.end(), [](Trap* t)
@@ -114,9 +194,8 @@ void TrapGenerator::parseLine(std::string line, Trap* trap)
 			trap->damageOverTimeDone_ = value;
 		else if (type == "summonMonster")
 		{
-			//TODO: generate monster
+			trap->enemiesToSummon_.push_back(enemyGenerator_->createEnemy(value));
 		}
-			
 	}
 }
 
@@ -403,17 +482,17 @@ RoomGenerator::RoomGenerator() : x_(-1), y_(-1), specialType_(Room::ROOM_TYPE::N
 	input_file.close();
 
 	enemyGenerator_ = new EnemyGenerator();
-	trapGenerator_ = new TrapGenerator();
 	weaponGenerator_ = new WeaponGenerator();
 	shieldGenerator_ = new ShieldGenerator();
+	trapGenerator_ = new TrapGenerator(enemyGenerator_);
 }
 
 RoomGenerator::~RoomGenerator()
 {
-	delete enemyGenerator_;
 	delete trapGenerator_;
 	delete weaponGenerator_;
 	delete shieldGenerator_;
+	delete enemyGenerator_;
 }
 
 void RoomGenerator::setSpecialRoom(int x, int y, Room::ROOM_TYPE type)
@@ -437,27 +516,27 @@ Room* RoomGenerator::createRoom(int x, int y, int z)
 	switch (createType)
 	{
 	case Room::ROOM_TYPE::StairsDown:
-		result = new Room(createType, "Je staat in een kamer met een trap naar beneden.");
+		result = new Room(createType, "Je staat in een kamer met een trap naar beneden.", z);
 		break;
 	case Room::ROOM_TYPE::StairsUp:
-		result = new Room(createType, "Je staat in een kamer met een trap naar boven.");
+		result = new Room(createType, "Je staat in een kamer met een trap naar boven.", z);
 		break;
 	case Room::ROOM_TYPE::EndEnemy:
-		result = new Room(createType, "Je staat in een grote kamer, het lijkt wel of hier ooit iets groots leefde...");
+		result = new Room(createType, "Je staat in een grote kamer, het lijkt wel of hier ooit iets groots leefde...", z);
 		// TODO: add boss enemy
 		break;
 	case Room::ROOM_TYPE::StartLocation:
-		result = new Room(createType, generateDescription());
+		result = new Room(createType, generateDescription(), z);
 		break;
 	case Room::ROOM_TYPE::NormalRoom:
-		result = new Room(createType, generateDescription());
+		result = new Room(createType, generateDescription(), z);
 		addEnemies(result, z);
 		addTraps(result, z);
 		addWeapon(result, z);
 		addShield(result, z);
 		break;
 	default:
-		result = new Room(Room::ROOM_TYPE::NormalRoom, generateDescription());
+		result = new Room(Room::ROOM_TYPE::NormalRoom, generateDescription(), z);
 		break;
 	}
 

@@ -6,6 +6,7 @@
 
 class Enemy
 {
+	friend class EnemyGenerator;
 	public:
 
 		Enemy(std::string type, std::string size, int level, int maxHP, int chanceToHit, int chanceToDefend, int attack, int chanceHeroEscapes);
@@ -16,6 +17,7 @@ class Enemy
 		bool getIsDefeated();
 		
 		std::string getType() const;
+		std::string getSize() const;
 		int getCurrentHP();
 		int getChanceToHit();
 		int getAttack();

@@ -3,28 +3,25 @@
 #include "Enemy.h"
 #include "Trap.h"
 #include "Item.h"
+#include "Hero.h"
 
-Room::Room(ROOM_TYPE type, std::string description) : isVisited_(true), type_(type), description_(description)
+Room::Room(ROOM_TYPE type, std::string description, int level) : isVisited_(false), level_(level), type_(type), description_(description)
 {
-	enemies_ = new std::vector<Enemy*>();
-	items_ = new std::vector<Item*>();
+	enemies_ = std::vector<Enemy*>();
+	items_ = std::vector<Item*>();
 }
 
 Room::~Room()
 {
-	std::for_each(enemies_->begin(), enemies_->end(), [](Enemy* e)
+	std::for_each(enemies_.begin(), enemies_.end(), [](Enemy* e)
 	{
 		delete e;
 	});
-	delete enemies_;
-	enemies_ = nullptr;
 
-	std::for_each(items_->begin(), items_->end(), [](Item* i)
+	std::for_each(items_.begin(), items_.end(), [](Item* i)
 	{
 		delete i;
 	});
-	delete items_;
-	items_ = nullptr;
 
 	delete trap_;
 	trap_ = nullptr;
@@ -32,9 +29,12 @@ Room::~Room()
 
 void Room::showDescription()
 {
-	std::cout << description_ << std::endl
-		<< std::endl
+	std::cout << description_;
+	
+	if (trap_)
+		trap_->showRoomDescription();
 
+	std:: cout << std::endl << std::endl
 		<< "Uitgangen: ";
 	for (auto iterator = exits_.begin(); iterator != exits_.end(); ++iterator) 
 	{
@@ -46,18 +46,23 @@ void Room::showDescription()
 	std::cout << "." << std::endl
 		<< std::endl;
 
-	if (enemies_->size() > 0)
+	if (enemies_.size() > 0)
 	{
 		std::cout << "Vijanden: ";
-		for (auto iterator = enemies_->begin(); iterator != enemies_->end(); ++iterator)
+		for (auto iterator = enemies_.begin(); iterator != enemies_.end(); ++iterator)
 		{
 			std::cout << **iterator;
-			if (iterator != --enemies_->end())
+			if (iterator != --enemies_.end())
 				std::cout << ", ";
 		}
 		std::cout << "." << std::endl
 			<< std::endl;
 	}
+}
+
+int Room::getLevel()
+{
+	return level_;
 }
 
 void Room::getActions(std::vector<std::string>* actions)
@@ -66,24 +71,28 @@ void Room::getActions(std::vector<std::string>* actions)
 	actions->push_back("doorzoek kamer");
 }
 
-bool Room::handleAction(std::string fullCommand, std::vector<std::string> action)
+bool Room::handleAction(std::string fullCommand, std::vector<std::string> action, Hero* hero)
 {
+	// Deze commandos kunnen niet onderbroken worden door vallen
+
 	if (fullCommand == "doorzoek kamer")
 	{
 		// TODO, kamer doorzoeken.
 		return true;
 	}
-
-	if (trap_ && trap_->handleAction(fullCommand, action))
-	{
-		return true;
-	}
-
 	if (fullCommand == "kijk rond")
 	{
 		showDescription();
 		return true;
 	}
+
+	// Kijk of er een val af gaat
+	if (enemies_.empty() && trap_ && trap_->handleAction(fullCommand, action, hero, this))
+	{
+		return true;
+	}
+
+	// Hier komen commandos die onderbroken kunnen worden door vallen.
 	
 	return false;
 }
@@ -96,13 +105,13 @@ void Room::addExit(std::string name, Room* room)
 
 void Room::addEnemy(Enemy* enemy)
 {
-	enemies_->push_back(enemy);
+	enemies_.push_back(enemy);
 }
 
 
 void Room::removeEnemy(Enemy* enemy)
 {
-	enemies_->erase(std::remove(enemies_->begin(), enemies_->end(), enemy), enemies_->end());
+	enemies_.erase(std::remove(enemies_.begin(), enemies_.end(), enemy), enemies_.end());
 }
 
 void Room::addItem(Item* item)
@@ -117,7 +126,7 @@ void Room::setTrap(Trap* trap)
 
 bool Room::hasEnemies()
 {
-	return (enemies_->size() > 0);
+	return (enemies_.size() > 0);
 }
 
 Room* Room::getExit(std::string name)
@@ -149,7 +158,7 @@ std::map<std::string, Room*> Room::getAllExits()
 	return exits_;
 }
 
-std::vector<Enemy*>* Room::getEnemies()
+std::vector<Enemy*> Room::getEnemies()
 {
 	return enemies_;
 }
