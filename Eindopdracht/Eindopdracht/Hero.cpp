@@ -68,7 +68,6 @@ void Hero::fight()
 
 
 		std::string enemyNumber;
-		std::getline(std::cin, enemyNumber);
 
 		bool valid = false;
 
@@ -163,7 +162,7 @@ void Hero::getAttackedByEnemies()
 	for (size_t i = 0; i < currentRoom_->getEnemies().size(); i++) {
 		if (!isDefeated_) {
 			Enemy* enemy = currentRoom_->getEnemies().at(i);
-			std::cout << "\nJe wordt aangevallen door de " << enemy;
+			std::cout << "\nJe wordt aangevallen door de " << *enemy;
 
 			if (Random::getRandomNumber(0, 100) <= enemy->getChanceToHit()) {
 				if (Random::getRandomNumber(0, 100) <= chanceToDefend_) {
