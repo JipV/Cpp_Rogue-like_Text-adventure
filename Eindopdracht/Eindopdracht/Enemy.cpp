@@ -39,7 +39,7 @@ bool Enemy::getIsDefeated()
 	return isDefeated_;
 }
 
-std::string Enemy::getType()
+std::string Enemy::getType() const
 {
 	return type_;
 }
@@ -62,4 +62,11 @@ int Enemy::getAttack()
 int Enemy::getChanceHeroEscapes()
 {
 	return chanceHeroEscapes_;
+}
+
+// Hierdoor werkt std::cout << Enemy
+std::ostream& operator<<(std::ostream& os, const Enemy& enemy)
+{
+	os << enemy.getType();
+	return os;
 }

@@ -7,6 +7,10 @@
 
 #include "targetver.h"
 
+// Leak detector: 
+// http://vld.codeplex.com/wikipage?title=Using%20Visual%20Leak%20Detector&referringTitle=Documentation
+//#include <vld.h>
+
 #include <stdio.h>
 #include <tchar.h>
 #include <stdlib.h>

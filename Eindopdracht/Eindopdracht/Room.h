@@ -1,14 +1,15 @@
 #ifndef __ROOM_H__
 #define __ROOM_H__
 
-#include "Enemy.h"
-#include "Item.h"
-#include "Trap.h"
+class Enemy;
+class Item;
+class Trap;
 
 class Room
 {
+	friend class MapGenerator;
+	friend class RoomGenerator;
 	public:
-
 		enum ROOM_TYPE {
 			StartLocation,
 			NormalRoom,
@@ -17,32 +18,25 @@ class Room
 			EndEnemy
 		};
 
-		Room();
 		Room(ROOM_TYPE type, std::string description);
 		~Room();
 
 		void showDescription();
-		void showExits();
-		void showEnemies();
 
 		void getActions(std::vector<std::string>* actions);
-		bool handleAction(std::vector<std::string> action);
+		bool handleAction(std::string fullCommand, std::vector<std::string> action);
 
-		void addExit(std::string name, Room* room);
 		Room* getExit(std::string name);
+		std::map<std::string, Room*> getAllExits();
 		
-		void addEnemy(Enemy* enemy);
 		void removeEnemy(Enemy* enemy);
+		bool hasEnemies();
+		std::vector<Enemy*>* getEnemies();
 
 		bool getIsVisited();
 		void setIsVisited(bool isVisited);
 
 		ROOM_TYPE getType();
-		void setType(ROOM_TYPE type);
-
-		std::map<std::string, Room*> getExits();
-		std::vector<Enemy*>* getEnemies();
-
 	private:
 
 		bool isVisited_;
@@ -55,7 +49,11 @@ class Room
 
 		std::vector<Enemy*>* enemies_ = nullptr;
 		std::vector<Item*>* items_ = nullptr;
-		std::vector<Trap*>* traps_ = nullptr;
+		Trap* trap_ = nullptr;
+
+		void addExit(std::string name, Room* room);
+		void addEnemy(Enemy* enemy);
+		void setTrap(Trap* trap);
 };
 
 #endif

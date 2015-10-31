@@ -1,32 +1,25 @@
 #ifndef __GAMECONTROLLER_H__
 #define __GAMECONTROLLER_H__
 
-#include "Map.h"
-#include "Hero.h"
+class Map;
+class Hero;
 
 class GameController
 {
-	public:
+public:
+	GameController();
+	~GameController();
 
-		GameController();
-		~GameController();
+	void startGame();
 
-		void readEnemies();
-		void startGame();
-		Map* createMap();
-		Hero* createHero();
-		void createEnemies();
+private:
+	Map* map_ = nullptr;
+	Hero* hero_ = nullptr;
 
-	private:
+	bool isRunning_;
 
-		Map* map_ = nullptr;
-		Hero* hero_ = nullptr;
-
-		std::vector<std::string>* monsterOptions_ = nullptr;
-		std::vector<std::string>* bossesOptions_ = nullptr;
-		std::vector<std::string>* enemySizeOptions_ = nullptr;
-
-		bool isRunning_;
+	Map* createMap();
+	Hero* createHero();
 };
 
 #endif

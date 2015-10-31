@@ -146,6 +146,7 @@
     <Text Include="held1.txt" />
     <Text Include="ReadMe.txt" />
     <Text Include="room_options.txt" />
+    <Text Include="traps.txt" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Armour.h" />
@@ -156,7 +157,7 @@
     <ClInclude Include="Map.h" />
     <ClInclude Include="Random.h" />
     <ClInclude Include="Room.h" />
-    <ClInclude Include="RoomGenerator.h" />
+    <ClInclude Include="Generators.h" />
     <ClInclude Include="Shield.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
@@ -173,7 +174,7 @@
     <ClCompile Include="Map.cpp" />
     <ClCompile Include="Random.cpp" />
     <ClCompile Include="Room.cpp" />
-    <ClCompile Include="RoomGenerator.cpp" />
+    <ClCompile Include="Generators.cpp" />
     <ClCompile Include="Shield.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>

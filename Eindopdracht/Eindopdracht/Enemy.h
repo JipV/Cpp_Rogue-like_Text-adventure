@@ -16,7 +16,7 @@ class Enemy
 
 		bool getIsDefeated();
 		
-		std::string getType();
+		std::string getType() const;
 		int getCurrentHP();
 		int getChanceToHit();
 		int getAttack();
@@ -43,6 +43,8 @@ class Enemy
 
 		std::string description_;
 };
+
+std::ostream& operator<<(std::ostream& os, const Enemy& obj);
 
 #endif
 

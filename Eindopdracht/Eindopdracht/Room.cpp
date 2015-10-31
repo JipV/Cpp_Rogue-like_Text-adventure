@@ -1,79 +1,87 @@
 #include "stdafx.h"
 #include "Room.h"
+#include "Enemy.h"
+#include "Trap.h"
+#include "Item.h"
 
 Room::Room(ROOM_TYPE type, std::string description) : isVisited_(true), type_(type), description_(description)
 {
 	enemies_ = new std::vector<Enemy*>();
 	items_ = new std::vector<Item*>();
-	traps_ = new std::vector<Trap*>();
 }
 
 Room::~Room()
 {
-	for (int i = 0; i < enemies_->size(); i++)
-		delete enemies_->at(i);
+	std::for_each(enemies_->begin(), enemies_->end(), [](Enemy* e)
+	{
+		delete e;
+	});
 	delete enemies_;
 	enemies_ = nullptr;
 
-	for (int i = 0; i < items_->size(); i++)
-		delete items_->at(i);
+	std::for_each(items_->begin(), items_->end(), [](Item* i)
+	{
+		delete i;
+	});
 	delete items_;
 	items_ = nullptr;
 
-	for (int i = 0; i < traps_->size(); i++)
-		delete traps_->at(i);
-	delete traps_;
-	traps_ = nullptr;
+	delete trap_;
+	trap_ = nullptr;
 }
 
 void Room::showDescription()
 {
-	std::cout << "\n" << description_ << "\n";
-}
+	std::cout << description_ << std::endl
+		<< std::endl
 
-void Room::showExits()
-{
-	std::cout << "\nUitgangen: ";
-	typedef std::map<std::string, Room*>::iterator it_type;
-	for (it_type iterator = exits_.begin(); iterator != exits_.end(); ++iterator) {
+		<< "Uitgangen: ";
+	for (auto iterator = exits_.begin(); iterator != exits_.end(); ++iterator) 
+	{
 		std::cout << iterator->first;
 		if (iterator != --exits_.end()) {
 			std::cout << ", ";
 		}
 	}
-	std::cout << "\n";
-}
+	std::cout << "." << std::endl
+		<< std::endl;
 
-
-void Room::showEnemies()
-{
-	if (enemies_->size() > 0) {
-		std::cout << "\nVijhanden: ";
-		for (size_t i = 0; i < enemies_->size(); i++) {
-			std::cout << enemies_->at(i)->getType();
-			if (i != enemies_->size() - 1) {
+	if (enemies_->size() > 0)
+	{
+		std::cout << "Vijanden: ";
+		for (auto iterator = enemies_->begin(); iterator != enemies_->end(); ++iterator)
+		{
+			std::cout << **iterator;
+			if (iterator != --enemies_->end())
 				std::cout << ", ";
-			}
 		}
-		std::cout << "\n";
+		std::cout << "." << std::endl
+			<< std::endl;
 	}
 }
 
 void Room::getActions(std::vector<std::string>* actions)
 {
 	actions->push_back("kijk rond");
+	actions->push_back("doorzoek kamer");
 }
 
-bool Room::handleAction(std::vector<std::string> action)
+bool Room::handleAction(std::string fullCommand, std::vector<std::string> action)
 {
-	std::string command = action[0];
+	if (fullCommand == "doorzoek kamer")
+	{
+		// TODO, kamer doorzoeken.
+		return true;
+	}
 
-	if (command == "kijk" &&
-		action.size() == 2 &&
-		action[1] == "rond")
+	if (trap_ && trap_->handleAction(fullCommand, action))
+	{
+		return true;
+	}
+
+	if (fullCommand == "kijk rond")
 	{
 		showDescription();
-		showExits();
 		return true;
 	}
 	
@@ -91,9 +99,20 @@ void Room::addEnemy(Enemy* enemy)
 	enemies_->push_back(enemy);
 }
 
+
 void Room::removeEnemy(Enemy* enemy)
 {
 	enemies_->erase(std::remove(enemies_->begin(), enemies_->end(), enemy), enemies_->end());
+}
+
+void Room::setTrap(Trap* trap)
+{
+	trap_ = trap;
+}
+
+bool Room::hasEnemies()
+{
+	return (enemies_->size() > 0);
 }
 
 Room* Room::getExit(std::string name)
@@ -120,12 +139,7 @@ Room::ROOM_TYPE Room::getType()
 	return type_;
 }
 
-void Room::setType(ROOM_TYPE type)
-{
-	type_ = type;
-}
-
-std::map<std::string, Room*> Room::getExits()
+std::map<std::string, Room*> Room::getAllExits()
 {
 	return exits_;
 }

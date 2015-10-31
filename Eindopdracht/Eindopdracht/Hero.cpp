@@ -2,28 +2,28 @@
 #include "Hero.h"
 #include "Room.h"
 #include "Random.h"
+#include "Enemy.h"
 
-Hero::Hero(std::string name)
+// ReSharper disable once CppPossiblyUninitializedMember
+Hero::Hero(std::string name) : 
+	name_(name), 
+	level_(0), 
+	maxHP_(20), 
+	currentHP_(20), 
+	xp_(0), 
+	chanceToHit_(20), 
+	chanceToDefend_(20), 
+	attack_(1),  
+	mindfulness_(2)
 {
-	name_ = name;
-	level_ = 0;
-	maxHP_ = 20;
-	currentHP_ = 20;
-	xp_ = 0;
-	chanceToHit_ = 20;
-	chanceToDefend_ = 20;
-	attack_ = 1;
-	mindfulness_ = 2;
-
 	items_ = new std::vector<Item*>();
 }
 
 Hero::~Hero()
 {
-	delete currentRoom_;
-	currentRoom_ = nullptr;
+	currentRoom_ = nullptr; // Rooms horen bij Map, die zal ze verwijderen
 
-	for (int i = 0; i < items_->size(); i++)
+	for (size_t i = 0; i < items_->size(); i++)
 		delete items_->at(i);
 	delete items_;
 	items_ = nullptr;
@@ -47,7 +47,7 @@ void Hero::fight()
 	std::vector<Enemy*>* enemies = currentRoom_->getEnemies();
 
 	// Val vijanden aan
-	for (int i = 0; i < enemies->size(); i++) {
+	for (size_t i = 0; i < enemies->size(); i++) {
 		if (Random::getRandomNumber(0, 100) <= chanceToHit_) {
 			if (enemies->at(i)->getAttackedByHero(attack_)) {
 				std::cout << "\nJe valt " << enemies->at(i)->getType() << " aan en doet " << attack_ << " schade.";
@@ -79,9 +79,9 @@ bool Hero::flee(std::string direction)
 {
 	Room* newRoom = currentRoom_->getExit(direction);
 
-	if (newRoom != nullptr)
+	if (newRoom) // nullptr == false
 	{
-		for (int i = 0; i < currentRoom_->getEnemies()->size(); i++) {
+		for (size_t i = 0; i < currentRoom_->getEnemies()->size(); i++) {
 			if (Random::getRandomNumber(0, 100) <= currentRoom_->getEnemies()->at(i)->getChanceHeroEscapes()) {
 				std::cout << "\nJe wordt tegengehouden door een vijand en kunt daardoor niet vluchten.\n";
 
@@ -97,7 +97,7 @@ bool Hero::flee(std::string direction)
 
 		return true;
 	}
-
+	
 	return false;
 }
 
@@ -120,7 +120,7 @@ void Hero::getAttackedByEnemies()
 {
 	// TODO: GAME OVER
 
-	for (int i = 0; i < currentRoom_->getEnemies()->size(); i++) {
+	for (size_t i = 0; i < currentRoom_->getEnemies()->size(); i++) {
 		if (!isDefeated_) {
 			Enemy* enemy = currentRoom_->getEnemies()->at(i);
 			std::cout << "\nJe wordt aangevallen door " << enemy->getType();
@@ -164,29 +164,40 @@ void Hero::removeItem(Item* item)
 
 void Hero::getActions(std::vector<std::string>* actions)
 {
-	if (currentRoom_->getEnemies()->size() > 0) {
+	if (currentRoom_->hasEnemies())
+	{
 		actions->push_back("vlucht [richting]");
 		actions->push_back("vecht");
 	}
-	else {
+	else 
+	{
 		actions->push_back("loop [richting]");
 	}
 
 	currentRoom_->getActions(actions);
 }
 
-
-bool Hero::handleAction(std::vector<std::string> action)
+bool Hero::handleAction(std::string fullCommand, std::vector<std::string> action)
 {
 	std::string command = action[0];
 
+	// Deze moet voor hero handle actions, gezien de acties onderbroken kunnen worden door traps
+	if (currentRoom_->handleAction(fullCommand, action))
+		return true;
+
 	if (command == "loop" && action.size() == 2)
 	{
+		if (currentRoom_->hasEnemies())
+			return false;
+
 		return goToRoom(action[1]);
 	}
 	if (command == "vlucht" && action.size() == 2)
 	{
-		return flee(action[1]);
+		if (currentRoom_->hasEnemies())
+			return flee(action[1]);
+
+		return false;
 	}
 	if (command == "vecht")
 	{
@@ -194,7 +205,7 @@ bool Hero::handleAction(std::vector<std::string> action)
 		return true;
 	}
 
-	return currentRoom_->handleAction(action);
+	return false;
 }
 
 Room* Hero::getCurrentRoom()
@@ -206,8 +217,6 @@ void Hero::setCurrentRoom(Room* room)
 {
 	currentRoom_ = room;
 	currentRoom_->showDescription();
-	currentRoom_->showExits();
-	currentRoom_->showEnemies();
 	room->setIsVisited(true);
 }
 
