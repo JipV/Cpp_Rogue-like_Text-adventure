@@ -5,7 +5,7 @@
 #include "Item.h"
 #include "Hero.h"
 
-Room::Room(ROOM_TYPE type, std::string description) : isVisited_(true), type_(type), description_(description)
+Room::Room(ROOM_TYPE type, std::string description, int level) : isVisited_(false), level_(level), type_(type), description_(description)
 {
 	enemies_ = new std::vector<Enemy*>();
 	items_ = new std::vector<Item*>();
@@ -62,6 +62,11 @@ void Room::showDescription()
 		std::cout << "." << std::endl
 			<< std::endl;
 	}
+}
+
+int Room::getLevel()
+{
+	return level_;
 }
 
 void Room::getActions(std::vector<std::string>* actions)

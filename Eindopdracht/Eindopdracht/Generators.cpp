@@ -270,25 +270,25 @@ Room* RoomGenerator::createRoom(int x, int y, int z)
 	switch (createType)
 	{
 	case Room::ROOM_TYPE::StairsDown:
-		result = new Room(createType, "Je staat in een kamer met een trap naar beneden.");
+		result = new Room(createType, "Je staat in een kamer met een trap naar beneden.", z);
 		break;
 	case Room::ROOM_TYPE::StairsUp:
-		result = new Room(createType, "Je staat in een kamer met een trap naar boven.");
+		result = new Room(createType, "Je staat in een kamer met een trap naar boven.", z);
 		break;
 	case Room::ROOM_TYPE::EndEnemy:
-		result = new Room(createType, "Je staat in een grote kamer, het lijkt wel of hier ooit iets groots leefde...");
+		result = new Room(createType, "Je staat in een grote kamer, het lijkt wel of hier ooit iets groots leefde...", z);
 		// TODO: add boss enemy
 		break;
 	case Room::ROOM_TYPE::StartLocation:
-		result = new Room(createType, generateDescription());
+		result = new Room(createType, generateDescription(), z);
 		break;
 	case Room::ROOM_TYPE::NormalRoom:
-		result = new Room(createType, generateDescription());
+		result = new Room(createType, generateDescription(), z);
 		addEnemies(result, z);
 		addTraps(result, z);
 		break;
 	default:
-		result = new Room(Room::ROOM_TYPE::NormalRoom, generateDescription());
+		result = new Room(Room::ROOM_TYPE::NormalRoom, generateDescription(), z);
 		break;
 	}
 
