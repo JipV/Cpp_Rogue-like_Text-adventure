@@ -235,17 +235,7 @@ bool Hero::handleAction(std::string fullCommand, std::vector<std::string> action
 {
 	std::string command = action[0];
 
-	// Deze moet voor hero handle actions, gezien de acties onderbroken kunnen worden door traps
-	if (currentRoom_->handleAction(fullCommand, action, this))
-		return true;
-
-	if (command == "loop" && action.size() == 2)
-	{
-		if (currentRoom_->hasEnemies())
-			return false;
-
-		return goToRoom(action[1]);
-	}
+	// Deze commandos kunnen niet onderbroken worden door vallen
 	if (command == "vlucht" && action.size() == 2)
 	{
 		if (currentRoom_->hasEnemies())
@@ -257,6 +247,19 @@ bool Hero::handleAction(std::string fullCommand, std::vector<std::string> action
 	{
 		fight();
 		return true;
+	}
+
+	// Handel room actions af en kijk of er een val af gaat
+	if (currentRoom_->handleAction(fullCommand, action, this))
+		return true;
+
+	// Deze commandos kunnen wel onderbroken worden door vallen
+	if (command == "loop" && action.size() == 2)
+	{
+		if (currentRoom_->hasEnemies())
+			return false;
+
+		return goToRoom(action[1]);
 	}
 
 	return false;

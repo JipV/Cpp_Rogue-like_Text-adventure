@@ -132,6 +132,7 @@ void Map::getActions(std::vector<std::string>* actions)
 
 bool Map::handleAction(std::string fullCommand, Hero* hero)
 {
+	// Acties hier kunnen nooit onderbroken worden door een val, dit lijkt mij ook niet de bedoeling.
 	if (fullCommand == "kaart")
 	{
 		showMap(hero->getCurrentRoom());
