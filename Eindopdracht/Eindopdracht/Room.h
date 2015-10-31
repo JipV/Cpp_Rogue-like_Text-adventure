@@ -53,6 +53,7 @@ class Room
 
 		void addExit(std::string name, Room* room);
 		void addEnemy(Enemy* enemy);
+		void addItem(Item* item);
 		void setTrap(Trap* trap);
 };
 

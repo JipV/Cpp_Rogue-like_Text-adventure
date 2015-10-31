@@ -105,6 +105,11 @@ void Room::removeEnemy(Enemy* enemy)
 	enemies_->erase(std::remove(enemies_->begin(), enemies_->end(), enemy), enemies_->end());
 }
 
+void Room::addItem(Item* item)
+{
+	items_->push_back(item);
+}
+
 void Room::setTrap(Trap* trap)
 {
 	trap_ = trap;

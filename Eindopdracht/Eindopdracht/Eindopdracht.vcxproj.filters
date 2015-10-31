@@ -28,6 +28,12 @@
     <Text Include="traps.txt">
       <Filter>Resource Files</Filter>
     </Text>
+    <Text Include="weapon_options.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
+    <Text Include="shield_options.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -55,9 +61,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Weapon.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Armour.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Shield.h">
@@ -99,9 +102,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Weapon.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Armour.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Shield.cpp">

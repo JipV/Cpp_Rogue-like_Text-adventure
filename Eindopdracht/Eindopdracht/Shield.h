@@ -1,30 +1,20 @@
 #ifndef __SHIELD_H__
 #define __SHIELD_H__
 
-class Shield
+#include "Item.h";
+
+class Shield : public Item
 {
 	public:
 
-		enum SHIELD_SIZE {
-			Large,
-			Medium,
-			Small
-		};
-
-		enum SHIELD_MATERIAL {
-			Wood,
-			Iron
-		};
-
-		Shield();
+		Shield(std::string size, int level, int defence);
 		~Shield();
 
 	private:
 
-		SHIELD_SIZE size_;
-		SHIELD_MATERIAL material_;
-		int defenseBonus_;
-		int minimumLevel_;
+		std::string size_;
+		int level_;
+		int defence_;
 };
 
 #endif
