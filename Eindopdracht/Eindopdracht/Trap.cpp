@@ -62,7 +62,7 @@ bool Trap::handleAction(std::string fullCommand, std::vector<std::string> action
 
 bool Trap::tryTrigger()
 {
-	if (Random::getRandomNumber(1,100) > chanceToTrigger_)
+	if (!triggered_ && Random::getRandomNumber(1,100) <= chanceToTrigger_)
 	{
 		triggered_ = true;
 		std::cout << triggerDescription_ << std::endl;
