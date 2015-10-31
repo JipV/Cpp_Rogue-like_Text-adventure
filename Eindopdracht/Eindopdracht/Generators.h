@@ -23,7 +23,6 @@ private:
 	std::vector<std::string> enemySizeOptions_;
 };
 
-
 class TrapGenerator
 {
 public:
@@ -38,21 +37,6 @@ private:
 
 	void parseLine(std::string line, Trap* trap);
 	void saveTrap(Trap* trap);
-};
-
-class EnemyGenerator
-{
-public:
-	EnemyGenerator();
-	~EnemyGenerator();
-
-	Enemy* createEnemy(int z);
-	Enemy* createEnemy(std::string stats);
-	Enemy* modifyEnemy(Enemy* enemy, std::string modifiers);
-private:
-	std::vector<std::string> monsterOptions_;
-	std::vector<std::string> bossesOptions_;
-	std::vector<std::string> enemySizeOptions_;
 };
 
 class WeaponGenerator
