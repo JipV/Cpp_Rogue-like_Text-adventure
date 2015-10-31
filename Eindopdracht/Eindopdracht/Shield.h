@@ -1,7 +1,7 @@
 #ifndef __SHIELD_H__
 #define __SHIELD_H__
 
-#include "Item.h";
+#include "Item.h"
 
 class Shield : public Item
 {

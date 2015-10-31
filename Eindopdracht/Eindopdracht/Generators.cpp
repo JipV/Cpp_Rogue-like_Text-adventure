@@ -229,8 +229,8 @@ WeaponGenerator::WeaponGenerator()
 	}
 	input_file.close();
 
-	for (int i = 0; i < weaponOptions_.size(); i++) {
-		for (int j = 0; j < weaponMaterialOptions_.size(); j++) {
+	for (size_t i = 0; i < weaponOptions_.size(); i++) {
+		for (size_t j = 0; j < weaponMaterialOptions_.size(); j++) {
 			possibleWeapons_.push_back(parseLine(weaponOptions_.at(i), weaponMaterialOptions_.at(i)));
 		}
 	}
@@ -312,8 +312,8 @@ ShieldGenerator::ShieldGenerator()
 	}
 	input_file.close();
 
-	for (int i = 0; i < shieldSizeOptions_.size(); i++) {
-		for (int j = 0; j < shieldMaterialOptions_.size(); j++) {
+	for (size_t i = 0; i < shieldSizeOptions_.size(); i++) {
+		for (size_t j = 0; j < shieldMaterialOptions_.size(); j++) {
 			possibleShields_.push_back(parseLine(shieldSizeOptions_.at(i), shieldMaterialOptions_.at(i)));
 		}
 	}
