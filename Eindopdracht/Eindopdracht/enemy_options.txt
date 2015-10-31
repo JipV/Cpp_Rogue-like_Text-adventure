@@ -9,6 +9,6 @@ monsters:gladiator,9,13,70,70,4,50
 bosses:dino,12,15,50,70,5,70
 bosses:reus,12,17,70,50,6,50
 bosses:draak,12,20,70,70,7,30
-sizes:groot,1,2,10,10,1,-10
+sizes:grote,1,2,10,10,1,-10
 sizes:normaal,0,0,0,0,0,0
-sizes:klein,-1,-2,-10,-10,-1,10
+sizes:kleine,-1,-2,-10,-10,-1,10

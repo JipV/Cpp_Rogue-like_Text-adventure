@@ -51,7 +51,7 @@ void Hero::fight()
 		
 		std::map<std::string, Enemy*> enemyOptions = std::map<std::string, Enemy*>();
 		for (size_t i = 0; i < currentRoom_->getEnemies().size(); i++) {
-			std::cout << "\nVijand " << i + 1 << ": " << currentRoom_->getEnemies().at(i)->getType();
+			std::cout << "\nVijand " << i + 1 << ": " << *currentRoom_->getEnemies().at(i);
 			enemyOptions[std::to_string(i + 1)] = currentRoom_->getEnemies().at(i);
 		}
 		std::cout << "\n";
@@ -92,21 +92,21 @@ void Hero::fight()
 	// Val vijand aan
 	if (Random::getRandomNumber(0, 100) <= chanceToHit_) {
 		if (enemy->getAttackedByHero(attack_)) {
-			std::cout << "\nJe valt de " << enemy->getType() << " aan en doet " << attack_ << " schade.";
+			std::cout << "\nJe valt de " << *enemy << " aan en doet " << attack_ << " schade.";
 			if (enemy->getIsDefeated()) {
-				std::cout << "\nJe hebt de " << enemy->getType() << " verslagen.";
+				std::cout << "\nJe hebt de " << *enemy << " verslagen.";
 				currentRoom_->removeEnemy(enemy);
 			}
 			else {
-				std::cout << "\nHet aantal levenspunten van de " << enemy->getType() << " is " << enemy->getCurrentHP();
+				std::cout << "\nHet aantal levenspunten van de " << *enemy << " is " << enemy->getCurrentHP();
 			}
 		}
 		else {
-			std::cout << "\nJe valt de " << enemy->getType() << ", maar hij verdedigt zich, waardoor de aanval mislukt.";
+			std::cout << "\nJe valt de " << *enemy << ", maar hij verdedigt zich, waardoor de aanval mislukt.";
 		}
 	}
 	else {
-		std::cout << "\nJe valt de " << enemy->getType() << " aan en mist.";
+		std::cout << "\nJe valt de " << *enemy << " aan en mist.";
 	}	
 	std::cout << "\n";
 

@@ -18,6 +18,7 @@ class Enemy
 		bool getIsDefeated();
 		
 		std::string getType() const;
+		std::string getSize() const;
 		int getCurrentHP();
 		int getChanceToHit();
 		int getAttack();
