@@ -52,10 +52,9 @@ bool Trap::handleAction(std::string fullCommand, std::vector<std::string> action
 	if (triggered_)
 		return false;
 
-	if (triggerCommands_.size() == 0)
+	if (triggerCommands_.empty() ||
+		std::find(triggerCommands_.begin(), triggerCommands_.end(), "fullCommand") != triggerCommands_.end())
 		return tryTrigger();
-	
-	//TODO check if fullCommand is in list
 
 	return false;
 }
