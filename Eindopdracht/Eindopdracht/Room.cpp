@@ -3,6 +3,7 @@
 #include "Enemy.h"
 #include "Trap.h"
 #include "Item.h"
+#include "Hero.h"
 
 Room::Room(ROOM_TYPE type, std::string description) : isVisited_(true), type_(type), description_(description)
 {
@@ -66,7 +67,7 @@ void Room::getActions(std::vector<std::string>* actions)
 	actions->push_back("doorzoek kamer");
 }
 
-bool Room::handleAction(std::string fullCommand, std::vector<std::string> action)
+bool Room::handleAction(std::string fullCommand, std::vector<std::string> action, Hero* hero)
 {
 	if (fullCommand == "doorzoek kamer")
 	{
@@ -74,7 +75,7 @@ bool Room::handleAction(std::string fullCommand, std::vector<std::string> action
 		return true;
 	}
 
-	if (trap_ && trap_->handleAction(fullCommand, action))
+	if (trap_ && trap_->handleAction(fullCommand, action, hero))
 	{
 		return true;
 	}

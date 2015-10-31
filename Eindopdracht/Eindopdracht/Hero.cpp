@@ -152,6 +152,21 @@ void Hero::getAttackedByEnemies()
 	std::cout << "\nJe hebt nog " << currentHP_ << " levenspunten over.\n";
 }
 
+void Hero::takeDirectDamage(int damage)
+{
+	currentHP_ -= damage;
+
+	if (currentHP_ <= 0)
+	{
+		std::cout << "Je bent dood!" << std::endl;
+
+		currentHP_ = 0;
+		isDefeated_ = true;
+	}
+
+	std::cout << "\nJe hebt nog " << currentHP_ << " levenspunten over.\n";
+}
+
 void Hero::addItem(Item* item)
 {
 	items_->push_back(item);
@@ -182,7 +197,7 @@ bool Hero::handleAction(std::string fullCommand, std::vector<std::string> action
 	std::string command = action[0];
 
 	// Deze moet voor hero handle actions, gezien de acties onderbroken kunnen worden door traps
-	if (currentRoom_->handleAction(fullCommand, action))
+	if (currentRoom_->handleAction(fullCommand, action, this))
 		return true;
 
 	if (command == "loop" && action.size() == 2)

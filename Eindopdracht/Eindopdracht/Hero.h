@@ -16,6 +16,7 @@ class Hero
 		~Hero();
 
 		void getAttackedByEnemies();
+		void takeDirectDamage(int damage);
 
 		void addItem(Item* item);
 		void removeItem(Item* item);

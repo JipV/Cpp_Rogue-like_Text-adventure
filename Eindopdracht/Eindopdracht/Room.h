@@ -4,6 +4,7 @@
 class Enemy;
 class Item;
 class Trap;
+class Hero;
 
 class Room
 {
@@ -24,7 +25,7 @@ class Room
 		void showDescription();
 
 		void getActions(std::vector<std::string>* actions);
-		bool handleAction(std::string fullCommand, std::vector<std::string> action);
+		bool handleAction(std::string fullCommand, std::vector<std::string> action, Hero* hero);
 
 		Room* getExit(std::string name);
 		std::map<std::string, Room*> getAllExits();
