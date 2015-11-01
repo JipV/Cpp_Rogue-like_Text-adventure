@@ -3,9 +3,9 @@
 
 class Room;
 
+#include "Item.h"
 #include "Weapon.h"
 #include "Shield.h"
-#include "Item.h"
 
 class Hero
 {
@@ -44,6 +44,8 @@ class Hero
 		Room* currentRoom_;
 
 		std::vector<Item*>* items_;
+		std::vector<Weapon*>* weapons_;
+		std::vector<Shield*>* shields_;
 
 		bool goToRoom(std::string direction);
 		void fight();

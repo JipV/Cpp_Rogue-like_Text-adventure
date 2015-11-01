@@ -11,3 +11,11 @@ Weapon::Weapon(std::string type, int level, int attack)
 Weapon::~Weapon()
 {
 }
+
+std::string Weapon::getType() {
+	return type_;
+}
+
+int Weapon::getAttack() {
+	return attack_;
+}

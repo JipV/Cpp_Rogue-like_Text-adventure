@@ -10,6 +10,9 @@ class Weapon : public Item
 		Weapon(std::string type, int level, int attack);
 		~Weapon();
 
+		std::string getType();
+		int getAttack();
+
 	private:
 
 		std::string type_;
