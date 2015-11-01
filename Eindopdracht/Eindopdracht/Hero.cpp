@@ -14,8 +14,8 @@ Hero::Hero(std::string name) :
 	maxHP_(20), 
 	currentHP_(20), 
 	xp_(0), 
-	chanceToHit_(20), 
-	chanceToDefend_(20), 
+	chanceToHit_(50), 
+	chanceToDefend_(50), 
 	attack_(1),  
 	mindfulness_(2)
 {
