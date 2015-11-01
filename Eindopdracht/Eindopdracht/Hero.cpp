@@ -200,7 +200,7 @@ void Hero::changeWeapon()
 
 	weapon_ = weaponOptions.at(weaponNumber);
 	if (weapon_ != nullptr) {
-		std::cout << "\nJe wapen is nu een " << *weapon_ << ".\n";
+		std::cout << "\nJe wapen is nu " << *weapon_ << ".\n";
 	}
 	else {
 		std::cout << "\nJe hebt nu geen wapen vast.\n";
@@ -251,6 +251,19 @@ void Hero::changeShield()
 	}
 	else {
 		std::cout << "\nJe hebt nu geen schild vast.\n";
+	}
+}
+
+void Hero::showItems()
+{
+	if (items_.size() > 0) {
+		std::cout << "\nJe beschikt over de volgende spullen:\n";
+		for (int i = 0; i < items_.size(); i++) {
+			std::cout << "- " << *items_.at(i) << "\n";
+		}
+	}
+	else {
+		std::cout << "\nJe hebt op dit moment geen spullen.\n";
 	}
 }
 
@@ -371,6 +384,7 @@ void Hero::getActions(std::vector<std::string>* actions)
 		actions->push_back("wissel schild");
 	}
 
+	actions->push_back("bekijk spullen");
 	actions->push_back("bekijk eigenschappen");
 
 	currentRoom_->getActions(actions);
@@ -401,6 +415,11 @@ bool Hero::handleAction(std::string fullCommand, std::vector<std::string> action
 	else if (command + " " + action[1] == "wissel schild")
 	{
 		changeShield();
+		return true;
+	}
+	else if (command + " " + action[1] == "bekijk spullen")
+	{
+		showItems();
 		return true;
 	}
 	else if (command + " " + action[1] == "bekijk eigenschappen")
