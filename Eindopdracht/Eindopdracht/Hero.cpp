@@ -20,8 +20,6 @@ Hero::Hero(std::string name) :
 	mindfulness_(2)
 {
 	items_ = std::vector<Item*>();
-	weapons_ = std::vector<Weapon*>();
-	shields_ = std::vector<Shield*>();
 }
 
 Hero::~Hero()
@@ -30,12 +28,6 @@ Hero::~Hero()
 
 	for (size_t i = 0; i < items_.size(); i++)
 		delete items_.at(i);
-
-	for (size_t i = 0; i < weapons_.size(); i++)
-		delete weapons_.at(i);
-
-	for (size_t i = 0; i < shields_.size(); i++)
-		delete shields_.at(i);
 
 	delete weapon_;
 	weapon_ = nullptr;
@@ -172,9 +164,9 @@ void Hero::viewItems()
 void Hero::changeWeapon()
 {
 	std::map<std::string, Weapon*> weaponOptions = std::map<std::string, Weapon*>();
-	for (size_t i = 0; i < weapons_.size(); i++) {
-		std::cout << "\nOptie " << i + 1 << ": " << *weapons_.at(i);
-		weaponOptions[std::to_string(i + 1)] = weapons_.at(i);
+	for (size_t i = 0; i < getWeapons().size(); i++) {
+		std::cout << "\nOptie " << i + 1 << ": " << *getWeapons().at(i);
+		weaponOptions[std::to_string(i + 1)] = getWeapons().at(i);
 	}
 	std::cout << "\nOptie " << weaponOptions.size() + 1 << ": geen";
 	weaponOptions[std::to_string(weaponOptions.size() + 1)] = nullptr;
@@ -207,14 +199,20 @@ void Hero::changeWeapon()
 	}
 
 	weapon_ = weaponOptions.at(weaponNumber);
+	if (weapon_ != nullptr) {
+		std::cout << "\nJe wapen is nu een " << *weapon_ << ".\n";
+	}
+	else {
+		std::cout << "\nJe hebt nu geen wapen vast.\n";
+	}
 }
 
 void Hero::changeShield()
 {
 	std::map<std::string, Shield*> shieldOptions = std::map<std::string, Shield*>();
-	for (size_t i = 0; i < shields_.size(); i++) {
-		std::cout << "\nOptie " << i + 1 << ": " << *shields_.at(i);
-		shieldOptions[std::to_string(i + 1)] = shields_.at(i);
+	for (size_t i = 0; i < getShields().size(); i++) {
+		std::cout << "\nOptie " << i + 1 << ": " << *getShields().at(i);
+		shieldOptions[std::to_string(i + 1)] = getShields().at(i);
 	}
 	std::cout << "\nOptie " << shieldOptions.size() + 1 << ": geen";
 	shieldOptions[std::to_string(shieldOptions.size() + 1)] = nullptr;
@@ -247,6 +245,13 @@ void Hero::changeShield()
 	}
 
 	shield_ = shieldOptions.at(shieldNumber);
+
+	if (shield_ != nullptr) {
+		std::cout << "\nJe hebt nu " << *shield_ << " vast.\n";
+	}
+	else {
+		std::cout << "\nJe hebt nu geen schild vast.\n";
+	}
 }
 
 void Hero::getAttackedByEnemies()
@@ -342,11 +347,11 @@ void Hero::getActions(std::vector<std::string>* actions)
 	{
 		actions->push_back("loop [richting]");
 	}
-	if (weapons_.size() > 0)
+	if (getWeapons().size() > 0)
 	{
 		actions->push_back("wissel wapen");
 	}
-	if (shields_.size() > 0)
+	if (getShields().size() > 0)
 	{
 		actions->push_back("wissel schild");
 	}
@@ -371,12 +376,12 @@ bool Hero::handleAction(std::string fullCommand, std::vector<std::string> action
 		fight();
 		return true;
 	}
-	else if (command == "wissel wapen")
+	else if (command + " " + action[1] == "wissel wapen")
 	{
 		changeWeapon();
 		return true;
 	}
-	else if (command == "wissel schild")
+	else if (command + " " + action[1] == "wissel schild")
 	{
 		changeShield();
 		return true;
@@ -454,4 +459,26 @@ void Hero::setAttack(int attack)
 void Hero::setMindfulness(int mindfulness)
 {
 	mindfulness_ = mindfulness;
+}
+
+std::vector<Weapon*> Hero::getWeapons()
+{
+	std::vector<Weapon*> weapons = std::vector<Weapon*>();
+	for (size_t i = 0; i < items_.size(); i++) {
+		if (Weapon* weapon = dynamic_cast<Weapon*>(items_.at(i))) {
+			weapons.push_back(weapon);
+		}
+	}
+	return weapons;
+}
+
+std::vector<Shield*> Hero::getShields()
+{
+	std::vector<Shield*> shields = std::vector<Shield*>();
+	for (size_t i = 0; i < items_.size(); i++) {
+		if (Shield* shield = dynamic_cast<Shield*>(items_.at(i))) {
+			shields.push_back(shield);
+		}
+	}
+	return shields;
 }

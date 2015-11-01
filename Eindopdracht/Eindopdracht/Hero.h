@@ -52,11 +52,12 @@ class Hero
 		Room* currentRoom_;
 
 		std::vector<Item*> items_;
-		std::vector<Weapon*> weapons_;
-		std::vector<Shield*> shields_;
 		
 		Weapon* weapon_ = nullptr;
 		Shield* shield_ = nullptr;
+
+		std::vector<Weapon*> getWeapons();
+		std::vector<Shield*> getShields();
 
 		bool goToRoom(std::string direction);
 		void fight();

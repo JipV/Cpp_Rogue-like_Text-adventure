@@ -151,6 +151,7 @@ void Room::searchRoom(Hero* hero)
 			std::cout << "Je hebt " << *i << " gevonden!" << std::endl;
 			hero->addItem(i);
 		});
+		items_.clear();
 	}
 
 	if (trap_)

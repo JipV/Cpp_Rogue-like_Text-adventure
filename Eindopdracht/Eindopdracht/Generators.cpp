@@ -271,7 +271,7 @@ Weapon* WeaponGenerator::parseLine(std::string weaponOption, std::string weaponM
 Weapon* WeaponGenerator::createWeapon(int z)
 {
 	//TODO: hoeveel kans willen we dat een kamer een wapen heeft?
-	if (Random::getRandomNumber(1, 100) <= 20)
+	if (Random::getRandomNumber(1, 100) <= 10)
 	{
 		std::vector<Weapon*> allowedWeapons;
 		for (int i = z; i <= z + 2; i++)
