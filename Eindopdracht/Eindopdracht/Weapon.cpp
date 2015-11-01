@@ -11,3 +11,8 @@ Weapon::Weapon(std::string type, int level, int attack)
 Weapon::~Weapon()
 {
 }
+
+std::string Weapon::getDescription() const
+{
+	return "een " + type_;
+}

@@ -11,3 +11,8 @@ Shield::Shield(std::string size, int level, int defence)
 Shield::~Shield()
 {
 }
+
+std::string Shield::getDescription() const
+{
+	return "een " + size_ + " schild";
+}

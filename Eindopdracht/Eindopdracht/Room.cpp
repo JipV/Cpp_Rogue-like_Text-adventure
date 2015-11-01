@@ -84,7 +84,7 @@ bool Room::handleAction(std::string fullCommand, std::vector<std::string> action
 
 	if (fullCommand == "doorzoek kamer")
 	{
-		searchRoom();
+		searchRoom(hero);
 		return true;
 	}
 	if (fullCommand == "kijk rond")
@@ -131,16 +131,27 @@ void Room::setTrap(Trap* trap)
 	trap_ = trap;
 }
 
-void Room::searchRoom()
+void Room::searchRoom(Hero* hero)
 {
 	if (searched_)
 		return;
 
 	searched_ = true;
 
-	std::cout << "Je doorzoekt de kamer. " << std::endl;
+	std::cout << "Je doorzoekt de kamer... " << std::endl;
 
 	bool foundSomething = false;
+
+	if (!items_.empty())
+	{
+		foundSomething = true;
+
+		std::for_each(items_.begin(), items_.end(), [hero](Item* i)
+		{
+			std::cout << "Je hebt " << *i << " gevonden!" << std::endl;
+			hero->addItem(i);
+		});
+	}
 
 	if (trap_)
 		foundSomething = trap_->searchRoom() || foundSomething;

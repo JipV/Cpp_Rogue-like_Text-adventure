@@ -60,7 +60,7 @@ class Room
 		void addExit(std::string name, Room* room);
 		void addItem(Item* item);
 		void setTrap(Trap* trap);
-		void searchRoom();
+		void searchRoom(Hero* hero);
 };
 
 #endif

@@ -5,7 +5,11 @@ class Item
 {
 	public:
 		Item();
-		~Item();
+		virtual ~Item();
+
+		virtual std::string getDescription() const;
 };
+
+std::ostream& operator<<(std::ostream& os, const Item& obj);
 
 #endif

@@ -10,6 +10,8 @@ class Weapon : public Item
 		Weapon(std::string type, int level, int attack);
 		~Weapon();
 
+		std::string getDescription() const override;
+
 	private:
 
 		std::string type_;

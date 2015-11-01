@@ -10,6 +10,8 @@ class Shield : public Item
 		Shield(std::string size, int level, int defence);
 		~Shield();
 
+		virtual std::string getDescription() const override;
+
 	private:
 
 		std::string size_;
