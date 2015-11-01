@@ -158,7 +158,10 @@ void Hero::rest()
 
 void Hero::viewItems()
 {
-	//BEKIJK ITEMS
+	std::cout << "\nJe beschikt over de volgende spullen:\n";
+	for (int i = 0; i < items_.size(); i++) {
+		std::cout << "- " << *items_.at(i) << "\n";
+	}
 }
 
 void Hero::changeWeapon()
@@ -254,20 +257,7 @@ void Hero::changeShield()
 	}
 }
 
-void Hero::showItems()
-{
-	if (items_.size() > 0) {
-		std::cout << "\nJe beschikt over de volgende spullen:\n";
-		for (int i = 0; i < items_.size(); i++) {
-			std::cout << "- " << *items_.at(i) << "\n";
-		}
-	}
-	else {
-		std::cout << "\nJe hebt op dit moment geen spullen.\n";
-	}
-}
-
-void Hero::showCharacteristics()
+void Hero::viewCharacteristics()
 {
 	std::cout << "\nEigenschappen held:\n";
 	std::cout << "Naam:\t\t\t" << name_ << "\n";
@@ -278,6 +268,23 @@ void Hero::showCharacteristics()
 	std::cout << "Chance to defend:\t" << chanceToDefend_ << "%\n";
 	std::cout << "Attack:\t\t\t" << attack_ << "\n";
 	std::cout << "Mindfulness:\t\t" << mindfulness_ << "\n";
+}
+
+void Hero::save()
+{
+	std::ofstream output_file{ name_ + ".txt" };
+	output_file << "name:" << name_ << "\n";
+	output_file << "level:" << level_ << "\n";
+	output_file << "maxHP:\t\t\t" << maxHP_ << "\n";
+	output_file << "currentHP:\t\t\t" << currentHP_ << "\n";
+	output_file << "xp:\t\t\t" << xp_ << "\n";
+	output_file << "chanceToHit:\t\t" << chanceToHit_ << "%\n";
+	output_file << "chanceToDefend:\t" << chanceToDefend_ << "%\n";
+	output_file << "attack:" << attack_ << "\n";
+	output_file << "mindfulness:" << mindfulness_ << "\n";
+	output_file.close();
+
+	std::cout << "\nJe held is opgeslagen.\n";
 }
 
 void Hero::getAttackedByEnemies()
@@ -369,7 +376,7 @@ void Hero::getActions(std::vector<std::string>* actions)
 		actions->push_back("vlucht [richting]");
 		actions->push_back("vecht");
 	}
-	else 
+	else
 	{
 		actions->push_back("loop [richting]");
 	}
@@ -384,8 +391,13 @@ void Hero::getActions(std::vector<std::string>* actions)
 		actions->push_back("wissel schild");
 	}
 
-	actions->push_back("bekijk spullen");
+	if (items_.size() > 0)
+	{
+		actions->push_back("bekijk spullen");
+	}
+
 	actions->push_back("bekijk eigenschappen");
+	actions->push_back("held opslaan");
 
 	currentRoom_->getActions(actions);
 }
@@ -402,29 +414,34 @@ bool Hero::handleAction(std::string fullCommand, std::vector<std::string> action
 
 		return false;
 	}
-	else if (command == "vecht" && currentRoom_->hasEnemies())
+	if (command == "vecht" && currentRoom_->hasEnemies())
 	{
 		fight();
 		return true;
 	}
-	else if (command + " " + action[1] == "wissel wapen")
+	if (command + " " + action[1] == "wissel wapen")
 	{
 		changeWeapon();
 		return true;
 	}
-	else if (command + " " + action[1] == "wissel schild")
+	if (command + " " + action[1] == "wissel schild")
 	{
 		changeShield();
 		return true;
 	}
-	else if (command + " " + action[1] == "bekijk spullen")
+	if (command + " " + action[1] == "bekijk spullen")
 	{
-		showItems();
+		viewItems();
 		return true;
 	}
-	else if (command + " " + action[1] == "bekijk eigenschappen")
+	if (command + " " + action[1] == "bekijk eigenschappen")
 	{
-		showCharacteristics();
+		viewCharacteristics();
+		return true;
+	}
+	if (command + " " + action[1] == "held opslaan")
+	{
+		save();
 		return true;
 	}
 

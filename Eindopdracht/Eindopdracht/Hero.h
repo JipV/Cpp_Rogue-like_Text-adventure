@@ -66,8 +66,9 @@ class Hero
 		void viewItems();
 		void changeWeapon();
 		void changeShield();
-		void showItems();
-		void showCharacteristics();
+		void viewCharacteristics();
+
+		void save();
 };
 
 #endif
