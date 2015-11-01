@@ -5,7 +5,12 @@
 #include "Item.h"
 #include "Hero.h"
 
-Room::Room(ROOM_TYPE type, std::string description, int level) : isVisited_(false), level_(level), type_(type), description_(description)
+Room::Room(ROOM_TYPE type, std::string description, int level) : 
+	isVisited_(false), 
+	searched_(false),
+	level_(level), 
+	type_(type), 
+	description_(description)
 {
 	enemies_ = std::vector<Enemy*>();
 	items_ = std::vector<Item*>();
@@ -68,7 +73,9 @@ int Room::getLevel()
 void Room::getActions(std::vector<std::string>* actions)
 {
 	actions->push_back("kijk rond");
-	actions->push_back("doorzoek kamer");
+	
+	if (!searched_)
+		actions->push_back("doorzoek kamer");
 }
 
 bool Room::handleAction(std::string fullCommand, std::vector<std::string> action, Hero* hero)
@@ -77,7 +84,7 @@ bool Room::handleAction(std::string fullCommand, std::vector<std::string> action
 
 	if (fullCommand == "doorzoek kamer")
 	{
-		// TODO, kamer doorzoeken.
+		searchRoom();
 		return true;
 	}
 	if (fullCommand == "kijk rond")
@@ -122,6 +129,26 @@ void Room::addItem(Item* item)
 void Room::setTrap(Trap* trap)
 {
 	trap_ = trap;
+}
+
+void Room::searchRoom()
+{
+	if (searched_)
+		return;
+
+	searched_ = true;
+
+	std::cout << "Je doorzoekt de kamer. " << std::endl;
+
+	bool foundSomething = false;
+
+	if (trap_)
+		foundSomething = trap_->searchRoom() || foundSomething;
+
+	// TODO: Andere dingen doorzoeken (zoals bijvoorbeeld kisten)
+
+	if (!foundSomething)
+		std::cout << "Maar je vind niks." << std::endl;
 }
 
 bool Room::hasEnemies()
