@@ -7,12 +7,17 @@ class Shield : public Item
 {
 	public:
 
-		Shield(std::string size, int level, int defence);
+		Shield(std::string size, std::string material, int level, int defence);
 		~Shield();
+
+		std::string getSize();
+		std::string getMaterial();
+		int getDefence();
 
 	private:
 
 		std::string size_;
+		std::string material_;
 		int level_;
 		int defence_;
 };

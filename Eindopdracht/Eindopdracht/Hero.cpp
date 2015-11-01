@@ -18,14 +18,15 @@ Hero::Hero(std::string name) :
 {
 	items_ = new std::vector<Item*>();
 	weapons_ = new std::vector<Weapon*>();
-	shields_ = new std::vector<Shield*>();
 
 
 	///////////////////////////////////////////////////////////////////////////
 	////////////////////////// OM TE TESTEN //////////////////////
 	///////////////////////////////////////////////////////////////////////////
-	weapons_->push_back(new Weapon("zwaard", 1, 2)); // MOET ER NOG UIT !!!!
-	weapons_->push_back(new Weapon("bijl", 1, 2)); // MOET ER NOG UIT !!!!
+	weapons_->push_back(new Weapon("zwaard", "ijzer", 1, 2)); // MOET ER NOG UIT !!!!
+	weapons_->push_back(new Weapon("bijl", "staal", 1, 2)); // MOET ER NOG UIT !!!!
+	
+	shield_ = new Shield("groot", "staal", 1, 2); // MOET ER NOG UIT !!!!
 }
 
 Hero::~Hero()
@@ -41,11 +42,9 @@ Hero::~Hero()
 		delete weapons_->at(i);
 	delete weapons_;
 	weapons_ = nullptr;
-
-	for (size_t i = 0; i < shields_->size(); i++)
-		delete shields_->at(i);
-	delete shields_;
-	shields_ = nullptr;
+	
+	delete shield_;
+	shield_ = nullptr;
 }
 
 bool Hero::goToRoom(std::string direction)
@@ -227,29 +226,50 @@ void Hero::getAttackedByEnemies()
 	for (size_t i = 0; i < currentRoom_->getEnemies().size(); i++) {
 		if (!isDefeated_) {
 			Enemy* enemy = currentRoom_->getEnemies().at(i);
-			std::cout << "\nJe wordt aangevallen door de " << *enemy;
+			std::cout << "\nJe wordt aangevallen door de " << *enemy << ".\n";
 
 			if (Random::getRandomNumber(0, 100) <= enemy->getChanceToHit()) {
-				if (Random::getRandomNumber(0, 100) <= chanceToDefend_) {
-					std::cout << ", maar je verdedigt je, waardoor de aanval mislukt.\n";
+				if (shield_ != nullptr && Random::getRandomNumber(0, 100) <= chanceToDefend_) {
+					
+					int totalEnemyAttack = enemy->getAttack() - shield_->getDefence();
+
+					if (totalEnemyAttack <= 0) {
+						totalEnemyAttack = 0;
+					}
+
+					if (totalEnemyAttack == 1) {
+						std::cout << "\nJe gebruikt je schild, waardoor je maar " << totalEnemyAttack << " levenspunt verliest.\n";
+					}
+					else {
+						std::cout << "\nJe gebruikt je schild, waardoor je maar " << totalEnemyAttack << " levenspunten verliest.\n";
+					}	
 				}
 				else {
 					currentHP_ -= enemy->getAttack();
-					if (currentHP_ <= 0) {
-						currentHP_ = 0;
-						isDefeated_ = true;
+					
+					if (shield_ != nullptr) {
+						std::cout << "\nJe verdedigt je niet goed en verliest daardoor " << enemy->getAttack();
 					}
-					std::cout << " en verliest daardoor " << enemy->getAttack();
-					if (enemy->getAttack() < 2) {
+					else {
+						std::cout << "\nJe kunt je niet verdedigen, omdat je geen schild hebt en daardoor verliest je " << enemy->getAttack();
+					}
+
+					if (enemy->getAttack() == 1) {
 						std::cout << " levenspunt.\n";
 					}
 					else {
 						std::cout << " levenspunten.\n";
 					}
 				}
+
+				// Check of de speler verslagen is
+				if (currentHP_ <= 0) {
+					currentHP_ = 0;
+					isDefeated_ = true;
+				}
 			}
 			else {
-				std::cout << ", maar hij mist.\n";
+				std::cout << "\nJe hebt gelukt. De " << *enemy << " mist.\n";
 			}
 		}
 	}

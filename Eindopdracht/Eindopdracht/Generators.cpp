@@ -265,7 +265,7 @@ Weapon* WeaponGenerator::parseLine(std::string weaponOption, std::string weaponM
 	int totalLevel = std::stoi(weaponLevel) + std::stoi(weaponMaterialLevel);
 	int totalAttack = std::stoi(weaponAttack) + std::stoi(weaponMaterialAttack);
 
-	return new Weapon(weaponType, totalLevel, totalAttack);
+	return new Weapon(weaponType, weaponMaterialType, totalLevel, totalAttack);
 }
 
 Weapon* WeaponGenerator::createWeapon(int z)
@@ -348,7 +348,7 @@ Shield* ShieldGenerator::parseLine(std::string shieldSizeOption, std::string shi
 	int totalLevel = std::stoi(shieldSizeLevel) + std::stoi(shieldMaterialLevel);
 	int totalAttack = std::stoi(shieldSizeAttack) + std::stoi(shieldMaterialAttack);
 
-	return new Shield(shieldSize, totalLevel, totalAttack);
+	return new Shield(shieldSize, shieldMaterialType, totalLevel, totalAttack);
 }
 
 Shield* ShieldGenerator::createShield(int z)

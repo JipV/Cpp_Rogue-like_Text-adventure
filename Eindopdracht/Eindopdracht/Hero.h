@@ -45,7 +45,8 @@ class Hero
 
 		std::vector<Item*>* items_;
 		std::vector<Weapon*>* weapons_;
-		std::vector<Shield*>* shields_;
+		
+		Shield* shield_ = nullptr;
 
 		bool goToRoom(std::string direction);
 		void fight();

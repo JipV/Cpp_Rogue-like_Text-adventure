@@ -1,9 +1,10 @@
 #include "stdafx.h"
 #include "Weapon.h"
 
-Weapon::Weapon(std::string type, int level, int attack)
+Weapon::Weapon(std::string type, std::string material, int level, int attack)
 {
 	type_ = type;
+	material_ = material;
 	level_ = level;
 	attack_ = attack;
 }
