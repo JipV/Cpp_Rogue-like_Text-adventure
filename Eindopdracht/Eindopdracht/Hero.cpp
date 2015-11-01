@@ -21,14 +21,7 @@ Hero::Hero(std::string name) :
 {
 	items_ = std::vector<Item*>();
 	weapons_ = std::vector<Weapon*>();
-
-	///////////////////////////////////////////////////////////////////////////
-	////////////////////////// OM TE TESTEN //////////////////////
-	///////////////////////////////////////////////////////////////////////////
-	weapons_.push_back(new Weapon("zwaard", "ijzer", 1, 2)); // MOET ER NOG UIT !!!!
-	weapons_.push_back(new Weapon("bijl", "staal", 1, 2)); // MOET ER NOG UIT !!!!
-	
-	shield_ = new Shield("groot", "staal", 1, 2); // MOET ER NOG UIT !!!!
+	shields_ = std::vector<Shield*>();
 }
 
 Hero::~Hero()
@@ -41,6 +34,11 @@ Hero::~Hero()
 	for (size_t i = 0; i < weapons_.size(); i++)
 		delete weapons_.at(i);
 
+	for (size_t i = 0; i < shields_.size(); i++)
+		delete shields_.at(i);
+
+	delete weapon_;
+	weapon_ = nullptr;
 	
 	delete shield_;
 	shield_ = nullptr;
@@ -104,53 +102,11 @@ void Hero::fight()
 	else {
 		enemy = currentRoom_->getEnemies().at(0);
 	}
-
-	// Bepaal wapen
-	Weapon* weapon = nullptr;
-
-	if (weapons_.size() > 0) {
-		std::map<std::string, Weapon*> weaponOptions = std::map<std::string, Weapon*>();
-		for (size_t i = 0; i < weapons_.size(); i++) {
-			std::cout << "\nOptie " << i + 1 << ": " << *weapons_.at(i);
-			weaponOptions[std::to_string(i + 1)] = weapons_.at(i);
-		}
-		std::cout << "\nOptie " << weaponOptions.size() + 1 << ": geen";
-		weaponOptions[std::to_string(weaponOptions.size() + 1)] = nullptr;
-		std::cout << "\n";
-
-		std::cout << "\nWelk wapen wil je gebruiken?\n";
-		std::cout << "(";
-		for (size_t i = 0; i < weaponOptions.size(); i++) {
-			std::cout << i + 1;
-			if (i != weaponOptions.size() - 1) {
-				std::cout << " | ";
-			}
-		}
-		std::cout << ")\n";
-
-		std::string weaponNumber;
-
-		bool valid = false;
-
-		while (!valid) {
-			std::cout << "\nWeapon: ";
-			std::getline(std::cin, weaponNumber);
-
-			auto it = weaponOptions.find(weaponNumber);
-			if (it != weaponOptions.end()) {
-				valid = true;
-			}
-			else
-				std::cout << "Het ingevoerde wapen is niet geldig. Voer opnieuw een wapen in.\n";
-		}
-
-		weapon = weaponOptions.at(weaponNumber);
-	}
 	
 	// Val vijand aan
 	int totalAttack = attack_;
-	if (weapon != nullptr) {
-		totalAttack += weapon->getAttack();
+	if (weapon_ != nullptr) {
+		totalAttack += weapon_->getAttack();
 	}
 
 	if (Random::getRandomNumber(0, 100) <= chanceToHit_) {
@@ -218,6 +174,86 @@ void Hero::viewItems()
 	//BEKIJK ITEMS
 }
 
+void Hero::changeWeapon()
+{
+	std::map<std::string, Weapon*> weaponOptions = std::map<std::string, Weapon*>();
+	for (size_t i = 0; i < weapons_.size(); i++) {
+		std::cout << "\nOptie " << i + 1 << ": " << *weapons_.at(i);
+		weaponOptions[std::to_string(i + 1)] = weapons_.at(i);
+	}
+	std::cout << "\nOptie " << weaponOptions.size() + 1 << ": geen";
+	weaponOptions[std::to_string(weaponOptions.size() + 1)] = nullptr;
+	std::cout << "\n";
+
+	std::cout << "\nWelk wapen wil je gebruiken?\n";
+	std::cout << "(";
+	for (size_t i = 0; i < weaponOptions.size(); i++) {
+		std::cout << i + 1;
+		if (i != weaponOptions.size() - 1) {
+			std::cout << " | ";
+		}
+	}
+	std::cout << ")\n";
+
+	std::string weaponNumber;
+
+	bool valid = false;
+
+	while (!valid) {
+		std::cout << "\nWeapon: ";
+		std::getline(std::cin, weaponNumber);
+
+		auto it = weaponOptions.find(weaponNumber);
+		if (it != weaponOptions.end()) {
+			valid = true;
+		}
+		else
+			std::cout << "Het ingevoerde wapen is niet geldig. Voer opnieuw een wapen in.\n";
+	}
+
+	weapon_ = weaponOptions.at(weaponNumber);
+}
+
+void Hero::changeShield()
+{
+	std::map<std::string, Shield*> shieldOptions = std::map<std::string, Shield*>();
+	for (size_t i = 0; i < shields_.size(); i++) {
+		std::cout << "\nOptie " << i + 1 << ": " << *shields_.at(i);
+		shieldOptions[std::to_string(i + 1)] = shields_.at(i);
+	}
+	std::cout << "\nOptie " << shieldOptions.size() + 1 << ": geen";
+	shieldOptions[std::to_string(shieldOptions.size() + 1)] = nullptr;
+	std::cout << "\n";
+
+	std::cout << "\nWelk schild wil je gebruiken?\n";
+	std::cout << "(";
+	for (size_t i = 0; i < shieldOptions.size(); i++) {
+		std::cout << i + 1;
+		if (i != shieldOptions.size() - 1) {
+			std::cout << " | ";
+		}
+	}
+	std::cout << ")\n";
+
+	std::string shieldNumber;
+
+	bool valid = false;
+
+	while (!valid) {
+		std::cout << "\nShield: ";
+		std::getline(std::cin, shieldNumber);
+
+		auto it = shieldOptions.find(shieldNumber);
+		if (it != shieldOptions.end()) {
+			valid = true;
+		}
+		else
+			std::cout << "Het ingevoerde schild is niet geldig. Voer opnieuw een schild in.\n";
+	}
+
+	shield_ = shieldOptions.at(shieldNumber);
+}
+
 void Hero::getAttackedByEnemies()
 {
 	// TODO: GAME OVER
@@ -250,7 +286,7 @@ void Hero::getAttackedByEnemies()
 						std::cout << "\nJe verdedigt je niet goed en verliest daardoor " << enemy->getAttack();
 					}
 					else {
-						std::cout << "\nJe kunt je niet verdedigen, omdat je geen schild hebt en daardoor verliest je " << enemy->getAttack();
+						std::cout << "\nJe kunt je niet verdedigen, omdat je geen schild hebt en daardoor verlies je " << enemy->getAttack();
 					}
 
 					if (enemy->getAttack() == 1) {
@@ -311,6 +347,14 @@ void Hero::getActions(std::vector<std::string>* actions)
 	{
 		actions->push_back("loop [richting]");
 	}
+	if (weapons_.size() > 0)
+	{
+		actions->push_back("wissel wapen");
+	}
+	if (shields_.size() > 0)
+	{
+		actions->push_back("wissel schild");
+	}
 
 	currentRoom_->getActions(actions);
 }
@@ -327,9 +371,19 @@ bool Hero::handleAction(std::string fullCommand, std::vector<std::string> action
 
 		return false;
 	}
-	if (command == "vecht" && currentRoom_->hasEnemies())
+	else if (command == "vecht" && currentRoom_->hasEnemies())
 	{
 		fight();
+		return true;
+	}
+	else if (command == "wissel wapen")
+	{
+		changeWeapon();
+		return true;
+	}
+	else if (command == "wissel schild")
+	{
+		changeShield();
 		return true;
 	}
 
