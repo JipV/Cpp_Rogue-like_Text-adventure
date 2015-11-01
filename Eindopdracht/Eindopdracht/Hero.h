@@ -2,10 +2,7 @@
 #define __HERO_H__
 
 class Room;
-
-#include "Weapon.h"
-#include "Shield.h"
-#include "Item.h"
+class Item;
 
 class Hero
 {
@@ -26,7 +23,7 @@ class Hero
 		Room* getCurrentRoom();
 		void setCurrentRoom(Room* room);
 
-		std::vector<Item*>* getItems();
+		std::vector<Item*> getItems();
 
 	private:
 		bool isDefeated_;
@@ -43,7 +40,7 @@ class Hero
 
 		Room* currentRoom_;
 
-		std::vector<Item*>* items_;
+		std::vector<Item*> items_;
 
 		bool goToRoom(std::string direction);
 		void fight();

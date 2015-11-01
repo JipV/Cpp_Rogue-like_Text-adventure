@@ -1,9 +1,6 @@
 #ifndef __ENEMY_H__
 #define __ENEMY_H__
 
-#include "Weapon.h"
-#include "Shield.h"
-
 class Enemy
 {
 	friend class EnemyGenerator;

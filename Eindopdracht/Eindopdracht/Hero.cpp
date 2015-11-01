@@ -3,6 +3,7 @@
 #include "Room.h"
 #include "Random.h"
 #include "Enemy.h"
+#include "Item.h"
 
 // ReSharper disable once CppPossiblyUninitializedMember
 Hero::Hero(std::string name) : 
@@ -16,17 +17,16 @@ Hero::Hero(std::string name) :
 	attack_(1),  
 	mindfulness_(2)
 {
-	items_ = new std::vector<Item*>();
+	items_ = std::vector<Item*>();
 }
 
 Hero::~Hero()
 {
 	currentRoom_ = nullptr; // Rooms horen bij Map, die zal ze verwijderen
 
-	for (size_t i = 0; i < items_->size(); i++)
-		delete items_->at(i);
-	delete items_;
-	items_ = nullptr;
+	for (size_t i = 0; i < items_.size(); i++)
+		delete items_.at(i);
+
 }
 
 bool Hero::goToRoom(std::string direction)
@@ -208,12 +208,12 @@ void Hero::takeDirectDamage(int damage)
 
 void Hero::addItem(Item* item)
 {
-	items_->push_back(item);
+	items_.push_back(item);
 }
 
 void Hero::removeItem(Item* item)
 {
-	items_->erase(std::remove(items_->begin(), items_->end(), item), items_->end());
+	items_.erase(std::remove(items_.begin(), items_.end(), item), items_.end());
 }
 
 void Hero::getActions(std::vector<std::string>* actions)
@@ -277,7 +277,7 @@ void Hero::setCurrentRoom(Room* room)
 	room->setIsVisited(true);
 }
 
-std::vector<Item*>* Hero::getItems()
+std::vector<Item*> Hero::getItems()
 {
 	return items_;
 }
