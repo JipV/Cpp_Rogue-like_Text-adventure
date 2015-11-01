@@ -254,6 +254,19 @@ void Hero::changeShield()
 	}
 }
 
+void Hero::showCharacteristics()
+{
+	std::cout << "\nEigenschappen held:\n";
+	std::cout << "Naam:\t\t\t" << name_ << "\n";
+	std::cout << "Level:\t\t\t" << level_ << "\n";
+	std::cout << "HP:\t\t\t" << currentHP_ << "\n";
+	std::cout << "XP:\t\t\t" << xp_ << "\n";
+	std::cout << "Chance to hit:\t\t" << chanceToHit_ << "%\n";
+	std::cout << "Chance to defend:\t" << chanceToDefend_ << "%\n";
+	std::cout << "Attack:\t\t\t" << attack_ << "\n";
+	std::cout << "Mindfulness:\t\t" << mindfulness_ << "\n";
+}
+
 void Hero::getAttackedByEnemies()
 {
 	// TODO: GAME OVER
@@ -347,14 +360,18 @@ void Hero::getActions(std::vector<std::string>* actions)
 	{
 		actions->push_back("loop [richting]");
 	}
+
 	if (getWeapons().size() > 0)
 	{
 		actions->push_back("wissel wapen");
 	}
+
 	if (getShields().size() > 0)
 	{
 		actions->push_back("wissel schild");
 	}
+
+	actions->push_back("bekijk eigenschappen");
 
 	currentRoom_->getActions(actions);
 }
@@ -384,6 +401,11 @@ bool Hero::handleAction(std::string fullCommand, std::vector<std::string> action
 	else if (command + " " + action[1] == "wissel schild")
 	{
 		changeShield();
+		return true;
+	}
+	else if (command + " " + action[1] == "bekijk eigenschappen")
+	{
+		showCharacteristics();
 		return true;
 	}
 

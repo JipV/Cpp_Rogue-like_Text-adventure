@@ -66,6 +66,7 @@ class Hero
 		void viewItems();
 		void changeWeapon();
 		void changeShield();
+		void showCharacteristics();
 };
 
 #endif
