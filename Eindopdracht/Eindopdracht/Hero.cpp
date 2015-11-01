@@ -159,11 +159,6 @@ bool Hero::flee(std::string direction)
 	return false;
 }
 
-void Hero::search()
-{
-	//ZOEK
-}
-
 void Hero::rest()
 {
 	//RUST UIT
@@ -418,4 +413,45 @@ void Hero::setCurrentRoom(Room* room)
 std::vector<Item*> Hero::getItems()
 {
 	return items_;
+}
+
+
+void Hero::setLevel(int level)
+{
+	level_ = level;
+}
+
+void Hero::setMaxHP(int maxHP)
+{
+	maxHP_ = maxHP;
+}
+
+void Hero::setCurrentHP(int currentHP)
+{
+	currentHP_ = currentHP;
+}
+
+void Hero::setXP(int xp)
+{
+	xp_ = xp;
+}
+
+void Hero::setChanceToHit(int chanceToHit)
+{
+	chanceToHit_ = chanceToHit;
+}
+
+void Hero::setChanceToDefend(int chanceToDefend)
+{
+	chanceToDefend_ = chanceToDefend;
+}
+
+void Hero::setAttack(int attack)
+{
+	attack_ = attack;
+}
+
+void Hero::setMindfulness(int mindfulness)
+{
+	mindfulness_ = mindfulness;
 }
