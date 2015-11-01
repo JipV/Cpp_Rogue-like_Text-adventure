@@ -7,14 +7,17 @@ class Weapon : public Item
 {
 	public:
 
-		Weapon(std::string type, int level, int attack);
+		Weapon(std::string type, std::string material, int level, int attack);
 		~Weapon();
 
+		std::string getType();
+		int getAttack();
 		std::string getDescription() const override;
 
 	private:
 
 		std::string type_;
+		std::string material_;
 		int level_;
 		int attack_;
 };

@@ -4,6 +4,8 @@
 #include "Random.h"
 #include "Enemy.h"
 #include "Item.h"
+#include "Weapon.h"
+#include "Shield.h"
 
 // ReSharper disable once CppPossiblyUninitializedMember
 Hero::Hero(std::string name) : 
@@ -18,6 +20,15 @@ Hero::Hero(std::string name) :
 	mindfulness_(2)
 {
 	items_ = std::vector<Item*>();
+	weapons_ = std::vector<Weapon*>();
+
+	///////////////////////////////////////////////////////////////////////////
+	////////////////////////// OM TE TESTEN //////////////////////
+	///////////////////////////////////////////////////////////////////////////
+	weapons_.push_back(new Weapon("zwaard", "ijzer", 1, 2)); // MOET ER NOG UIT !!!!
+	weapons_.push_back(new Weapon("bijl", "staal", 1, 2)); // MOET ER NOG UIT !!!!
+	
+	shield_ = new Shield("groot", "staal", 1, 2); // MOET ER NOG UIT !!!!
 }
 
 Hero::~Hero()
@@ -27,6 +38,12 @@ Hero::~Hero()
 	for (size_t i = 0; i < items_.size(); i++)
 		delete items_.at(i);
 
+	for (size_t i = 0; i < weapons_.size(); i++)
+		delete weapons_.at(i);
+
+	
+	delete shield_;
+	shield_ = nullptr;
 }
 
 bool Hero::goToRoom(std::string direction)
@@ -44,14 +61,14 @@ bool Hero::goToRoom(std::string direction)
 
 void Hero::fight()
 {
+	// Bepaal vijand
 	Enemy* enemy = nullptr;
 
-	// Bepaal vijand
 	if (currentRoom_->getEnemies().size() > 1) {
 		
 		std::map<std::string, Enemy*> enemyOptions = std::map<std::string, Enemy*>();
 		for (size_t i = 0; i < currentRoom_->getEnemies().size(); i++) {
-			std::cout << "\nVijand " << i + 1 << ": " << *currentRoom_->getEnemies().at(i);
+			std::cout << "\nOptie " << i + 1 << ": " << *currentRoom_->getEnemies().at(i);
 			enemyOptions[std::to_string(i + 1)] = currentRoom_->getEnemies().at(i);
 		}
 		std::cout << "\n";
@@ -66,7 +83,6 @@ void Hero::fight()
 		}
 		std::cout << ")\n";
 
-
 		std::string enemyNumber;
 
 		bool valid = false;
@@ -80,7 +96,7 @@ void Hero::fight()
 				valid = true;
 			}
 			else
-				std::cout << "De ingevoerd vijand is niet geldig. Voor opnieuw een vijand in.\n";
+				std::cout << "De ingevoerde vijand is niet geldig. Voer opnieuw een vijand in.\n";
 		}
 
 		enemy = enemyOptions.at(enemyNumber);
@@ -88,11 +104,58 @@ void Hero::fight()
 	else {
 		enemy = currentRoom_->getEnemies().at(0);
 	}
+
+	// Bepaal wapen
+	Weapon* weapon = nullptr;
+
+	if (weapons_.size() > 0) {
+		std::map<std::string, Weapon*> weaponOptions = std::map<std::string, Weapon*>();
+		for (size_t i = 0; i < weapons_.size(); i++) {
+			std::cout << "\nOptie " << i + 1 << ": " << *weapons_.at(i);
+			weaponOptions[std::to_string(i + 1)] = weapons_.at(i);
+		}
+		std::cout << "\nOptie " << weaponOptions.size() + 1 << ": geen";
+		weaponOptions[std::to_string(weaponOptions.size() + 1)] = nullptr;
+		std::cout << "\n";
+
+		std::cout << "\nWelk wapen wil je gebruiken?\n";
+		std::cout << "(";
+		for (size_t i = 0; i < weaponOptions.size(); i++) {
+			std::cout << i + 1;
+			if (i != weaponOptions.size() - 1) {
+				std::cout << " | ";
+			}
+		}
+		std::cout << ")\n";
+
+		std::string weaponNumber;
+
+		bool valid = false;
+
+		while (!valid) {
+			std::cout << "\nWeapon: ";
+			std::getline(std::cin, weaponNumber);
+
+			auto it = weaponOptions.find(weaponNumber);
+			if (it != weaponOptions.end()) {
+				valid = true;
+			}
+			else
+				std::cout << "Het ingevoerde wapen is niet geldig. Voer opnieuw een wapen in.\n";
+		}
+
+		weapon = weaponOptions.at(weaponNumber);
+	}
 	
 	// Val vijand aan
+	int totalAttack = attack_;
+	if (weapon != nullptr) {
+		totalAttack += weapon->getAttack();
+	}
+
 	if (Random::getRandomNumber(0, 100) <= chanceToHit_) {
-		if (enemy->getAttackedByHero(attack_)) {
-			std::cout << "\nJe valt de " << *enemy << " aan en doet " << attack_ << " schade.";
+		if (enemy->getAttackedByHero(totalAttack)) {
+			std::cout << "\nJe valt de " << *enemy << " aan en doet " << totalAttack << " schade.";
 			if (enemy->getIsDefeated()) {
 				std::cout << "\nJe hebt de " << *enemy << " verslagen.";
 				currentRoom_->removeEnemy(enemy);
@@ -162,29 +225,50 @@ void Hero::getAttackedByEnemies()
 	for (size_t i = 0; i < currentRoom_->getEnemies().size(); i++) {
 		if (!isDefeated_) {
 			Enemy* enemy = currentRoom_->getEnemies().at(i);
-			std::cout << "\nJe wordt aangevallen door de " << *enemy;
+			std::cout << "\nJe wordt aangevallen door de " << *enemy << ".\n";
 
 			if (Random::getRandomNumber(0, 100) <= enemy->getChanceToHit()) {
-				if (Random::getRandomNumber(0, 100) <= chanceToDefend_) {
-					std::cout << ", maar je verdedigt je, waardoor de aanval mislukt.\n";
+				if (shield_ != nullptr && Random::getRandomNumber(0, 100) <= chanceToDefend_) {
+					
+					int totalEnemyAttack = enemy->getAttack() - shield_->getDefence();
+
+					if (totalEnemyAttack <= 0) {
+						totalEnemyAttack = 0;
+					}
+
+					if (totalEnemyAttack == 1) {
+						std::cout << "\nJe gebruikt je schild, waardoor je maar " << totalEnemyAttack << " levenspunt verliest.\n";
+					}
+					else {
+						std::cout << "\nJe gebruikt je schild, waardoor je maar " << totalEnemyAttack << " levenspunten verliest.\n";
+					}	
 				}
 				else {
 					currentHP_ -= enemy->getAttack();
-					if (currentHP_ <= 0) {
-						currentHP_ = 0;
-						isDefeated_ = true;
+					
+					if (shield_ != nullptr) {
+						std::cout << "\nJe verdedigt je niet goed en verliest daardoor " << enemy->getAttack();
 					}
-					std::cout << " en verliest daardoor " << enemy->getAttack();
-					if (enemy->getAttack() < 2) {
+					else {
+						std::cout << "\nJe kunt je niet verdedigen, omdat je geen schild hebt en daardoor verliest je " << enemy->getAttack();
+					}
+
+					if (enemy->getAttack() == 1) {
 						std::cout << " levenspunt.\n";
 					}
 					else {
 						std::cout << " levenspunten.\n";
 					}
 				}
+
+				// Check of de speler verslagen is
+				if (currentHP_ <= 0) {
+					currentHP_ = 0;
+					isDefeated_ = true;
+				}
 			}
 			else {
-				std::cout << ", maar hij mist.\n";
+				std::cout << "\nJe hebt gelukt. De " << *enemy << " mist.\n";
 			}
 		}
 	}
@@ -243,7 +327,7 @@ bool Hero::handleAction(std::string fullCommand, std::vector<std::string> action
 
 		return false;
 	}
-	if (command == "vecht")
+	if (command == "vecht" && currentRoom_->hasEnemies())
 	{
 		fight();
 		return true;
