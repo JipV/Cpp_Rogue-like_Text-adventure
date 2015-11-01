@@ -13,14 +13,23 @@ Shield::~Shield()
 {
 }
 
-std::string Shield::getSize() {
+std::string Shield::getSize() 
+{
 	return size_;
 }
 
-std::string Shield::getMaterial() {
+std::string Shield::getMaterial() 
+{
 	return material_;
 }
 
-int Shield::getDefence() {
+int Shield::getDefence() 
+{
 	return defence_;
 }
+
+std::string Shield::getDescription() const
+{
+	return "een " + size_ + " schild gemaakt van " + material_;
+}
+

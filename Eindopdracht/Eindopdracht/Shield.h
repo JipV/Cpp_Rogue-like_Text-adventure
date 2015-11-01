@@ -13,6 +13,7 @@ class Shield : public Item
 		std::string getSize();
 		std::string getMaterial();
 		int getDefence();
+		virtual std::string getDescription() const override;
 
 	private:
 

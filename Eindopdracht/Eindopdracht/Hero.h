@@ -2,10 +2,9 @@
 #define __HERO_H__
 
 class Room;
-
-#include "Item.h"
-#include "Weapon.h"
-#include "Shield.h"
+class Item;
+class Weapon;
+class Shield;
 
 class Hero
 {
@@ -26,7 +25,7 @@ class Hero
 		Room* getCurrentRoom();
 		void setCurrentRoom(Room* room);
 
-		std::vector<Item*>* getItems();
+		std::vector<Item*> getItems();
 
 	private:
 		bool isDefeated_;
@@ -43,10 +42,11 @@ class Hero
 
 		Room* currentRoom_;
 
-		std::vector<Item*>* items_;
-		std::vector<Weapon*>* weapons_;
+		std::vector<Item*> items_;
+		std::vector<Weapon*> weapons_;
 		
 		Shield* shield_ = nullptr;
+
 
 		bool goToRoom(std::string direction);
 		void fight();

@@ -67,6 +67,18 @@ bool Trap::handleAction(std::string fullCommand, std::vector<std::string> action
 	return false;
 }
 
+bool Trap::searchRoom()
+{
+	if (!triggered_ && Random::getRandomNumber(1,100) <= chanceToFind_)
+	{
+		triggered_ = true; // Zorg ervoor dat de val niet meer af gaat
+		std::cout << findDescription_ << std::endl;
+		return true;
+	}
+
+	return false;
+}
+
 void Trap::showRoomDescription()
 {
 	if (!triggered_)

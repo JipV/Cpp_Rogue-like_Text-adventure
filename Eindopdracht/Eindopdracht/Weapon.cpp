@@ -20,3 +20,8 @@ std::string Weapon::getType() {
 int Weapon::getAttack() {
 	return attack_;
 }
+
+std::string Weapon::getDescription() const
+{
+	return "een " + type_ + " van " + material_;
+}

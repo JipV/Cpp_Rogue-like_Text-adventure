@@ -44,6 +44,7 @@ class Room
 	private:
 
 		bool isVisited_;
+		bool searched_;
 		int level_;
 
 		ROOM_TYPE type_;
@@ -59,6 +60,7 @@ class Room
 		void addExit(std::string name, Room* room);
 		void addItem(Item* item);
 		void setTrap(Trap* trap);
+		void searchRoom(Hero* hero);
 };
 
 #endif

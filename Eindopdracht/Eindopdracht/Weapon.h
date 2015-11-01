@@ -12,6 +12,7 @@ class Weapon : public Item
 
 		std::string getType();
 		int getAttack();
+		std::string getDescription() const override;
 
 	private:
 

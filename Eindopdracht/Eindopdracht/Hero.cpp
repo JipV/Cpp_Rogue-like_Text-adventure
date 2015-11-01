@@ -3,6 +3,9 @@
 #include "Room.h"
 #include "Random.h"
 #include "Enemy.h"
+#include "Item.h"
+#include "Weapon.h"
+#include "Shield.h"
 
 // ReSharper disable once CppPossiblyUninitializedMember
 Hero::Hero(std::string name) : 
@@ -16,15 +19,14 @@ Hero::Hero(std::string name) :
 	attack_(1),  
 	mindfulness_(2)
 {
-	items_ = new std::vector<Item*>();
-	weapons_ = new std::vector<Weapon*>();
-
+	items_ = std::vector<Item*>();
+	weapons_ = std::vector<Weapon*>();
 
 	///////////////////////////////////////////////////////////////////////////
 	////////////////////////// OM TE TESTEN //////////////////////
 	///////////////////////////////////////////////////////////////////////////
-	weapons_->push_back(new Weapon("zwaard", "ijzer", 1, 2)); // MOET ER NOG UIT !!!!
-	weapons_->push_back(new Weapon("bijl", "staal", 1, 2)); // MOET ER NOG UIT !!!!
+	weapons_.push_back(new Weapon("zwaard", "ijzer", 1, 2)); // MOET ER NOG UIT !!!!
+	weapons_.push_back(new Weapon("bijl", "staal", 1, 2)); // MOET ER NOG UIT !!!!
 	
 	shield_ = new Shield("groot", "staal", 1, 2); // MOET ER NOG UIT !!!!
 }
@@ -33,15 +35,12 @@ Hero::~Hero()
 {
 	currentRoom_ = nullptr; // Rooms horen bij Map, die zal ze verwijderen
 
-	for (size_t i = 0; i < items_->size(); i++)
-		delete items_->at(i);
-	delete items_;
-	items_ = nullptr;
+	for (size_t i = 0; i < items_.size(); i++)
+		delete items_.at(i);
 
-	for (size_t i = 0; i < weapons_->size(); i++)
-		delete weapons_->at(i);
-	delete weapons_;
-	weapons_ = nullptr;
+	for (size_t i = 0; i < weapons_.size(); i++)
+		delete weapons_.at(i);
+
 	
 	delete shield_;
 	shield_ = nullptr;
@@ -109,11 +108,11 @@ void Hero::fight()
 	// Bepaal wapen
 	Weapon* weapon = nullptr;
 
-	if (weapons_->size() > 0) {
+	if (weapons_.size() > 0) {
 		std::map<std::string, Weapon*> weaponOptions = std::map<std::string, Weapon*>();
-		for (size_t i = 0; i < weapons_->size(); i++) {
-			std::cout << "\nOptie " << i + 1 << ": " << weapons_->at(i)->getType();
-			weaponOptions[std::to_string(i + 1)] = weapons_->at(i);
+		for (size_t i = 0; i < weapons_.size(); i++) {
+			std::cout << "\nOptie " << i + 1 << ": " << *weapons_.at(i);
+			weaponOptions[std::to_string(i + 1)] = weapons_.at(i);
 		}
 		std::cout << "\nOptie " << weaponOptions.size() + 1 << ": geen";
 		weaponOptions[std::to_string(weaponOptions.size() + 1)] = nullptr;
@@ -293,12 +292,12 @@ void Hero::takeDirectDamage(int damage)
 
 void Hero::addItem(Item* item)
 {
-	items_->push_back(item);
+	items_.push_back(item);
 }
 
 void Hero::removeItem(Item* item)
 {
-	items_->erase(std::remove(items_->begin(), items_->end(), item), items_->end());
+	items_.erase(std::remove(items_.begin(), items_.end(), item), items_.end());
 }
 
 void Hero::getActions(std::vector<std::string>* actions)
@@ -328,7 +327,7 @@ bool Hero::handleAction(std::string fullCommand, std::vector<std::string> action
 
 		return false;
 	}
-	if (command == "vecht")
+	if (command == "vecht" && currentRoom_->hasEnemies())
 	{
 		fight();
 		return true;
@@ -362,7 +361,7 @@ void Hero::setCurrentRoom(Room* room)
 	room->setIsVisited(true);
 }
 
-std::vector<Item*>* Hero::getItems()
+std::vector<Item*> Hero::getItems()
 {
 	return items_;
 }
