@@ -66,6 +66,12 @@ void GameController::startGame()
 				std::cout << "actie \"" << action << "\" is niet geldig." << std::endl;
 			}
 		}
+
+		if (hero_->getIsDefeated()) {
+			std::cout << "\nGAME OVER !!\n" << std::endl;
+			std::cout << "Je bent verslagen..\n" << std::endl;
+			isRunning_ = false;
+		}
 	}
 }
 
