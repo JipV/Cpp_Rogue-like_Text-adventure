@@ -4,9 +4,8 @@
 #include "Map.h"
 #include "Generators.h"
 
-GameController::GameController()
+GameController::GameController() : isRunning_(false), exitGame_(false)
 {
-	isRunning_ = false;
 }
 
 GameController::~GameController()
@@ -62,7 +61,11 @@ void GameController::startGame()
 				hero_->handleAction(action, elems)))
 			{
 				if (elems[0] == "exit")
+				{
+					isRunning_ = false;
+					exitGame_ = true;
 					break;
+				}
 				std::cout << "actie \"" << action << "\" is niet geldig." << std::endl;
 			}
 		}
@@ -73,6 +76,11 @@ void GameController::startGame()
 			isRunning_ = false;
 		}
 	}
+}
+
+bool GameController::gameShouldRun()
+{
+	return !exitGame_;
 }
 
 Map* GameController::createMap()
