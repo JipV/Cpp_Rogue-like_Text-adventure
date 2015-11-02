@@ -1,9 +1,9 @@
 name:held1
-level:2
-maxHP:20
-currentHP:20
+level:10
+maxHP:2000
+currentHP:2000
 xp:2
-chanceToHit:20
-chanceToDefend:50
-attack:1
+chanceToHit:100
+chanceToDefend:100
+attack:100
 perception:2

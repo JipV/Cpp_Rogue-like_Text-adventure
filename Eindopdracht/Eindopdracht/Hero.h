@@ -13,6 +13,7 @@ class Hero
 		Hero(std::string name);
 		~Hero();
 
+		bool getHasWon();
 		bool getIsDefeated();
 
 		void getAttackedByEnemies();
@@ -42,6 +43,7 @@ class Hero
 		void levelUp();
 
 	private:
+		bool hasWon_;
 		bool isDefeated_;
 
 		std::string name_;
