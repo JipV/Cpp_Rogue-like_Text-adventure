@@ -19,6 +19,7 @@ class Enemy
 		int getChanceToHit();
 		int getAttack();
 		int getChanceHeroEscapes();
+		int getXP();
 
 	private:
 

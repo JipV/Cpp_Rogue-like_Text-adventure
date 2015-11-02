@@ -10,14 +10,14 @@
 // ReSharper disable once CppPossiblyUninitializedMember
 Hero::Hero(std::string name) : 
 	name_(name), 
-	level_(0), 
+	level_(1), 
 	maxHP_(20), 
 	currentHP_(20), 
 	xp_(0), 
 	chanceToHit_(50), 
 	chanceToDefend_(50), 
 	attack_(1),  
-	mindfulness_(2)
+	perception_(0)
 {
 	items_ = std::vector<Item*>();
 }
@@ -106,6 +106,9 @@ void Hero::fight()
 			std::cout << "\nJe valt de " << *enemy << " aan en doet " << totalAttack << " schade.";
 			if (enemy->getIsDefeated()) {
 				std::cout << "\nJe hebt de " << *enemy << " verslagen.";
+
+				addXP(enemy->getXP());
+
 				currentRoom_->removeEnemy(enemy);
 			}
 			else {
@@ -267,7 +270,7 @@ void Hero::viewCharacteristics()
 	std::cout << "Chance to hit:\t\t" << chanceToHit_ << "%\n";
 	std::cout << "Chance to defend:\t" << chanceToDefend_ << "%\n";
 	std::cout << "Attack:\t\t\t" << attack_ << "\n";
-	std::cout << "Mindfulness:\t\t" << mindfulness_ << "\n";
+	std::cout << "Perception:\t\t" << perception_ << "\n";
 }
 
 void Hero::save()
@@ -281,7 +284,7 @@ void Hero::save()
 	output_file << "chanceToHit:" << chanceToHit_ << "\n";
 	output_file << "chanceToDefend:" << chanceToDefend_ << "\n";
 	output_file << "attack:" << attack_ << "\n";
-	output_file << "perception:" << mindfulness_ << "\n";
+	output_file << "perception:" << perception_ << "\n";
 	output_file.close();
 
 	std::cout << "\nJe held is opgeslagen.\n";
@@ -514,9 +517,90 @@ void Hero::setAttack(int attack)
 	attack_ = attack;
 }
 
-void Hero::setMindfulness(int mindfulness)
+void Hero::setPerception(int perception)
 {
-	mindfulness_ = mindfulness;
+	perception_ = perception;
+}
+
+void Hero::addXP(int xp)
+{
+	if (level_ < 10)
+	{
+		xp_ += xp;
+
+		// level 2: 200 XP
+		// level 3: 440 XP
+		// ...
+		// level 9: 2.720 XP
+		// level 10: 3.240 XP
+		int requiredXP = (20 * level_ * level_) + (180 * level_);
+
+		std::cout << "Je krijgt " << xp << " ervaringspunten.\n" <<
+			"Totaal: (" << xp_ << "/" << requiredXP << ")\n";
+
+		if (xp_ >= requiredXP)
+		{
+			levelUp();
+		}
+	}
+}
+
+void Hero::levelUp()
+{
+	if (level_ < 10)
+	{
+		level_++;
+		maxHP_ += 3;
+		chanceToHit_ += 4;
+		chanceToDefend_ += 4;
+		attack_ += 1;
+		perception_ += 5;
+
+		currentHP_ = maxHP_;
+
+		std::cout << "Level up!\nNieuw level: " << level_ << std::endl;
+
+		viewCharacteristics();
+
+		bool statUpgraded = false;
+
+		while (!statUpgraded)
+		{
+			std::string input;
+			std::cout << "Kies een eigenschap om te verhogen.\n( HP | hit chance | defend chance | attack | perception )\nKeuze: ";
+			std::getline(std::cin, input);
+
+			std::cout << std::endl;
+
+			statUpgraded = true;
+			if("HP" == input)
+			{
+				maxHP_ += 3;
+				currentHP_ = maxHP_;
+			}
+			else if ("hit chance" == input)
+			{
+				chanceToHit_ += 2;
+			}
+			else if ("defend chance" == input)
+			{
+				chanceToDefend_ += 2;
+			}
+			else if ("attack"== input)
+			{
+				attack_++;
+			}
+			else if ("perception" == input)
+			{
+				perception_ += 3;
+			}
+			else
+			{
+				statUpgraded = false;
+				std::cout << "Optie " << input << " is niet geldig." << std::endl;
+			}
+		}
+	}
 }
 
 std::vector<Weapon*> Hero::getWeapons()

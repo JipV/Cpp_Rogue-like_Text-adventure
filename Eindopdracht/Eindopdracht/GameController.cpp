@@ -71,22 +71,39 @@ void GameController::startGame()
 
 Map* GameController::createMap()
 {
-	std::string xSize;
-	std::cout << "Hoeveel kamers breed wil je de kerker is: ";
-	std::getline(std::cin, xSize);
+	std::string temp;
+	int xSize, ySize, zSize;
 
+	try
+	{
+		std::cout << "Hoeveel kamers breed wil je de kerker is (3-15): ";
+		std::getline(std::cin, temp);
+		xSize = std::stoi(temp);
+
+		if (xSize < 3 || xSize > 15)
+			throw std::exception();
 	
-	std::string ySize;
-	std::cout << "\nHoeveel kamers lang wil je de kerker is: ";
-	std::getline(std::cin, ySize);
+		std::cout << "\nHoeveel kamers lang wil je de kerker is (3-15): ";
+		std::getline(std::cin, temp);
+		ySize = std::stoi(temp);
 
-	std::string zSize;
-	std::cout << "\nHoeveel verdiepingen wil je de kerker heeft: ";
-	std::getline(std::cin, zSize);
+		if (ySize < 3 || ySize > 15)
+			throw std::exception();
 
-	// ER MOET NOG WORDEN GECHECKT OF ER GELDIGE WAARDEN ZIJN INGEVOERD
-	return MapGenerator().generateMap(std::stoi(xSize), std::stoi(ySize), std::stoi(zSize));
-	//return new Map(std::stoi(xSize), std::stoi(ySize), std::stoi(zSize));
+		std::cout << "\nHoeveel verdiepingen wil je de kerker heeft (3-15): ";
+		std::getline(std::cin, temp);
+		zSize = std::stoi(temp);
+
+		if (zSize < 3 || zSize > 15)
+			throw std::exception();
+
+		return MapGenerator().generateMap(xSize, ySize, zSize);
+	}
+	catch (std::exception)
+	{
+		std::cout << "\nDe ingevoerde waarde is ongeldig.\n";
+		return createMap();
+	}
 }
 
 Hero* GameController::createHero()
@@ -163,7 +180,7 @@ Hero* GameController::createHero()
 				newHero->setAttack(std::stoi(propertyValue));
 			}
 			else if (propertyName == "perception") {
-				newHero->setMindfulness(std::stoi(propertyValue));
+				newHero->setPerception(std::stoi(propertyValue));
 			}
 		}
 		input_file.close();
