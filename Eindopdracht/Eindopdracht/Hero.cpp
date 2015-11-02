@@ -344,6 +344,7 @@ void Hero::getAttackedByEnemies()
 			}
 		}
 	}
+
 	std::cout << "\nJe hebt nog " << currentHP_ << " levenspunten over.\n";
 }
 
@@ -462,6 +463,11 @@ bool Hero::handleAction(std::string fullCommand, std::vector<std::string> action
 	}
 
 	return false;
+}
+
+bool Hero::getIsDefeated()
+{
+	return isDefeated_;
 }
 
 Room* Hero::getCurrentRoom()

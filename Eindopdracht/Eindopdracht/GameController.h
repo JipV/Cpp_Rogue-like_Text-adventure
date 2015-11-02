@@ -11,12 +11,14 @@ public:
 	~GameController();
 
 	void startGame();
+	bool gameShouldRun();
 
 private:
 	Map* map_ = nullptr;
 	Hero* hero_ = nullptr;
 
 	bool isRunning_;
+	bool exitGame_;
 
 	Map* createMap();
 	Hero* createHero();

@@ -13,6 +13,8 @@ class Hero
 		Hero(std::string name);
 		~Hero();
 
+		bool getIsDefeated();
+
 		void getAttackedByEnemies();
 		void takeDirectDamage(int damage);
 

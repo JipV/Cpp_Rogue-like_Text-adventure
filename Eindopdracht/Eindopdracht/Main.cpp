@@ -4,7 +4,11 @@
 int main()
 {
 	GameController gameController = GameController();
-	gameController.startGame();
+
+	while (gameController.gameShouldRun())
+	{
+		gameController.startGame();
+	}
 
 	return 0;
 }
