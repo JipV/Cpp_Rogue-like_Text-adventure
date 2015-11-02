@@ -406,40 +406,32 @@ bool Hero::handleAction(std::string fullCommand, std::vector<std::string> action
 {
 	std::string command = action[0];
 
-	// Deze commandos kunnen niet onderbroken worden door vallen
-	if (command == "vlucht" && action.size() == 2)
-	{
-		if (currentRoom_->hasEnemies())
-			return flee(action[1]);
-
-		return false;
-	}
 	if (command == "vecht" && currentRoom_->hasEnemies())
 	{
 		fight();
 		return true;
 	}
-	if (command + " " + action[1] == "wissel wapen")
+	if (fullCommand == "wissel wapen")
 	{
 		changeWeapon();
 		return true;
 	}
-	if (command + " " + action[1] == "wissel schild")
+	if (fullCommand == "wissel schild")
 	{
 		changeShield();
 		return true;
 	}
-	if (command + " " + action[1] == "bekijk spullen")
+	if (fullCommand == "bekijk spullen")
 	{
 		viewItems();
 		return true;
 	}
-	if (command + " " + action[1] == "bekijk eigenschappen")
+	if (fullCommand == "bekijk eigenschappen")
 	{
 		viewCharacteristics();
 		return true;
 	}
-	if (command + " " + action[1] == "held opslaan")
+	if (fullCommand == "held opslaan")
 	{
 		save();
 		return true;
@@ -456,6 +448,14 @@ bool Hero::handleAction(std::string fullCommand, std::vector<std::string> action
 			return false;
 
 		return goToRoom(action[1]);
+	}
+	// Deze commandos kunnen niet onderbroken worden door vallen
+	if (command == "vlucht" && action.size() == 2)
+	{
+		if (currentRoom_->hasEnemies())
+			return flee(action[1]);
+
+		return false;
 	}
 
 	return false;
