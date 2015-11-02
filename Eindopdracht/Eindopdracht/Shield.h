@@ -5,6 +5,7 @@
 
 class Shield : public Item
 {
+	friend class ShieldGenerator;
 	public:
 
 		Shield(std::string size, std::string material, int level, int defence);

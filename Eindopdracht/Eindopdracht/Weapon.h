@@ -5,6 +5,7 @@
 
 class Weapon : public Item
 {
+	friend class WeaponGenerator;
 	public:
 
 		Weapon(std::string type, std::string material, int level, int attack);
