@@ -250,6 +250,10 @@ WeaponGenerator::WeaponGenerator()
 
 WeaponGenerator::~WeaponGenerator()
 {
+	std::for_each(possibleWeapons_.begin(), possibleWeapons_.end(), [](Weapon* w)
+	{
+		delete w;
+	});
 }
 
 Weapon* WeaponGenerator::parseLine(std::string weaponOption, std::string weaponMaterialOption)
@@ -292,7 +296,7 @@ Weapon* WeaponGenerator::createWeapon(int z)
 
 		if (allowedWeapons.size() > 0)
 		{
-			return allowedWeapons[Random::getRandomNumber(0, allowedWeapons.size() - 1)];
+			return new Weapon(*allowedWeapons[Random::getRandomNumber(0, allowedWeapons.size() - 1)]);
 		}
 	}
 
@@ -333,6 +337,10 @@ ShieldGenerator::ShieldGenerator()
 
 ShieldGenerator::~ShieldGenerator()
 {
+	std::for_each(possibleShields_.begin(), possibleShields_.end(), [](Shield* s)
+	{
+		delete s;
+	});
 }
 
 Shield* ShieldGenerator::parseLine(std::string shieldSizeOption, std::string shieldMaterialOption)
@@ -375,7 +383,7 @@ Shield* ShieldGenerator::createShield(int z)
 
 		if (allowedShields.size() > 0)
 		{
-			return allowedShields[Random::getRandomNumber(0, allowedShields.size() - 1)];
+			return new Shield(*allowedShields[Random::getRandomNumber(0, allowedShields.size() - 1)]);
 		}
 	}
 
