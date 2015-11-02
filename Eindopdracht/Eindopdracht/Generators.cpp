@@ -14,10 +14,8 @@ void split(const std::string& s, char delim, std::vector<std::string>& v) {
 		v.push_back(s.substr(i, pos - i));
 		i = ++pos;
 		pos = static_cast<int>(s.find(delim, pos));
-
-		if (pos == std::string::npos)
-			v.push_back(s.substr(i, s.length()));
 	}
+	v.push_back(s.substr(i, s.length()));
 }
 
 // ---------------------------- ENEMY GENERATOR ----------------------------
@@ -214,8 +212,11 @@ void TrapGenerator::parseLine(std::string line, Trap* trap)
 			trap->chanceToFind_ = std::stoi(value);
 		else if (type == "chanceToTrigger")
 			trap->chanceToTrigger_ = std::stoi(value);
-		else if (type == "triggerCommand")
+		else if (type == "triggerCommands")
+		{
+			trap->triggerCommands_ = {};
 			split(value, ',', trap->triggerCommands_);
+		}
 		else if (type == "directDamage")
 			trap->directDamage_ = std::stoi(value);
 		else if (type == "damageOverTime")

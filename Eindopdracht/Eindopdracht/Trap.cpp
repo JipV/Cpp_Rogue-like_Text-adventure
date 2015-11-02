@@ -15,7 +15,7 @@ damageOverTimeTurns_(0),
 roomDescription_(""),
 damageOverTimeMessage_(""),
 damageOverTimeDone_(""),
-triggerCommands_({}),
+triggerCommands_({"loop", "vlucht"}),
 enemiesToSummon_({})
 {
 
@@ -60,8 +60,8 @@ bool Trap::handleAction(std::string fullCommand, std::vector<std::string> action
 	if (triggered_)
 		return false;
 
-	if (triggerCommands_.empty() ||
-		std::find(triggerCommands_.begin(), triggerCommands_.end(), "fullCommand") != triggerCommands_.end())
+	if (std::find(triggerCommands_.begin(), triggerCommands_.end(), fullCommand) != triggerCommands_.end() ||
+		std::find(triggerCommands_.begin(), triggerCommands_.end(), action[0]) != triggerCommands_.end())
 		return tryTrigger(hero, room);
 
 	return false;
