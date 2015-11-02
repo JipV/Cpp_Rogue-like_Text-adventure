@@ -7,7 +7,7 @@
 //   triggerDescription: text die wordt weergegeven als de val afgaat
 //   chanceToFind: kans (in procent) dat de val gevonden word bij doorzoeken kamer (default: 100)
 //   chanceToTrigger: kans (in procent) dat de val afgaat
-//   triggerCommand: kommagescheiden commandos welke de val af laten gaan (default: alle actie commands)
+//   triggerCommands: kommagescheiden commandos welke de val af laten gaan (default: loop,vlucht)
 //
 //   directDamage: directe schade bij afgaan van de val (default: 0)
 //
@@ -57,7 +57,7 @@ level:9
 roomDescription:Er staat een kist in de hoek van de kamer.
 findDescription:Deze trap is onvindbaar.
 triggerDescription:Je opent de kist en er schiet een klein pijltje uit. Er ontstaat een brandend gevoel waar je geraakt bent.
-triggerCommand:open kist
+triggerCommands:open kist
 chanceToFind:0
 chanceToTrigger:100
 damageOverTime:5

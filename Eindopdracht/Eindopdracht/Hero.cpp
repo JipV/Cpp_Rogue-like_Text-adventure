@@ -408,6 +408,10 @@ void Hero::getActions(std::vector<std::string>* actions)
 
 bool Hero::handleAction(std::string fullCommand, std::vector<std::string> action)
 {
+	// Handel room actions af en kijk of er een val af gaat
+	if (currentRoom_->handleAction(fullCommand, action, this))
+		return true;
+
 	std::string command = action[0];
 
 	if (command == "vecht" && currentRoom_->hasEnemies())
@@ -440,12 +444,6 @@ bool Hero::handleAction(std::string fullCommand, std::vector<std::string> action
 		save();
 		return true;
 	}
-
-	// Handel room actions af en kijk of er een val af gaat
-	if (currentRoom_->handleAction(fullCommand, action, this))
-		return true;
-
-	// Deze commandos kunnen wel onderbroken worden door vallen
 	if (command == "loop" && action.size() == 2)
 	{
 		if (currentRoom_->hasEnemies())
@@ -453,7 +451,6 @@ bool Hero::handleAction(std::string fullCommand, std::vector<std::string> action
 
 		return goToRoom(action[1]);
 	}
-	// Deze commandos kunnen niet onderbroken worden door vallen
 	if (command == "vlucht" && action.size() == 2)
 	{
 		if (currentRoom_->hasEnemies())

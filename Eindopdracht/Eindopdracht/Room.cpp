@@ -80,7 +80,11 @@ void Room::getActions(std::vector<std::string>* actions)
 
 bool Room::handleAction(std::string fullCommand, std::vector<std::string> action, Hero* hero)
 {
-	// Deze commandos kunnen niet onderbroken worden door vallen
+	// Kijk eerst of er een val af gaat
+	if (trap_ && trap_->handleAction(fullCommand, action, hero, this))
+	{
+		return true;
+	}
 
 	if (fullCommand == "doorzoek kamer")
 	{
@@ -93,14 +97,6 @@ bool Room::handleAction(std::string fullCommand, std::vector<std::string> action
 		return true;
 	}
 
-	// Kijk of er een val af gaat
-	if (enemies_.empty() && trap_ && trap_->handleAction(fullCommand, action, hero, this))
-	{
-		return true;
-	}
-
-	// Hier komen commandos die onderbroken kunnen worden door vallen.
-	
 	return false;
 }
 
