@@ -460,7 +460,6 @@ Room* RoomGenerator::createRoom(int x, int y, int z)
 		break;
 	case Room::ROOM_TYPE::EndEnemy:
 		result = new Room(createType, "Je staat in een grote kamer, het lijkt wel of hier ooit iets groots leefde...", z);
-		// TODO: add boss enemy
 		result->addEnemy(enemyGenerator_->createBoss(z));
 		break;
 	case Room::ROOM_TYPE::StartLocation:

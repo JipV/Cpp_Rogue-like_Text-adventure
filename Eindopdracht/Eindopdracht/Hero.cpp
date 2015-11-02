@@ -275,11 +275,11 @@ void Hero::save()
 	std::ofstream output_file{ name_ + ".txt" };
 	output_file << "name:" << name_ << "\n";
 	output_file << "level:" << level_ << "\n";
-	output_file << "maxHP:\t\t\t" << maxHP_ << "\n";
-	output_file << "currentHP:\t\t\t" << currentHP_ << "\n";
-	output_file << "xp:\t\t\t" << xp_ << "\n";
-	output_file << "chanceToHit:\t\t" << chanceToHit_ << "%\n";
-	output_file << "chanceToDefend:\t" << chanceToDefend_ << "%\n";
+	output_file << "maxHP:" << maxHP_ << "\n";
+	output_file << "currentHP:" << currentHP_ << "\n";
+	output_file << "xp:" << xp_ << "\n";
+	output_file << "chanceToHit:" << chanceToHit_ << "\n";
+	output_file << "chanceToDefend:" << chanceToDefend_ << "\n";
 	output_file << "attack:" << attack_ << "\n";
 	output_file << "mindfulness:" << mindfulness_ << "\n";
 	output_file.close();

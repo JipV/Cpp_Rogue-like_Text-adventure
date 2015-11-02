@@ -75,6 +75,7 @@ Map* GameController::createMap()
 	std::cout << "Hoeveel kamers breed wil je de kerker is: ";
 	std::getline(std::cin, xSize);
 
+	
 	std::string ySize;
 	std::cout << "\nHoeveel kamers lang wil je de kerker is: ";
 	std::getline(std::cin, ySize);
@@ -110,8 +111,6 @@ Hero* GameController::createHero()
 		std::string name;
 		std::getline(std::cin, name);
 
-		// ER MOET NOG GECHECKT WORDEN OF DE NAAM NIET AL BESTAAT IN VERBAND MET OPSLAAN
-		// ER MOET NOG GECHECHT WORDEN OF DE INGEVOERDE TEKENS GELDIG ZIJN
 		while (name.length() < 3) {
 			std::cout << "\nDe moet minstens drie tekens lang zijn.\nVoer opnieuw een naam in.\n";
 			std::cout << "\nNaam: ";
