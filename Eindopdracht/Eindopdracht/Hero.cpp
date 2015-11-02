@@ -528,6 +528,11 @@ void Hero::setPerception(int perception)
 	perception_ = perception;
 }
 
+int Hero::getPerception()
+{
+	return perception_;
+}
+
 void Hero::addXP(int xp)
 {
 	if (level_ < 10)

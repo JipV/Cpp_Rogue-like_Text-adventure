@@ -37,6 +37,7 @@ class Hero
 		void setChanceToDefend(int chanceToDefend);
 		void setAttack(int attack);
 		void setPerception(int perception);
+		int getPerception();
 		void addXP(int xp);
 		void levelUp();
 
