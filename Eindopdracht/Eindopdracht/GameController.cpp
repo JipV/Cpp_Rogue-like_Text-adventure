@@ -128,8 +128,6 @@ Hero* GameController::createHero()
 		std::string name;
 		std::getline(std::cin, name);
 
-		// ER MOET NOG GECHECKT WORDEN OF DE NAAM NIET AL BESTAAT IN VERBAND MET OPSLAAN
-		// ER MOET NOG GECHECHT WORDEN OF DE INGEVOERDE TEKENS GELDIG ZIJN
 		while (name.length() < 3) {
 			std::cout << "\nDe moet minstens drie tekens lang zijn.\nVoer opnieuw een naam in.\n";
 			std::cout << "\nNaam: ";
@@ -181,7 +179,7 @@ Hero* GameController::createHero()
 			else if (propertyName == "attack") {
 				newHero->setAttack(std::stoi(propertyValue));
 			}
-			else if (propertyName == "mindfulness") {
+			else if (propertyName == "perception") {
 				newHero->setPerception(std::stoi(propertyValue));
 			}
 		}

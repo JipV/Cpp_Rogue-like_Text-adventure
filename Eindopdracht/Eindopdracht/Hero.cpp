@@ -171,7 +171,7 @@ void Hero::changeWeapon()
 {
 	std::map<std::string, Weapon*> weaponOptions = std::map<std::string, Weapon*>();
 	for (size_t i = 0; i < getWeapons().size(); i++) {
-		std::cout << "\nOptie " << i + 1 << ": " << *getWeapons().at(i);
+		std::cout << "\nOptie " << i + 1 << ": " << *getWeapons().at(i) << " (Aanval is " << getWeapons().at(i)->getAttack() << ")";
 		weaponOptions[std::to_string(i + 1)] = getWeapons().at(i);
 	}
 	std::cout << "\nOptie " << weaponOptions.size() + 1 << ": geen";
@@ -217,7 +217,7 @@ void Hero::changeShield()
 {
 	std::map<std::string, Shield*> shieldOptions = std::map<std::string, Shield*>();
 	for (size_t i = 0; i < getShields().size(); i++) {
-		std::cout << "\nOptie " << i + 1 << ": " << *getShields().at(i);
+		std::cout << "\nOptie " << i + 1 << ": " << *getShields().at(i) << " (Verdediging is " << getShields().at(i)->getDefence() << ")";
 		shieldOptions[std::to_string(i + 1)] = getShields().at(i);
 	}
 	std::cout << "\nOptie " << shieldOptions.size() + 1 << ": geen";
@@ -278,13 +278,13 @@ void Hero::save()
 	std::ofstream output_file{ name_ + ".txt" };
 	output_file << "name:" << name_ << "\n";
 	output_file << "level:" << level_ << "\n";
-	output_file << "maxHP:\t\t\t" << maxHP_ << "\n";
-	output_file << "currentHP:\t\t\t" << currentHP_ << "\n";
-	output_file << "xp:\t\t\t" << xp_ << "\n";
-	output_file << "chanceToHit:\t\t" << chanceToHit_ << "%\n";
-	output_file << "chanceToDefend:\t" << chanceToDefend_ << "%\n";
+	output_file << "maxHP:" << maxHP_ << "\n";
+	output_file << "currentHP:" << currentHP_ << "\n";
+	output_file << "xp:" << xp_ << "\n";
+	output_file << "chanceToHit:" << chanceToHit_ << "\n";
+	output_file << "chanceToDefend:" << chanceToDefend_ << "\n";
 	output_file << "attack:" << attack_ << "\n";
-	output_file << "mindfulness:" << perception_ << "\n";
+	output_file << "perception:" << perception_ << "\n";
 	output_file.close();
 
 	std::cout << "\nJe held is opgeslagen.\n";

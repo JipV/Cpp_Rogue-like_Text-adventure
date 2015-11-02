@@ -1,7 +1,8 @@
-shieldSize:klein,3,1,2
+shieldSize:klein,3,3
 shieldSize:normaal,6,4
-shieldSize:groot,9,5,6
-shieldMaterial:hout,-1,-1
-shieldMaterial:ijzer,0,0
-shieldMaterial:staal,1,1
-shieldMaterial:diamant,2,2
+shieldSize:groot,9,5
+shieldMaterial:hout,-2,-2
+shieldMaterial:ijzer,-1,-1
+shieldMaterial:staal,0,0
+shieldMaterial:diamant,1,1
+shieldMaterial:adamantium,2,2
