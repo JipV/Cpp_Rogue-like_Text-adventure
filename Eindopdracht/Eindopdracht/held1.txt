@@ -4,6 +4,6 @@ maxHP:20
 currentHP:20
 xp:2
 chanceToHit:20
-chanceToDefence:20
+chanceToDefend:50
 attack:1
-mindfulness:2
+perception:2

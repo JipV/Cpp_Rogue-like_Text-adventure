@@ -281,7 +281,7 @@ void Hero::save()
 	output_file << "chanceToHit:" << chanceToHit_ << "\n";
 	output_file << "chanceToDefend:" << chanceToDefend_ << "\n";
 	output_file << "attack:" << attack_ << "\n";
-	output_file << "mindfulness:" << mindfulness_ << "\n";
+	output_file << "perception:" << mindfulness_ << "\n";
 	output_file.close();
 
 	std::cout << "\nJe held is opgeslagen.\n";
