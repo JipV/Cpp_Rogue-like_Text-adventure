@@ -340,7 +340,7 @@ void Hero::getAttackedByEnemies()
 				}
 			}
 			else {
-				std::cout << "\nJe hebt gelukt. De " << *enemy << " mist.\n";
+				std::cout << "\nJe hebt geluk. De " << *enemy << " mist.\n";
 			}
 		}
 	}
