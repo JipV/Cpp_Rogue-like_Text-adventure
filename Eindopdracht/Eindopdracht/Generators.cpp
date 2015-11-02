@@ -64,6 +64,17 @@ Enemy* EnemyGenerator::createEnemy(int z)
 	return result;
 }
 
+Enemy* EnemyGenerator::createBoss(int z)
+{
+	// Maak een enemy aan
+	Enemy* result = createEnemy(bossesOptions_.at(Random::getRandomNumber(0, static_cast<int>(bossesOptions_.size()) - 1)));
+
+	// Bepaal de grootte van het monster
+	result = modifyEnemy(result, enemySizeOptions_.at(Random::getRandomNumber(0, static_cast<int>(enemySizeOptions_.size()) - 1)));
+
+	return result;
+}
+
 Enemy* EnemyGenerator::createEnemy(std::string stats)
 {
 	std::vector<std::string> monsterData = std::vector<std::string>();
@@ -271,7 +282,7 @@ Weapon* WeaponGenerator::parseLine(std::string weaponOption, std::string weaponM
 Weapon* WeaponGenerator::createWeapon(int z)
 {
 	//TODO: hoeveel kans willen we dat een kamer een wapen heeft?
-	if (Random::getRandomNumber(1, 100) <= 20)
+	if (Random::getRandomNumber(1, 100) <= 10)
 	{
 		std::vector<Weapon*> allowedWeapons;
 		for (int i = z; i <= z + 2; i++)
@@ -450,6 +461,7 @@ Room* RoomGenerator::createRoom(int x, int y, int z)
 	case Room::ROOM_TYPE::EndEnemy:
 		result = new Room(createType, "Je staat in een grote kamer, het lijkt wel of hier ooit iets groots leefde...", z);
 		// TODO: add boss enemy
+		result->addEnemy(enemyGenerator_->createBoss(z));
 		break;
 	case Room::ROOM_TYPE::StartLocation:
 		result = new Room(createType, generateDescription(), z);

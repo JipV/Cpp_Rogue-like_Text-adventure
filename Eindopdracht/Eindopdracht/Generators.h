@@ -14,6 +14,7 @@ public:
 	~EnemyGenerator();
 
 	Enemy* createEnemy(int z);
+	Enemy* createBoss(int z);
 	Enemy* createEnemy(std::string stats);
 	Enemy* modifyEnemy(Enemy* enemy, std::string modifiers);
 

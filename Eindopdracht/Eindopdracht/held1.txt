@@ -1,7 +1,9 @@
 name:held1
 level:2
-hp:4
+maxHP:20
+currentHP:20
 xp:2
+chanceToHit:20
+chanceToDefence:20
 attack:1
-defense:2
 mindfulness:2

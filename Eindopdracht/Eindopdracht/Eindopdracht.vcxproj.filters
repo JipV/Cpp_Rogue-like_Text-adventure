@@ -19,9 +19,6 @@
     <Text Include="room_options.txt">
       <Filter>Resource Files</Filter>
     </Text>
-    <Text Include="held1.txt">
-      <Filter>Resource Files</Filter>
-    </Text>
     <Text Include="enemy_options.txt">
       <Filter>Resource Files</Filter>
     </Text>
@@ -32,6 +29,9 @@
       <Filter>Resource Files</Filter>
     </Text>
     <Text Include="shield_options.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
+    <Text Include="held1.txt">
       <Filter>Resource Files</Filter>
     </Text>
   </ItemGroup>

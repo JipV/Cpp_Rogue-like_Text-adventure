@@ -27,6 +27,15 @@ class Hero
 
 		std::vector<Item*> getItems();
 
+		void setLevel(int level);
+		void setMaxHP(int maxHP);
+		void setCurrentHP(int currentHP);
+		void setXP(int xp);
+		void setChanceToHit(int chanceToHit);
+		void setChanceToDefend(int chanceToDefend);
+		void setAttack(int attack);
+		void setMindfulness(int mindfulness);
+
 	private:
 		bool isDefeated_;
 
@@ -43,17 +52,23 @@ class Hero
 		Room* currentRoom_;
 
 		std::vector<Item*> items_;
-		std::vector<Weapon*> weapons_;
 		
+		Weapon* weapon_ = nullptr;
 		Shield* shield_ = nullptr;
 
+		std::vector<Weapon*> getWeapons();
+		std::vector<Shield*> getShields();
 
 		bool goToRoom(std::string direction);
 		void fight();
 		bool flee(std::string direction);
-		void search();
 		void rest();
 		void viewItems();
+		void changeWeapon();
+		void changeShield();
+		void viewCharacteristics();
+
+		void save();
 };
 
 #endif

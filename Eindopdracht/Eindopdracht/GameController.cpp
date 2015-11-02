@@ -142,24 +142,30 @@ Hero* GameController::createHero()
 			std::string propertyName = line.substr(0, line.find(":"));
 			std::string propertyValue = line.substr(line.find(":") + 1, line.length());
 
-			/*if (propertyName == "level") {
+			if (propertyName == "level") {
 				newHero->setLevel(std::stoi(propertyValue));
 			}
-			else if (propertyName == "hp") {
-				newHero->setHP(std::stoi(propertyValue));
+			else if (propertyName == "maxHP") {
+				newHero->setMaxHP(std::stoi(propertyValue));
+			}
+			else if (propertyName == "currentHP") {
+				newHero->setCurrentHP(std::stoi(propertyValue));
 			}
 			else if (propertyName == "xp") {
 				newHero->setXP(std::stoi(propertyValue));
 			}
+			else if (propertyName == "chanceToHit") {
+				newHero->setChanceToHit(std::stoi(propertyValue));
+			}
+			else if (propertyName == "chanceToDefend") {
+				newHero->setChanceToDefend(std::stoi(propertyValue));
+			}
 			else if (propertyName == "attack") {
 				newHero->setAttack(std::stoi(propertyValue));
 			}
-			else if (propertyName == "defense") {
-				newHero->setDefense(std::stoi(propertyValue));
-			}
 			else if (propertyName == "mindfulness") {
 				newHero->setMindfulness(std::stoi(propertyValue));
-			}*/
+			}
 		}
 		input_file.close();
 
