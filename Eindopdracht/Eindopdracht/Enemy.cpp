@@ -69,6 +69,17 @@ int Enemy::getChanceHeroEscapes()
 	return chanceHeroEscapes_;
 }
 
+int Enemy::getXP()
+{
+	// Totaal niet van WoW gekopiëerd ;)
+	return 45 + (5*level_);
+	// L1: 50 XP
+	// L2: 55 XP
+	// ...
+	// L9: 90 XP
+	// L10: 95 XP
+}
+
 // Hierdoor werkt std::cout << Enemy
 std::ostream& operator<<(std::ostream& os, const Enemy& enemy)
 {

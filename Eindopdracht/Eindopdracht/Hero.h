@@ -35,6 +35,8 @@ class Hero
 		void setChanceToDefend(int chanceToDefend);
 		void setAttack(int attack);
 		void setMindfulness(int mindfulness);
+		void addXP(int xp);
+		void levelUp();
 
 	private:
 		bool isDefeated_;

@@ -106,6 +106,9 @@ void Hero::fight()
 			std::cout << "\nJe valt de " << *enemy << " aan en doet " << totalAttack << " schade.";
 			if (enemy->getIsDefeated()) {
 				std::cout << "\nJe hebt de " << *enemy << " verslagen.";
+
+				addXP(enemy->getXP());
+
 				currentRoom_->removeEnemy(enemy);
 			}
 			else {
@@ -517,6 +520,38 @@ void Hero::setAttack(int attack)
 void Hero::setMindfulness(int mindfulness)
 {
 	mindfulness_ = mindfulness;
+}
+
+void Hero::addXP(int xp)
+{
+	if (level_ < 10)
+	{
+		xp_ += xp;
+
+		// level 2: 200 XP
+		// level 3: 440 XP
+		// ...
+		// level 9: 2.720 XP
+		// level 10: 3.240 XP
+		int requiredXP = (20 * level_ * level_) + (180 * level_);
+
+		std::cout << "Je krijgt " << xp << " ervaringspunten.\n" <<
+			"Totaal: (" << xp_ << "/" << requiredXP << ")\n";
+
+		if (xp_ >= requiredXP)
+		{
+			levelUp();
+		}
+	}
+}
+
+void Hero::levelUp()
+{
+	if (level_ < 10)
+	{
+		level_++;
+		std::cout << "Level up!\nNieuw level: " << level_ << std::endl;
+	}
 }
 
 std::vector<Weapon*> Hero::getWeapons()
