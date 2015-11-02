@@ -14,7 +14,7 @@ public:
 	~Trap();
 
 	bool handleAction(std::string fullCommand, std::vector<std::string> action, Hero* hero, Room* room);
-	bool searchRoom();
+	bool searchRoom(int perception);
 	void showRoomDescription();
 private:
 	bool triggered_;

@@ -155,7 +155,7 @@ void Room::searchRoom(Hero* hero)
 	}
 
 	if (trap_)
-		foundSomething = trap_->searchRoom() || foundSomething;
+		foundSomething = trap_->searchRoom(hero->getPerception()) || foundSomething;
 
 	// TODO: Andere dingen doorzoeken (zoals bijvoorbeeld kisten)
 
