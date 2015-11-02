@@ -168,7 +168,7 @@ void Hero::changeWeapon()
 {
 	std::map<std::string, Weapon*> weaponOptions = std::map<std::string, Weapon*>();
 	for (size_t i = 0; i < getWeapons().size(); i++) {
-		std::cout << "\nOptie " << i + 1 << ": " << *getWeapons().at(i);
+		std::cout << "\nOptie " << i + 1 << ": " << *getWeapons().at(i) << " (Aanval is " << getWeapons().at(i)->getAttack() << ")";
 		weaponOptions[std::to_string(i + 1)] = getWeapons().at(i);
 	}
 	std::cout << "\nOptie " << weaponOptions.size() + 1 << ": geen";
@@ -214,7 +214,7 @@ void Hero::changeShield()
 {
 	std::map<std::string, Shield*> shieldOptions = std::map<std::string, Shield*>();
 	for (size_t i = 0; i < getShields().size(); i++) {
-		std::cout << "\nOptie " << i + 1 << ": " << *getShields().at(i);
+		std::cout << "\nOptie " << i + 1 << ": " << *getShields().at(i) << " (Verdediging is " << getShields().at(i)->getDefence() << ")";
 		shieldOptions[std::to_string(i + 1)] = getShields().at(i);
 	}
 	std::cout << "\nOptie " << shieldOptions.size() + 1 << ": geen";

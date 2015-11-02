@@ -242,7 +242,7 @@ WeaponGenerator::WeaponGenerator()
 
 	for (size_t i = 0; i < weaponOptions_.size(); i++) {
 		for (size_t j = 0; j < weaponMaterialOptions_.size(); j++) {
-			possibleWeapons_.push_back(parseLine(weaponOptions_.at(i), weaponMaterialOptions_.at(i)));
+			possibleWeapons_.push_back(parseLine(weaponOptions_.at(i), weaponMaterialOptions_.at(j)));
 		}
 	}
 
@@ -325,7 +325,7 @@ ShieldGenerator::ShieldGenerator()
 
 	for (size_t i = 0; i < shieldSizeOptions_.size(); i++) {
 		for (size_t j = 0; j < shieldMaterialOptions_.size(); j++) {
-			possibleShields_.push_back(parseLine(shieldSizeOptions_.at(i), shieldMaterialOptions_.at(i)));
+			possibleShields_.push_back(parseLine(shieldSizeOptions_.at(i), shieldMaterialOptions_.at(j)));
 		}
 	}
 
