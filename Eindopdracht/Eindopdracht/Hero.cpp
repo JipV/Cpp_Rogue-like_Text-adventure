@@ -19,6 +19,8 @@ Hero::Hero(std::string name) :
 	attack_(1),  
 	perception_(0)
 {
+	hasWon_ = false;
+	isDefeated_ = false;
 	items_ = std::vector<Item*>();
 }
 
@@ -105,7 +107,12 @@ void Hero::fight()
 		if (enemy->getAttackedByHero(totalAttack)) {
 			std::cout << "\nJe valt de " << *enemy << " aan en doet " << totalAttack << " schade.";
 			if (enemy->getIsDefeated()) {
-				std::cout << "\nJe hebt de " << *enemy << " verslagen.";
+				if (currentRoom_->getType() == Room::EndEnemy) {
+					hasWon_ = true;
+				}
+				else {
+					std::cout << "\nJe hebt de " << *enemy << " verslagen. ";
+				}
 
 				addXP(enemy->getXP());
 
@@ -292,8 +299,6 @@ void Hero::save()
 
 void Hero::getAttackedByEnemies()
 {
-	// TODO: GAME OVER
-
 	for (size_t i = 0; i < currentRoom_->getEnemies().size(); i++) {
 		if (!isDefeated_) {
 			Enemy* enemy = currentRoom_->getEnemies().at(i);
@@ -460,6 +465,11 @@ bool Hero::handleAction(std::string fullCommand, std::vector<std::string> action
 	}
 
 	return false;
+}
+
+bool Hero::getHasWon()
+{
+	return hasWon_;
 }
 
 bool Hero::getIsDefeated()

@@ -75,6 +75,11 @@ void GameController::startGame()
 			std::cout << "Je bent verslagen..\n" << std::endl;
 			isRunning_ = false;
 		}
+		else if (hero_->getHasWon()) {
+			std::cout << "\nJE HEBT GEWONNEN !!" << std::endl;
+			std::cout << "\nJe hebt de eindvijand verslagen." << std::endl;
+			isRunning_ = false;
+		}
 	}
 }
 
