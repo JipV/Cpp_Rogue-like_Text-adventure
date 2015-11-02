@@ -182,7 +182,7 @@ Hero* GameController::createHero()
 				newHero->setAttack(std::stoi(propertyValue));
 			}
 			else if (propertyName == "mindfulness") {
-				newHero->setMindfulness(std::stoi(propertyValue));
+				newHero->setPerception(std::stoi(propertyValue));
 			}
 		}
 		input_file.close();

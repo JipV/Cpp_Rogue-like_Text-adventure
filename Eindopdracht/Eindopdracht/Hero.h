@@ -34,7 +34,7 @@ class Hero
 		void setChanceToHit(int chanceToHit);
 		void setChanceToDefend(int chanceToDefend);
 		void setAttack(int attack);
-		void setMindfulness(int mindfulness);
+		void setPerception(int perception);
 		void addXP(int xp);
 		void levelUp();
 
@@ -49,7 +49,7 @@ class Hero
 		int chanceToHit_;
 		int chanceToDefend_;
 		int attack_;
-		int mindfulness_;
+		int perception_;
 
 		Room* currentRoom_;
 
