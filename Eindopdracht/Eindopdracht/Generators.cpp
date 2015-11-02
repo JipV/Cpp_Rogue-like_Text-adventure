@@ -47,21 +47,44 @@ EnemyGenerator::EnemyGenerator()
 		}
 	}
 	input_file.close();
+
+	std::for_each(monsterOptions_.begin(), monsterOptions_.end(), [this](std::string monsterOption)
+	{
+		std::for_each(enemySizeOptions_.begin(), enemySizeOptions_.end(), [this,monsterOption](std::string sizeOption)
+		{
+			Enemy* enemy = createEnemy(monsterOption);
+			modifyEnemy(enemy, sizeOption);
+			possibleEnemies_[enemy->level_].push_back(enemy);
+		});
+	});
 }
 
 EnemyGenerator::~EnemyGenerator()
 {
+	for (auto it = possibleEnemies_.begin(); it != possibleEnemies_.end(); ++it)
+	{
+		std::for_each(it->second.begin(), it->second.end(), [](Enemy* e)
+		{
+			delete e;
+		});
+	}
 }
 
 Enemy* EnemyGenerator::createEnemy(int z)
 {
-	// Maak een enemy aan
-	Enemy* result = createEnemy(monsterOptions_.at(Random::getRandomNumber(0, static_cast<int>(monsterOptions_.size()) - 1)));
+	std::vector<Enemy*> allowedEnemies;
+	for (int i = z; i <= z + 2; i++)
+	{
+		allowedEnemies.insert(allowedEnemies.end(), possibleEnemies_[i].begin(), possibleEnemies_[i].end());
+	}
 
-	// Bepaal de grootte van het monster
-	result = modifyEnemy(result, enemySizeOptions_.at(Random::getRandomNumber(0, static_cast<int>(enemySizeOptions_.size()) - 1)));
+	if (allowedEnemies.size() > 0)
+	{
+		// Copy constructor
+		return new Enemy(*allowedEnemies[Random::getRandomNumber(0, static_cast<int>(allowedEnemies.size()) - 1)]);
+	}
 
-	return result;
+	return nullptr;
 }
 
 Enemy* EnemyGenerator::createBoss(int z)
@@ -162,7 +185,7 @@ Trap* TrapGenerator::createTrap(int z)
 		if (allowedTraps.size() > 0)
 		{
 			// Copy constructor
-			return new Trap(*allowedTraps[Random::getRandomNumber(0, allowedTraps.size() - 1)]);
+			return new Trap(*allowedTraps[Random::getRandomNumber(0, static_cast<int>(allowedTraps.size()) - 1)]);
 		}
 	}
 
@@ -242,7 +265,8 @@ WeaponGenerator::WeaponGenerator()
 
 	for (size_t i = 0; i < weaponOptions_.size(); i++) {
 		for (size_t j = 0; j < weaponMaterialOptions_.size(); j++) {
-			possibleWeapons_.push_back(parseLine(weaponOptions_.at(i), weaponMaterialOptions_.at(j)));
+			Weapon* weapon = parseLine(weaponOptions_.at(i), weaponMaterialOptions_.at(j));
+			possibleWeapons_[weapon->level_].push_back(weapon);
 		}
 	}
 
@@ -250,10 +274,13 @@ WeaponGenerator::WeaponGenerator()
 
 WeaponGenerator::~WeaponGenerator()
 {
-	std::for_each(possibleWeapons_.begin(), possibleWeapons_.end(), [](Weapon* w)
+	for (auto it = possibleWeapons_.begin(); it != possibleWeapons_.end(); ++it)
 	{
-		delete w;
-	});
+		std::for_each(it->second.begin(), it->second.end(), [](Weapon* w)
+		{
+			delete w;
+		});
+	}
 }
 
 Weapon* WeaponGenerator::parseLine(std::string weaponOption, std::string weaponMaterialOption)
@@ -291,12 +318,12 @@ Weapon* WeaponGenerator::createWeapon(int z)
 		std::vector<Weapon*> allowedWeapons;
 		for (int i = z; i <= z + 2; i++)
 		{
-			allowedWeapons.insert(allowedWeapons.end(), possibleWeapons_.begin(), possibleWeapons_.end());
+			allowedWeapons.insert(allowedWeapons.end(), possibleWeapons_[i].begin(), possibleWeapons_[i].end());
 		}
 
 		if (allowedWeapons.size() > 0)
 		{
-			return new Weapon(*allowedWeapons[Random::getRandomNumber(0, allowedWeapons.size() - 1)]);
+			return new Weapon(*allowedWeapons[Random::getRandomNumber(0, static_cast<int>(allowedWeapons.size()) - 1)]);
 		}
 	}
 
@@ -329,7 +356,8 @@ ShieldGenerator::ShieldGenerator()
 
 	for (size_t i = 0; i < shieldSizeOptions_.size(); i++) {
 		for (size_t j = 0; j < shieldMaterialOptions_.size(); j++) {
-			possibleShields_.push_back(parseLine(shieldSizeOptions_.at(i), shieldMaterialOptions_.at(j)));
+			Shield* shield = parseLine(shieldSizeOptions_.at(i), shieldMaterialOptions_.at(j));
+			possibleShields_[shield->level_].push_back(shield);
 		}
 	}
 
@@ -337,10 +365,13 @@ ShieldGenerator::ShieldGenerator()
 
 ShieldGenerator::~ShieldGenerator()
 {
-	std::for_each(possibleShields_.begin(), possibleShields_.end(), [](Shield* s)
+	for (auto it = possibleShields_.begin(); it != possibleShields_.end(); ++it)
 	{
-		delete s;
-	});
+		std::for_each(it->second.begin(), it->second.end(), [](Shield* s)
+		{
+			delete s;
+		});
+	}
 }
 
 Shield* ShieldGenerator::parseLine(std::string shieldSizeOption, std::string shieldMaterialOption)
@@ -378,12 +409,12 @@ Shield* ShieldGenerator::createShield(int z)
 		std::vector<Shield*> allowedShields;
 		for (int i = z; i <= z + 2; i++)
 		{
-			allowedShields.insert(allowedShields.end(), possibleShields_.begin(), possibleShields_.end());
+			allowedShields.insert(allowedShields.end(), possibleShields_[i].begin(), possibleShields_[i].end());
 		}
 
 		if (allowedShields.size() > 0)
 		{
-			return new Shield(*allowedShields[Random::getRandomNumber(0, allowedShields.size() - 1)]);
+			return new Shield(*allowedShields[Random::getRandomNumber(0, static_cast<int>(allowedShields.size()) - 1)]);
 		}
 	}
 
@@ -491,13 +522,13 @@ Room* RoomGenerator::createRoom(int x, int y, int z)
 std::string RoomGenerator::generateDescription()
 {
 	return "Beschrijving: "
-		+ sizeOptions_.at(Random::getRandomNumber(0, sizeOptions_.size() - 1)) + " "
-		+ floorOptions_.at(Random::getRandomNumber(0, floorOptions_.size() - 1)) + " "
-		+ decorOptions_.at(Random::getRandomNumber(0, decorOptions_.size() - 1)) + " "
-		+ chestOptions_.at(Random::getRandomNumber(0, chestOptions_.size() - 1)) + " "
-		+ tidyOptions_.at(Random::getRandomNumber(0, tidyOptions_.size() - 1)) + " "
-		+ lightingOptions_.at(Random::getRandomNumber(0, lightingOptions_.size() - 1)) + " "
-		+ atmosphereOptions_.at(Random::getRandomNumber(0, atmosphereOptions_.size() - 1)) + " ";
+		+ sizeOptions_.at(Random::getRandomNumber(0, static_cast<int>(sizeOptions_.size()) - 1)) + " "
+		+ floorOptions_.at(Random::getRandomNumber(0, static_cast<int>(floorOptions_.size()) - 1)) + " "
+		+ decorOptions_.at(Random::getRandomNumber(0, static_cast<int>(decorOptions_.size()) - 1)) + " "
+		+ chestOptions_.at(Random::getRandomNumber(0, static_cast<int>(chestOptions_.size()) - 1)) + " "
+		+ tidyOptions_.at(Random::getRandomNumber(0, static_cast<int>(tidyOptions_.size()) - 1)) + " "
+		+ lightingOptions_.at(Random::getRandomNumber(0, static_cast<int>(lightingOptions_.size()) - 1)) + " "
+		+ atmosphereOptions_.at(Random::getRandomNumber(0, static_cast<int>(atmosphereOptions_.size()) - 1)) + " ";
 }
 
 void RoomGenerator::addEnemies(Room* room, int z)

@@ -22,6 +22,8 @@ private:
 	std::vector<std::string> monsterOptions_;
 	std::vector<std::string> bossesOptions_;
 	std::vector<std::string> enemySizeOptions_;
+
+	std::map<int, std::vector<Enemy*>> possibleEnemies_;
 };
 
 class TrapGenerator
@@ -52,7 +54,7 @@ private:
 	std::vector<std::string> weaponOptions_;
 	std::vector<std::string> weaponMaterialOptions_;
 
-	std::vector<Weapon*> possibleWeapons_;
+	std::map<int, std::vector<Weapon*>> possibleWeapons_;
 
 	Weapon* parseLine(std::string weaponOption, std::string weaponMaterialOption);
 };
@@ -69,7 +71,7 @@ private:
 	std::vector<std::string> shieldSizeOptions_;
 	std::vector<std::string> shieldMaterialOptions_;
 
-	std::vector<Shield*> possibleShields_;
+	std::map<int, std::vector<Shield*>> possibleShields_;
 
 	Shield* parseLine(std::string shieldSizeOption, std::string shieldMaterialOption);
 };
