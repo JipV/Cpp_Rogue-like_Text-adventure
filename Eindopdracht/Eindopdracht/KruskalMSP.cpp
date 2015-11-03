@@ -9,15 +9,12 @@ KruskalMST::KruskalMST(Graph graph)
 
 	size_t requiredEdges = graph.Rooms.size() - 1;
 	
-	// De graph is unweighted, sorteren is niet nodig. 
+	// Elke gang is "even zwaar", sorteren is dus niet nodig.
 
-	std::unordered_map<Room*, Room*> roomsMap;
-
-	std::for_each(graph.Rooms.begin(), graph.Rooms.end(), [&roomsMap](Room* r)
+	std::for_each(graph.Rooms.begin(), graph.Rooms.end(), [this](Room* r)
 	{
-		roomsMap[r] = r;
+		parents_[r] = r;
 	});
-	parents_ = roomsMap;
 
 	auto iterator = graph.Corridors.begin();
 
@@ -27,28 +24,21 @@ KruskalMST::KruskalMST(Graph graph)
 		Room* parent2 = findParent(iterator->Room2);
 
 		// Als de rooms dezelfde parent hebben, is er een lus
-		if (parent1 != parent2)
+		if (parent1 == parent2)
 		{
-			crucialCorridors_.push_back(*iterator);
-			combineTrees(parent1, parent2);
+			nonCrucialCorridors_.push_back(*iterator);
 		}
 		else
 		{
-			nonCrucialCorridors_.push_back(*iterator);
+			crucialCorridors_.push_back(*iterator);
+			combineTrees(parent1, parent2);
 		}
 
 		++iterator;
 	}
 
 	// Alle overgebleven gangen zijn niet cruciaal.
-	//while (iterator != graph.Corridors.end())
-	//{
-	//	nonCrucialCorridors_.push_back(*iterator);
-	//	++iterator;
-	//}
 	nonCrucialCorridors_.insert(nonCrucialCorridors_.end(), iterator, graph.Corridors.end());
-
-	std::cout << "KruskalMSP done. Rooms: " << graph.Rooms.size() << ", Corridors: " << graph.Corridors.size() << ", crucial: " << crucialCorridors_.size() << ", noncrucial: " << nonCrucialCorridors_.size() << std::endl;
 }
 
 KruskalMST::~KruskalMST()
