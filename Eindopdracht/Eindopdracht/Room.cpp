@@ -173,6 +173,18 @@ Room* Room::getExit(std::string name)
 	return nullptr;
 }
 
+void Room::collapseCorridorToRoom(Room* room)
+{
+	std::vector<std::string> directions = { "noord", "oost", "zuid", "west" };
+
+	std::for_each(directions.begin(), directions.end(), [this, room](std::string d)
+	{
+		if (exits_[d] == room ||
+			exits_[d] == nullptr)
+			exits_.erase(d);
+	});
+}
+
 bool Room::getIsVisited()
 {
 	return isVisited_;

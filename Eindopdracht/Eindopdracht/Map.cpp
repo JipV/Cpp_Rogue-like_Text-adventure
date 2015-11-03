@@ -2,6 +2,7 @@
 #include "Map.h"
 #include "Room.h"
 #include "Hero.h"
+#include "KruskalMSP.h"
 #include "Graph.h"
 
 Map::Map(int xSize, int ySize, int zSize)
@@ -146,6 +147,12 @@ bool Map::handleAction(std::string fullCommand, Hero* hero)
 		return true;
 	}
 
+	if (fullCommand == "handgranaat")
+	{
+		destroyCorridors(hero->getCurrentRoom()->getLevel());
+		return false; // Room moet dit ook nog afhandelen
+	}
+
 	return false;
 }
 
@@ -156,7 +163,16 @@ void Map::addRoom(Room* room, int x, int y, int z)
 
 void Map::destroyCorridors(int z)
 {
-	Graph graph = Graph(getAllRooms(z));
+	std::cout << "handgranaat!\n";
+	KruskalMST mst = KruskalMST(getAllRooms(z));
+
+	std::vector<Corridor> corridorsToCollapse = mst.getNonCrucialCorridors();
+
+	std::for_each(corridorsToCollapse.begin(), corridorsToCollapse.end(), [](Corridor c)
+	{
+		c.Room1->collapseCorridorToRoom(c.Room2);
+		c.Room2->collapseCorridorToRoom(c.Room1);
+	});
 }
 
 Room* Map::getRoom(int x, int y, int z)
