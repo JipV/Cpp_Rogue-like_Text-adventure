@@ -282,9 +282,10 @@ void Hero::useTalisman()
 		if (currentRoom_->getType() != Room::StairsDown) {
 			queue->pop_front();
 			visited.push_back(currentRoom);
-			numberOfSteps++;
 
-			std::for_each(currentRoom->getAllExits().begin(), currentRoom->getAllExits().end(), [queue, visited](std::pair<std::string, Room*> pair)
+			std::map<std::string, Room*> exits = currentRoom->getAllExits();
+
+			std::for_each(exits.begin(), exits.end(), [queue, visited](std::pair<std::string, Room*> pair)
 			{
 				if (pair.first != "omlaag" && 
 					pair.first != "omloog" &&
@@ -294,16 +295,6 @@ void Hero::useTalisman()
 					queue->push_back(pair.second);
 				}
 			});
-			/*typedef std::map<std::string, Room*>::iterator it_type;
-			for (it_type iterator = currentRoom->getAllExits().begin(); iterator != currentRoom->getAllExits().end(); iterator++) {
-				if (iterator->first != "omlaag" &&
-					iterator->first != "omloog" &&
-					std::find(visited.begin(), visited.end(), iterator->second) == visited.end() &&
-					std::find(queue->begin(), queue->end(), iterator->second) == queue->end())
-				{
-					queue->push_back(iterator->second);
-				}
-			}*/
 		}
 		else {
 			break;
