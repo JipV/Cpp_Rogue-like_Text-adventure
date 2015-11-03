@@ -294,22 +294,10 @@ void Hero::useTalisman()
 			{
 				if (pair.first != "omlaag" && 
 					pair.first != "omhoog" &&
-					std::find(visited->begin(), visited->end(), pair.second) == visited->end())
+					std::find(visited->begin(), visited->end(), pair.second) == visited->end() &&
+					std::find(queue->begin(), queue->end(), std::make_pair(pair.second, currentSteps)) == queue->end())
 				{
-					bool found = false;
-
-					for (auto it = queue->begin(); it != queue->end() && !found; ++it)
-					{
-						if (it->first == pair.second)
-						{
-							found = true;
-						}
-					}
-
-					if (!found)
-					{
-						queue->push_back(std::make_pair(pair.second, currentSteps));
-					}
+					queue->push_back(std::make_pair(pair.second, currentSteps));
 				}
 			});
 		}
