@@ -279,7 +279,7 @@ void Hero::useTalisman()
 	while (!queue->empty()) {
 		Room* currentRoom = queue->front();
 
-		if (currentRoom_->getType() != Room::StairsDown) {
+		if (currentRoom->getType() != Room::StairsDown) {
 			queue->pop_front();
 			visited.push_back(currentRoom);
 			numberOfSteps++;
@@ -289,7 +289,7 @@ void Hero::useTalisman()
 			std::for_each(exits.begin(), exits.end(), [queue, visited](std::pair<std::string, Room*> pair)
 			{
 				if (pair.first != "omlaag" && 
-					pair.first != "omloog" &&
+					pair.first != "omhoog" &&
 					std::find(visited.begin(), visited.end(), pair.second) == visited.end() &&
 					std::find(queue->begin(), queue->end(), pair.second) == queue->end())
 				{
