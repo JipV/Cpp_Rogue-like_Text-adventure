@@ -286,8 +286,6 @@ void Hero::useTalisman()
 			visited->push_back(currentRoom);
 			currentSteps++;
 
-			std::cout << "Current room: " << currentRoom << " type: " << currentRoom->getType() << "\n";
-
 			std::map<std::string, Room*> exits = currentRoom->getAllExits();
 
 			std::for_each(exits.begin(), exits.end(), [queue, visited, currentSteps](std::pair<std::string, Room*> pair)
@@ -306,12 +304,6 @@ void Hero::useTalisman()
 			break;
 		}
 	}
-
-	std::cout << "\nVisited kamers:\n";
-	std::for_each(visited->begin(), visited->end(), [](Room* room)
-	{
-		std::cout << room << "\n";
-	});
 
 	std::cout << "\nDe talisman licht op en fluistert dat de trap omlaag " << numberOfSteps << " kamers ver weg is.\n";
 
