@@ -2,6 +2,7 @@
 #include "Map.h"
 #include "Room.h"
 #include "Hero.h"
+#include "Graph.h"
 
 Map::Map(int xSize, int ySize, int zSize)
 	: xSize_{ xSize }, ySize_{ ySize }, zSize_{ zSize }, rooms_{ nullptr }
@@ -153,9 +154,26 @@ void Map::addRoom(Room* room, int x, int y, int z)
 	rooms_[index(x, y, z)] = room;
 }
 
+void Map::destroyCorridors(int z)
+{
+	Graph graph = Graph(getAllRooms(z));
+}
+
 Room* Map::getRoom(int x, int y, int z)
 {
 	return &*rooms_[index(x, y, z)];
+}
+
+std::vector<Room*> Map::getAllRooms(int z)
+{
+	std::vector<Room*> rooms = std::vector<Room*>();
+
+	for (int i = index(0, 0, z); i <= index(xSize_, ySize_, z); i++)
+	{
+		rooms.push_back(&*rooms_[i]);
+	}
+
+	return rooms;
 }
 
 Room* Map::getStartLocation()
