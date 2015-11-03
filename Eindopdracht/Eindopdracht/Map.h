@@ -11,7 +11,7 @@ public:
 	Map(int xSize, int ySize, int zSize);
 	~Map();
 
-	void showMap(Room* currentRoom);
+	void showMap(Room* currentRoom, bool showUnvisitedRooms);
 
 	void getActions(std::vector<std::string>* actions);
 	bool handleAction(std::string fullCommand, Hero* hero);
