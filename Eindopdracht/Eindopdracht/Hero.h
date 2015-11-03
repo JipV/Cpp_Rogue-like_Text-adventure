@@ -73,7 +73,9 @@ class Hero
 		void viewItems();
 		void changeWeapon();
 		void changeShield();
+		void useTalisman();
 		void viewCharacteristics();
+		
 
 		void save();
 };
