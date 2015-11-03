@@ -269,7 +269,54 @@ void Hero::changeShield()
 
 void Hero::useTalisman()
 {
-	std::cout << "\nGEBRUIK TALISMAN\n";
+	int numberOfSteps = 0;
+
+	std::deque<Room*>* queue = new std::deque<Room*>();
+	std::vector<Room*> visited = std::vector<Room*>();
+
+	queue->push_back(currentRoom_);
+
+	while (!queue->empty()) {
+		Room* currentRoom = queue->front();
+
+		if (currentRoom_->getType() != Room::StairsDown) {
+			queue->pop_front();
+			visited.push_back(currentRoom);
+			numberOfSteps++;
+
+			std::for_each(currentRoom->getAllExits().begin(), currentRoom->getAllExits().end(), [queue, visited](std::pair<std::string, Room*> pair)
+			{
+				if (pair.first != "omlaag" && 
+					pair.first != "omloog" &&
+					std::find(visited.begin(), visited.end(), pair.second) == visited.end() &&
+					std::find(queue->begin(), queue->end(), pair.second) == queue->end())
+				{
+					queue->push_back(pair.second);
+				}
+			});
+			/*typedef std::map<std::string, Room*>::iterator it_type;
+			for (it_type iterator = currentRoom->getAllExits().begin(); iterator != currentRoom->getAllExits().end(); iterator++) {
+				if (iterator->first != "omlaag" &&
+					iterator->first != "omloog" &&
+					std::find(visited.begin(), visited.end(), iterator->second) == visited.end() &&
+					std::find(queue->begin(), queue->end(), iterator->second) == queue->end())
+				{
+					queue->push_back(iterator->second);
+				}
+			}*/
+		}
+		else {
+			break;
+		}
+	}
+
+	std::cout << "\nDe talisman licht op en fluistert dat de trap omlaag " << numberOfSteps << " kamers ver weg is.\n";
+
+	std::for_each(queue->begin(), queue->end(), [](Room* room)
+	{
+		delete room;
+	});
+	delete queue;
 }
 
 void Hero::viewCharacteristics()
