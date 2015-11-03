@@ -304,10 +304,6 @@ void Hero::useTalisman()
 
 	std::cout << "\nDe talisman licht op en fluistert dat de trap omlaag " << numberOfSteps << " kamers ver weg is.\n";
 
-	std::for_each(queue->begin(), queue->end(), [](Room* room)
-	{
-		delete room;
-	});
 	delete queue;
 }
 
