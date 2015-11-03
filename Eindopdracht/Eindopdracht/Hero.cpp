@@ -271,35 +271,50 @@ void Hero::useTalisman()
 {
 	int numberOfSteps = 0;
 
-	std::deque<Room*>* queue = new std::deque<Room*>();
+	std::deque<std::pair<Room*, int>>* queue = new std::deque<std::pair<Room*, int>>();
 	std::vector<Room*>* visited = new std::vector<Room*>();
 
-	queue->push_back(currentRoom_);
+	queue->push_back(std::make_pair(currentRoom_, 0));
 
 	while (!queue->empty()) {
-		Room* currentRoom = queue->front();
+		auto currentPair = queue->front();
+		Room* currentRoom = currentPair.first;
+		int currentSteps = currentPair.second;
 
 		if (currentRoom->getType() != Room::StairsDown) {
 			queue->pop_front();
 			visited->push_back(currentRoom);
-			numberOfSteps++;
+			currentSteps++;
 
 			std::cout << "Current room: " << currentRoom << " type: " << currentRoom->getType() << "\n";
 
 			std::map<std::string, Room*> exits = currentRoom->getAllExits();
 
-			std::for_each(exits.begin(), exits.end(), [queue, visited](std::pair<std::string, Room*> pair)
+			std::for_each(exits.begin(), exits.end(), [queue, visited, currentSteps](std::pair<std::string, Room*> pair)
 			{
 				if (pair.first != "omlaag" && 
 					pair.first != "omhoog" &&
-					std::find(visited->begin(), visited->end(), pair.second) == visited->end() &&
-					std::find(queue->begin(), queue->end(), pair.second) == queue->end())
+					std::find(visited->begin(), visited->end(), pair.second) == visited->end())
 				{
-					queue->push_back(pair.second);
+					bool found = false;
+
+					for (auto it = queue->begin(); it != queue->end() && !found; ++it)
+					{
+						if (it->first == pair.second)
+						{
+							found = true;
+						}
+					}
+
+					if (!found)
+					{
+						queue->push_back(std::make_pair(pair.second, currentSteps));
+					}
 				}
 			});
 		}
 		else {
+			numberOfSteps = currentSteps;
 			break;
 		}
 	}
