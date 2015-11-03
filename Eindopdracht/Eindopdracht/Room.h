@@ -30,6 +30,7 @@ class Room
 		bool handleAction(std::string fullCommand, std::vector<std::string> action, Hero* hero);
 
 		Room* getExit(std::string name);
+		void collapseCorridorToRoom(Room* room);
 		std::map<std::string, Room*> getAllExits();
 		
 		void addEnemy(Enemy* enemy);

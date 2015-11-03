@@ -689,13 +689,23 @@ Room* MapGenerator::addRoom(int x, int y, int z, Map* map)
 		if (newX >= 0 &&
 			newX < map->xSize_ &&
 			newY >= 0 &&
-			newY < map->ySize_ &&
-			map->rooms_[map->index(newX, newY, z)] == nullptr)
+			newY < map->ySize_)
 		{
-			Room* newRoom = addRoom(newX, newY, z, map); // Recursieve call om een nieuwe room te genereren
+			Room *otherRoom = map->rooms_[map->index(newX, newY, z)];
 
-			currentRoom->addExit(currentExit, newRoom);
-			newRoom->addExit(oppositeExit, currentRoom);
+			bool addCorridor = Random::getRandomNumber(0, 4) == 0; // 20% kans op een extra gang. Normaal niet in maze generation, maar nodig voor handgranaat. 
+
+			if (otherRoom == nullptr)
+			{
+				otherRoom = addRoom(newX, newY, z, map); // Recursieve call om een nieuwe room te genereren
+				addCorridor = true;
+			}
+
+			if (addCorridor)
+			{
+				currentRoom->addExit(currentExit, otherRoom);
+				otherRoom->addExit(oppositeExit, currentRoom);
+			}
 		}
 	}
 

@@ -2,6 +2,8 @@
 #include "Map.h"
 #include "Room.h"
 #include "Hero.h"
+#include "KruskalMSP.h"
+#include "Graph.h"
 
 Map::Map(int xSize, int ySize, int zSize)
 	: xSize_{ xSize }, ySize_{ ySize }, zSize_{ zSize }, rooms_{ nullptr }
@@ -20,7 +22,7 @@ Map::~Map()
 	startLocation_ = nullptr; // Deze wordt al verwijderd samen met alle rooms
 }
 
-void Map::showMap(Room* currentRoom)
+void Map::showMap(Room* currentRoom, bool showUnvisitedRooms)
 {
 	std::cout << "\nKerker kaart: \n";
 
@@ -37,7 +39,7 @@ void Map::showMap(Room* currentRoom)
 				SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 2);
 			}
 
-			if (room->getIsVisited())
+			if (room->getIsVisited() || showUnvisitedRooms)
 			{
 				// Teken kamer
 				switch (room->getType())
@@ -90,7 +92,7 @@ void Map::showMap(Room* currentRoom)
 		for (int x = 0; x < xSize_; x++)
 		{
 			Room* room = getRoom(x, y, z);
-			if (room->getIsVisited())
+			if (room->getIsVisited() || showUnvisitedRooms)
 			{
 				if (room->getAllExits().count("zuid"))
 					std::cout << "| ";
@@ -135,8 +137,20 @@ bool Map::handleAction(std::string fullCommand, Hero* hero)
 	// Acties hier kunnen nooit onderbroken worden door een val, dit lijkt mij ook niet de bedoeling.
 	if (fullCommand == "kaart")
 	{
-		showMap(hero->getCurrentRoom());
+		showMap(hero->getCurrentRoom(), false);
 		return true;
+	}
+
+	if (fullCommand == "cheatKaart")
+	{
+		showMap(hero->getCurrentRoom(), true);
+		return true;
+	}
+
+	if (fullCommand == "handgranaat")
+	{
+		destroyCorridors(hero->getCurrentRoom()->getLevel());
+		return false; // Room moet dit ook nog afhandelen
 	}
 
 	return false;
@@ -147,9 +161,35 @@ void Map::addRoom(Room* room, int x, int y, int z)
 	rooms_[index(x, y, z)] = room;
 }
 
+void Map::destroyCorridors(int z)
+{
+	std::cout << "handgranaat!\n";
+	KruskalMST mst = KruskalMST(getAllRooms(z));
+
+	std::vector<Corridor> corridorsToCollapse = mst.getNonCrucialCorridors();
+
+	std::for_each(corridorsToCollapse.begin(), corridorsToCollapse.end(), [](Corridor c)
+	{
+		c.Room1->collapseCorridorToRoom(c.Room2);
+		c.Room2->collapseCorridorToRoom(c.Room1);
+	});
+}
+
 Room* Map::getRoom(int x, int y, int z)
 {
 	return &*rooms_[index(x, y, z)];
+}
+
+std::vector<Room*> Map::getAllRooms(int z)
+{
+	std::vector<Room*> rooms = std::vector<Room*>();
+
+	for (int i = index(0, 0, z); i <= index(xSize_-1, ySize_-1, z); i++)
+	{
+		rooms.push_back(&*rooms_[i]);
+	}
+
+	return rooms;
 }
 
 Room* Map::getStartLocation()
