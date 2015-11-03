@@ -158,6 +158,18 @@ Room* Map::getRoom(int x, int y, int z)
 	return &*rooms_[index(x, y, z)];
 }
 
+std::vector<Room*> Map::getAllRooms(int z)
+{
+	std::vector<Room*> rooms = std::vector<Room*>();
+
+	for (int i = index(0, 0, z); i <= index(xSize_, ySize_, z); i++)
+	{
+		rooms.push_back(&*rooms_[i]);
+	}
+
+	return rooms;
+}
+
 Room* Map::getStartLocation()
 {
 	return startLocation_;

@@ -11,12 +11,11 @@ public:
 	Map(int xSize, int ySize, int zSize);
 	~Map();
 
-	void showMap(Room* currentRoom, bool showUnvisitedRooms);
-
 	void getActions(std::vector<std::string>* actions);
 	bool handleAction(std::string fullCommand, Hero* hero);
 
 	Room* getRoom(int x, int y, int z);
+	std::vector<Room*> getAllRooms(int z);
 	Room* getStartLocation();
 
 	int getSize();
@@ -35,6 +34,8 @@ private:
 
 	int index(int x, int y, int z);
 	void addRoom(Room* room, int x, int y, int z);
+
+	void showMap(Room* currentRoom, bool showUnvisitedRooms);
 };
 
 #endif
