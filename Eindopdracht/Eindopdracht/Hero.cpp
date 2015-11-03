@@ -272,7 +272,7 @@ void Hero::useTalisman()
 	int numberOfSteps = 0;
 
 	std::deque<Room*>* queue = new std::deque<Room*>();
-	std::vector<Room*> visited = std::vector<Room*>();
+	std::vector<Room*>* visited = new std::vector<Room*>();
 
 	queue->push_back(currentRoom_);
 
@@ -281,8 +281,10 @@ void Hero::useTalisman()
 
 		if (currentRoom->getType() != Room::StairsDown) {
 			queue->pop_front();
-			visited.push_back(currentRoom);
+			visited->push_back(currentRoom);
 			numberOfSteps++;
+
+			std::cout << "Current room: " << currentRoom << " type: " << currentRoom->getType() << "\n";
 
 			std::map<std::string, Room*> exits = currentRoom->getAllExits();
 
@@ -290,7 +292,7 @@ void Hero::useTalisman()
 			{
 				if (pair.first != "omlaag" && 
 					pair.first != "omhoog" &&
-					std::find(visited.begin(), visited.end(), pair.second) == visited.end() &&
+					std::find(visited->begin(), visited->end(), pair.second) == visited->end() &&
 					std::find(queue->begin(), queue->end(), pair.second) == queue->end())
 				{
 					queue->push_back(pair.second);
@@ -302,9 +304,16 @@ void Hero::useTalisman()
 		}
 	}
 
+	std::cout << "\nVisited kamers:\n";
+	std::for_each(visited->begin(), visited->end(), [](Room* room)
+	{
+		std::cout << room << "\n";
+	});
+
 	std::cout << "\nDe talisman licht op en fluistert dat de trap omlaag " << numberOfSteps << " kamers ver weg is.\n";
 
 	delete queue;
+	delete visited;
 }
 
 void Hero::viewCharacteristics()
