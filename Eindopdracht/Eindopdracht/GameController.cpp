@@ -10,11 +10,6 @@ GameController::GameController() : isRunning_(false), exitGame_(false)
 
 GameController::~GameController()
 {
-	delete map_;
-	map_ = nullptr;
-
-	delete hero_;
-	hero_ = nullptr;
 }
 
 void GameController::startGame()
@@ -81,6 +76,12 @@ void GameController::startGame()
 			isRunning_ = false;
 		}
 	}
+
+	delete map_;
+	map_ = nullptr;
+
+	delete hero_;
+	hero_ = nullptr;
 }
 
 bool GameController::gameShouldRun()
