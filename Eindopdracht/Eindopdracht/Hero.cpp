@@ -169,7 +169,7 @@ void Hero::rest()
 void Hero::viewItems()
 {
 	std::cout << "\nJe beschikt over de volgende spullen:\n";
-	for (int i = 0; i < items_.size(); i++) {
+	for (size_t i = 0; i < items_.size(); i++) {
 		std::cout << "- " << *items_.at(i) << "\n";
 	}
 }

@@ -2,6 +2,7 @@
 #include "Map.h"
 #include "Room.h"
 #include "Hero.h"
+#include "Graph.h"
 
 Map::Map(int xSize, int ySize, int zSize)
 	: xSize_{ xSize }, ySize_{ ySize }, zSize_{ zSize }, rooms_{ nullptr }
@@ -151,6 +152,11 @@ bool Map::handleAction(std::string fullCommand, Hero* hero)
 void Map::addRoom(Room* room, int x, int y, int z)
 {
 	rooms_[index(x, y, z)] = room;
+}
+
+void Map::destroyCorridors(int z)
+{
+	Graph graph = Graph(getAllRooms(z));
 }
 
 Room* Map::getRoom(int x, int y, int z)
