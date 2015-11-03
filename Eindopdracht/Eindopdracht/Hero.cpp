@@ -267,6 +267,46 @@ void Hero::changeShield()
 	}
 }
 
+void Hero::useTalisman()
+{
+	int numberOfSteps = 0;
+
+	std::deque<Room*>* queue = new std::deque<Room*>();
+	std::vector<Room*> visited = std::vector<Room*>();
+
+	queue->push_back(currentRoom_);
+
+	while (!queue->empty()) {
+		Room* currentRoom = queue->front();
+
+		if (currentRoom->getType() != Room::StairsDown) {
+			queue->pop_front();
+			visited.push_back(currentRoom);
+			numberOfSteps++;
+
+			std::map<std::string, Room*> exits = currentRoom->getAllExits();
+
+			std::for_each(exits.begin(), exits.end(), [queue, visited](std::pair<std::string, Room*> pair)
+			{
+				if (pair.first != "omlaag" && 
+					pair.first != "omhoog" &&
+					std::find(visited.begin(), visited.end(), pair.second) == visited.end() &&
+					std::find(queue->begin(), queue->end(), pair.second) == queue->end())
+				{
+					queue->push_back(pair.second);
+				}
+			});
+		}
+		else {
+			break;
+		}
+	}
+
+	std::cout << "\nDe talisman licht op en fluistert dat de trap omlaag " << numberOfSteps << " kamers ver weg is.\n";
+
+	delete queue;
+}
+
 void Hero::viewCharacteristics()
 {
 	std::cout << "\nEigenschappen held:\n";
@@ -405,6 +445,7 @@ void Hero::getActions(std::vector<std::string>* actions)
 		actions->push_back("bekijk spullen");
 	}
 
+	actions->push_back("gebruik talisman");
 	actions->push_back("bekijk eigenschappen");
 	actions->push_back("held opslaan");
 
@@ -432,6 +473,11 @@ bool Hero::handleAction(std::string fullCommand, std::vector<std::string> action
 	if (fullCommand == "wissel schild")
 	{
 		changeShield();
+		return true;
+	}
+	if (fullCommand == "gebruik talisman")
+	{
+		useTalisman();
 		return true;
 	}
 	if (fullCommand == "bekijk spullen")
