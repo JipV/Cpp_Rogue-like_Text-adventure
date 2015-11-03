@@ -282,6 +282,7 @@ void Hero::useTalisman()
 		if (currentRoom_->getType() != Room::StairsDown) {
 			queue->pop_front();
 			visited.push_back(currentRoom);
+			numberOfSteps++;
 
 			std::map<std::string, Room*> exits = currentRoom->getAllExits();
 
