@@ -168,7 +168,7 @@ std::vector<Room*> Map::getAllRooms(int z)
 {
 	std::vector<Room*> rooms = std::vector<Room*>();
 
-	for (int i = index(0, 0, z); i <= index(xSize_, ySize_, z); i++)
+	for (int i = index(0, 0, z); i <= index(xSize_-1, ySize_-1, z); i++)
 	{
 		rooms.push_back(&*rooms_[i]);
 	}
