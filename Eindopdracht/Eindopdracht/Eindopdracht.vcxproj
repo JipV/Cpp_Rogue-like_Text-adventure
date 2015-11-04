@@ -158,7 +158,7 @@
     <ClInclude Include="Graph.h" />
     <ClInclude Include="Hero.h" />
     <ClInclude Include="Item.h" />
-    <ClInclude Include="KruskalMSP.h" />
+    <ClInclude Include="KruskalMST.h" />
     <ClInclude Include="Map.h" />
     <ClInclude Include="Random.h" />
     <ClInclude Include="Room.h" />
@@ -174,7 +174,7 @@
     <ClCompile Include="GameController.cpp" />
     <ClCompile Include="Hero.cpp" />
     <ClCompile Include="Item.cpp" />
-    <ClCompile Include="KruskalMSP.cpp" />
+    <ClCompile Include="KruskalMST.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Map.cpp" />
     <ClCompile Include="Random.cpp" />
