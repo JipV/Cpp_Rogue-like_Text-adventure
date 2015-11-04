@@ -9,7 +9,8 @@ KruskalMST::KruskalMST(Graph graph)
 
 	size_t requiredEdges = graph.Rooms.size() - 1;
 	
-	// Elke gang is "even zwaar", sorteren is dus niet nodig.
+	// Schud de volgorde van gangen, anders storten er alleen horizontale gangen in. "weight" van elke gang is gelijk, dus dit geeft geen problemen.
+	std::random_shuffle(graph.Corridors.begin(), graph.Corridors.end());
 
 	std::for_each(graph.Rooms.begin(), graph.Rooms.end(), [this](Room* r)
 	{
