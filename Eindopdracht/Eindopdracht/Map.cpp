@@ -176,7 +176,11 @@ void Map::addRoom(Room* room, int x, int y, int z)
 
 void Map::destroyCorridors(Room* currentRoom)
 {
-	KruskalMST mst = KruskalMST(getAllRooms(currentRoom->getLevel()));
+	// Random gangen storten in
+	//KruskalMST mst = KruskalMST(getAllRooms(currentRoom->getLevel()));
+
+	// MST met bonus: gangen vlakbij de speler storten in.
+	KruskalMST mst = KruskalMST(currentRoom);
 
 	std::vector<Corridor> corridorsToCollapse = mst.getNonCrucialCorridors();
 	size_t amountToCollapse = Random::getRandomNumber(10, 15);
@@ -201,15 +205,12 @@ void Map::destroyCorridors(Room* currentRoom)
 		}
 		else
 		{
-			for (size_t i = 0; i < amountToCollapse; i++)
+			// De dichtsbijzijnde gangen staan op het einde van de vector, laat deze instorten.
+			std::for_each(corridorsToCollapse.end() - amountToCollapse, corridorsToCollapse.end(), [](Corridor c)
 			{
-				int index = Random::getRandomNumber(0, corridorsToCollapse.size() - 1);
-
-				Corridor c = corridorsToCollapse.at(index);
 				c.Room1->collapseCorridorToRoom(c.Room2);
 				c.Room2->collapseCorridorToRoom(c.Room1);
-				corridorsToCollapse.erase(corridorsToCollapse.begin() + index);
-			}
+			});
 		}
 	}
 	

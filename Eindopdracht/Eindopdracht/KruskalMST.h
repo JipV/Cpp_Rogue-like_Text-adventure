@@ -5,7 +5,8 @@
 class KruskalMST
 {
 public:
-	KruskalMST(Graph graph);
+	explicit KruskalMST(Room* middleRoom);
+	explicit KruskalMST(std::vector<Room*> rooms);
 	~KruskalMST();
 
 	std::vector<Corridor> getCrucialCorridors();
@@ -17,6 +18,7 @@ private:
 	std::vector<Corridor> crucialCorridors_;
 	std::vector<Corridor> nonCrucialCorridors_;
 
+	void findMST(Graph graph);
 	Room* findParent(Room* room);
 	void combineTrees(Room* room1, Room* room2);
 };
