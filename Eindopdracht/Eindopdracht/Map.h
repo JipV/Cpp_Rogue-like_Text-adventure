@@ -36,7 +36,7 @@ private:
 	void addRoom(Room* room, int x, int y, int z);
 
 	void showMap(Room* currentRoom, bool showUnvisitedRooms);
-	void destroyCorridors(int z);
+	bool destroyCorridors(int z);
 };
 
 #endif

@@ -4,6 +4,7 @@
 #include "Hero.h"
 #include "KruskalMSP.h"
 #include "Graph.h"
+#include "Random.h"
 
 Map::Map(int xSize, int ySize, int zSize)
 	: xSize_{ xSize }, ySize_{ ySize }, zSize_{ zSize }, rooms_{ nullptr }
@@ -172,18 +173,48 @@ void Map::addRoom(Room* room, int x, int y, int z)
 	rooms_[index(x, y, z)] = room;
 }
 
-void Map::destroyCorridors(int z)
+bool Map::destroyCorridors(int z)
 {
-	std::cout << "handgranaat!\n";
 	KruskalMST mst = KruskalMST(getAllRooms(z));
 
 	std::vector<Corridor> corridorsToCollapse = mst.getNonCrucialCorridors();
+	int amountToCollapse = Random::getRandomNumber(10, 15);
 
-	std::for_each(corridorsToCollapse.begin(), corridorsToCollapse.end(), [](Corridor c)
+	if (corridorsToCollapse.size() == 0)
 	{
-		c.Room1->collapseCorridorToRoom(c.Room2);
-		c.Room2->collapseCorridorToRoom(c.Room1);
-	});
+		std::cout << "Je vreest dat een extra handgranaat een cruciale passage zal blokkeren. Het is beter om deze niet meer te gebruiken op deze verdieping." << std::endl;
+
+		return false;
+	}
+	else
+	{
+		std::cout << "De kerker schudt op zijn grondvesten, alle tegenstanders in de kamer zijn verslagen! Een donderend geluid maakt duidelijk dat gedeeltes van de kerker zijn ingestort..." << std::endl;
+
+		// Als alles moet instorten, hoeven we geen random kamers te selecteren.
+		if (corridorsToCollapse.size() <= amountToCollapse)
+		{
+			std::for_each(corridorsToCollapse.begin(), corridorsToCollapse.end(), [](Corridor c)
+			{
+				c.Room1->collapseCorridorToRoom(c.Room2);
+				c.Room2->collapseCorridorToRoom(c.Room1);
+			});
+		}
+		else
+		{
+			for (int i = 0; i < amountToCollapse; i++)
+			{
+				int index = Random::getRandomNumber(0, corridorsToCollapse.size() - 1);
+
+				Corridor c = corridorsToCollapse.at(index);
+				c.Room1->collapseCorridorToRoom(c.Room2);
+				c.Room2->collapseCorridorToRoom(c.Room1);
+				corridorsToCollapse.erase(corridorsToCollapse.begin() + index);
+			}
+		}
+
+		return true;
+	}
+	
 }
 
 Room* Map::getRoom(int x, int y, int z)
