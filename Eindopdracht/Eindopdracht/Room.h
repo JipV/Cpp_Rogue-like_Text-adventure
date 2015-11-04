@@ -42,6 +42,9 @@ class Room
 		void setIsVisited(bool isVisited);
 
 		ROOM_TYPE getType();
+		
+		int getTotalHPEnemies();
+
 	private:
 
 		bool isVisited_;

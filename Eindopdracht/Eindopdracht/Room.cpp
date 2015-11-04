@@ -209,3 +209,13 @@ std::vector<Enemy*> Room::getEnemies()
 {
 	return enemies_;
 }
+
+int Room::getTotalHPEnemies()
+{
+	int totalHP = 0;
+	std::for_each(enemies_.begin(), enemies_.end(), [&totalHP](Enemy* e)
+	{
+		totalHP += e->getCurrentHP();
+	});
+	return totalHP;
+}

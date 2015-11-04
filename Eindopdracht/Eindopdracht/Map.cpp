@@ -127,9 +127,149 @@ void Map::showMap(Room* currentRoom, bool showUnvisitedRooms)
 	std::cout << ".  : Niet bezocht \n";
 }
 
+
+void Map::useCompass(Room* currentRoom, std::vector<Room*> allRooms)
+{
+	struct Vertex {
+		Room* vertex;
+		std::map<std::string, Room*> edges;
+		double distance;
+		Vertex* previousVertex;
+		bool done;
+	};
+
+	std::vector<Vertex*>* vertices = new std::vector<Vertex*>();
+	std::queue<Vertex*>* queue = new std::queue<Vertex*>();
+
+	// Maak vertices aan
+	std::for_each(allRooms.begin(), allRooms.end(), [currentRoom, vertices, queue](Room* room)
+	{
+		Vertex* newVertex = new Vertex();
+		newVertex->vertex = room;
+		newVertex->edges = room->getAllExits();
+		newVertex->distance = std::numeric_limits<double>::infinity();
+		newVertex->previousVertex = nullptr;
+		newVertex->done = false;
+
+		// Zet de afstand van de eerste vertex op 0 en van de rest op oneindig
+		if (room == currentRoom) {
+			newVertex->distance = 0;
+			queue->push(newVertex); // Begin bij de vertex met de laagste afstand
+		}
+
+		vertices->push_back(newVertex);
+	});
+
+	/*std::cout << "\nAlle vertices:\n";
+	std::for_each(vertices->begin(), vertices->end(), [](Vertex* v)
+	{
+	std::cout << v->vertex << " weight: " << v->distance << "\n";
+	});*/
+
+	// Bepaal afstanden
+	while (!queue->empty()) {
+		Vertex* vertex = queue->front();
+		queue->pop();
+
+		std::for_each(vertex->edges.begin(), vertex->edges.end(), [queue, vertices, vertex](std::pair<std::string, Room*> exitPair)
+		{
+			// Haal de vertex uit de vector, die hoort bij de gang
+			auto vertex2 = std::find_if(vertices->begin(), vertices->end(), [exitPair](Vertex* vertex2) {return vertex2->vertex == exitPair.second; });
+			if (vertex2 != vertices->end())
+			{
+				int weigthEdge = exitPair.second->getTotalHPEnemies(); // TODO: + EVENTUELE VAL
+				int distance = vertex->distance + weigthEdge;
+
+				// Bepaal de kleinste afstand
+				if (distance < (*vertex2)->distance) {
+					(*vertex2)->distance = distance;
+					(*vertex2)->previousVertex = vertex;
+				}
+
+				// Voeg eventueel vertex toe aan de queue
+				if (!(*vertex2)->done) {
+					queue->push(*vertex2);
+				}
+			}
+		});
+
+		vertex->done = true;
+	}
+
+	/*std::cout << "\nAlle vertices:\n";
+	std::for_each(vertices->begin(), vertices->end(), [](Vertex* v)
+	{
+		std::cout << v->vertex << " weight: " << v->distance << "\n";
+	});*/
+
+	std::vector<Vertex*>* route = new std::vector<Vertex*>();
+	
+	// Bepaalde korste route
+	auto v = std::find_if(vertices->begin(), vertices->end(), [](Vertex* vertex2) {return vertex2->vertex->getType() == Room::StairsDown; }); // TODO: moet eindvijand worden
+	if (v != vertices->end())
+	{
+		Vertex* currentVertex = *v;
+		while (currentVertex->previousVertex != nullptr) {
+			route->push_back(currentVertex);
+			currentVertex = currentVertex->previousVertex;
+		}
+		
+	}
+
+	// Zet de vertices in de goede volgorde (van held naar doel, in plaats van doel naar held)
+	std::reverse(route->begin(), route->end());
+
+	/*std::cout << "\nRooms in route:\n";
+	std::for_each(route->begin(), route->end(), [](Vertex* v)
+	{
+		std::cout << v->vertex << "\n";
+	});*/
+
+	std::cout << "\nJe haalt het kompas uit je zak. Het trilt in je hand en projecteert in grote lichtgevende letters in de lucht:\n" << std::endl;
+
+	//std::cout << "\nLoop route:\n";
+	for (int i = 0; i < route->size(); i++) {
+		std::for_each(route->at(i)->edges.begin(), route->at(i)->edges.end(), [route, i](std::pair<std::string, Room*> exitPair)
+		{
+			if (i + 1 < route->size()) {
+				if (exitPair.second == route->at(i + 1)->vertex) {
+					std::cout << exitPair.first;
+					if (i != route->size() - 1) {
+						std::cout << " - ";
+					}
+				}
+			}
+		});
+	}
+	std::cout << "\n";
+
+	delete vertices;
+	delete queue;
+	delete route;
+
+	// STAPPENPLAN
+
+	// Zet de eerste vertex op 0, de rest op oneindig (dat is de afstand naar de vertex)
+
+	// Kies de vertex met de laagste afstand en ga alle edges langs
+
+	// (Vertex 1 is de vertex waar je vanaf komt, vertex 2 is de vertex waar je naar toe gaat via de edge)
+	// (De weight van een edge is is het totale hp van alle enemies in vertex 2 + eventueel de val)
+
+	// Update de afstand van de vertex 2 als de afstand van vertex 1 + weight van de edge samen LAGER is dan de afstand van vertex 2
+	// Als de afstand moet worden geupdate, sla bij vertex 2 vertext 1 op, zodat je later kan terug lopen
+
+	// Als alle edges van een vertex zijn doorlopen, dan aangeven dat de vertex klaar is
+
+	// Als alle vertex dingen geweest zijn, dan kun je terug lopen, om zo de korste route te hebben
+
+}
+
+
 void Map::getActions(std::vector<std::string>* actions)
 {
 	actions->push_back("kaart");
+	actions->push_back("gebruik kompas");
 }
 
 bool Map::handleAction(std::string fullCommand, Hero* hero)
@@ -138,6 +278,11 @@ bool Map::handleAction(std::string fullCommand, Hero* hero)
 	if (fullCommand == "kaart")
 	{
 		showMap(hero->getCurrentRoom(), false);
+		return true;
+	}
+	if (fullCommand == "gebruik kompas")
+	{
+		useCompass(hero->getCurrentRoom(), getAllRooms(hero->getCurrentRoom()->getLevel()));
 		return true;
 	}
 

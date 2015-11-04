@@ -6,6 +6,7 @@
 #include "Item.h"
 #include "Weapon.h"
 #include "Shield.h"
+#include "Map.h"
 
 // ReSharper disable once CppPossiblyUninitializedMember
 Hero::Hero(std::string name) : 
@@ -311,24 +312,6 @@ void Hero::useTalisman()
 	delete visited;
 }
 
-void Hero::useCompass()
-{
-	std::cout << "\nGEBRUIK KOMPAS\n";
-
-	// Zet de eerste vertex op 0, de rest op oneindig (dat is de afstand)
-	
-	// Kies de vertex met de laagste afstand en ga alle edges langs
-
-	// (Vertex 1 is de vertex waar je vanaf komt, vertex 2 is de vertex waar je naar toe gaat via de edge)
-	// (De weight van een edge is is het totale hp van alle enemies in vertex 2 + eventueel de val)
-
-	// Update de afstand van de vertex 2 als de afstand van vertex 1 + weight van de edge samen lager is dan de afstand van vertex 2
-	// Als de afstand moet worden geupdate, sla bij vertex 2 vertext 1 op, zodat je later kan terug lopen
-
-	// Als alle vertex dingen geweest zijn, dan kun je terug lopen, om zo de korste route te hebben
-
-}
-
 void Hero::viewCharacteristics()
 {
 	std::cout << "\nEigenschappen held:\n";
@@ -468,7 +451,6 @@ void Hero::getActions(std::vector<std::string>* actions)
 	}
 
 	actions->push_back("gebruik talisman");
-	actions->push_back("gebruik kompas");
 	actions->push_back("bekijk eigenschappen");
 	actions->push_back("held opslaan");
 
@@ -501,11 +483,6 @@ bool Hero::handleAction(std::string fullCommand, std::vector<std::string> action
 	if (fullCommand == "gebruik talisman")
 	{
 		useTalisman();
-		return true;
-	}
-	if (fullCommand == "gebruik kompas")
-	{
-		useCompass();
 		return true;
 	}
 	if (fullCommand == "bekijk spullen")

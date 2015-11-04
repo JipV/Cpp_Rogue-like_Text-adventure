@@ -5,6 +5,7 @@ class Room;
 class Item;
 class Weapon;
 class Shield;
+class Map;
 
 class Hero
 {
@@ -74,7 +75,6 @@ class Hero
 		void changeWeapon();
 		void changeShield();
 		void useTalisman();
-		void useCompass();
 		void viewCharacteristics();
 		
 
