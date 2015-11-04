@@ -1,5 +1,5 @@
 #include "stdafx.h"
-#include "KruskalMSP.h"
+#include "KruskalMST.h"
 #include "Graph.h"
 
 // Gangen worden op afstand (aantal stappen) gesorteerd. Verste gangen eerst.

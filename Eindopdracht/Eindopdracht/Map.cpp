@@ -2,7 +2,7 @@
 #include "Map.h"
 #include "Room.h"
 #include "Hero.h"
-#include "KruskalMSP.h"
+#include "KruskalMST.h"
 #include "Graph.h"
 #include "Random.h"
 
