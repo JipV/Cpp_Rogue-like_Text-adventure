@@ -281,26 +281,25 @@ void Hero::useTalisman()
 		Room* currentRoom = queue.front();
 		currentSteps = steps.at(currentRoom);
 
-		if (currentRoom->getType() != Room::StairsDown) {
-			queue.pop();
-			currentSteps++;
-
-			std::unordered_map<std::string, Room*> exits = currentRoom->getAllExits();
-
-			std::for_each(exits.begin(), exits.end(), [&queue, &steps, currentSteps](std::pair<std::string, Room*> pair)
-			{
-				if (pair.first != "omlaag" && 
-					pair.first != "omhoog" &&
-					steps.count(pair.second) == 0)
-				{
-					queue.push(pair.second);
-					steps[pair.second] = currentSteps;
-				}
-			});
-		}
-		else {
+		if (currentRoom->getType() == Room::StairsDown ||
+			currentRoom->getType() == Room::EndEnemy)
 			break;
-		}
+
+		queue.pop();
+		currentSteps++;
+
+		std::unordered_map<std::string, Room*> exits = currentRoom->getAllExits();
+
+		std::for_each(exits.begin(), exits.end(), [&queue, &steps, currentSteps](std::pair<std::string, Room*> pair)
+		{
+			if (pair.first != "omlaag" && 
+				pair.first != "omhoog" &&
+				steps.count(pair.second) == 0)
+			{
+				queue.push(pair.second);
+				steps[pair.second] = currentSteps;
+			}
+		});
 	}
 
 	std::cout << "\nDe talisman licht op en fluistert dat de trap omlaag " << currentSteps << " kamers ver weg is.\n";
