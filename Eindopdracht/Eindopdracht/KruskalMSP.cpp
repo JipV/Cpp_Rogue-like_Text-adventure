@@ -2,15 +2,46 @@
 #include "KruskalMSP.h"
 #include "Graph.h"
 
-KruskalMST::KruskalMST(Graph graph)
+// Gangen worden op afstand (aantal stappen) gesorteerd. Verste gangen eerst.
+KruskalMST::KruskalMST(Room* middleRoom)
+{
+	// De corridors bij deze manier van sorteren zijn gesorteerd of afstand, verste corridors eerst. 
+	// Zonder verder sorteren betekend dit effectief dat de gangen rond de gegeven kamer het "zwaarste" wegen
+	findMST(Graph(middleRoom));
+}
+
+// De oude methode, deze wordt momenteel niet gebruikt. 
+KruskalMST::KruskalMST(std::vector<Room*> rooms)
+{
+	Graph graph = Graph(rooms);
+
+	// Door de manier van sorteren bij een Graph gemaakt met een vector, zullen loops alleen door horizontale gangen gemaakt kunnen worden. 
+	// Het shudden van de gangen voorkomt een kerker met veel lange verticale gangen.
+	std::random_shuffle(graph.Corridors.begin(), graph.Corridors.end());
+
+	findMST(graph);
+}
+
+KruskalMST::~KruskalMST()
+{
+}
+
+std::vector<Corridor> KruskalMST::getCrucialCorridors()
+{
+	return crucialCorridors_;
+}
+
+std::vector<Corridor> KruskalMST::getNonCrucialCorridors()
+{
+	return nonCrucialCorridors_;
+}
+
+void KruskalMST::findMST(Graph graph)
 {
 	crucialCorridors_ = std::vector<Corridor>();
 	nonCrucialCorridors_ = std::vector<Corridor>();
 
 	size_t requiredEdges = graph.Rooms.size() - 1;
-	
-	// Schud de volgorde van gangen, anders storten er alleen horizontale gangen in. "weight" van elke gang is gelijk, dus dit geeft geen problemen.
-	std::random_shuffle(graph.Corridors.begin(), graph.Corridors.end());
 
 	std::for_each(graph.Rooms.begin(), graph.Rooms.end(), [this](Room* r)
 	{
@@ -40,20 +71,6 @@ KruskalMST::KruskalMST(Graph graph)
 
 	// Alle overgebleven gangen zijn niet cruciaal.
 	nonCrucialCorridors_.insert(nonCrucialCorridors_.end(), iterator, graph.Corridors.end());
-}
-
-KruskalMST::~KruskalMST()
-{
-}
-
-std::vector<Corridor> KruskalMST::getCrucialCorridors()
-{
-	return crucialCorridors_;
-}
-
-std::vector<Corridor> KruskalMST::getNonCrucialCorridors()
-{
-	return nonCrucialCorridors_;
 }
 
 Room* KruskalMST::findParent(Room* room)
