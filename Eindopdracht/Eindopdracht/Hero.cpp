@@ -269,33 +269,32 @@ void Hero::changeShield()
 
 void Hero::useTalisman()
 {
+	std::queue<Room*> queue;
+	std::unordered_map<Room*, int> steps;
+
+	queue.push(currentRoom_);
+	steps[currentRoom_] = 0;
+
 	int currentSteps = 0;
 
-	std::deque<std::pair<Room*, int>> queue = std::deque<std::pair<Room*, int>>();
-	std::vector<Room*> visited = std::vector<Room*>();
-
-	queue.push_back(std::make_pair(currentRoom_, 0));
-
 	while (!queue.empty()) {
-		auto currentPair = queue.front();
-		Room* currentRoom = currentPair.first;
-		currentSteps = currentPair.second;
+		Room* currentRoom = queue.front();
+		currentSteps = steps.at(currentRoom);
 
 		if (currentRoom->getType() != Room::StairsDown) {
-			queue.pop_front();
-			visited.push_back(currentRoom);
+			queue.pop();
 			currentSteps++;
 
 			std::unordered_map<std::string, Room*> exits = currentRoom->getAllExits();
 
-			std::for_each(exits.begin(), exits.end(), [&queue, visited, currentSteps](std::pair<std::string, Room*> pair)
+			std::for_each(exits.begin(), exits.end(), [&queue, &steps, currentSteps](std::pair<std::string, Room*> pair)
 			{
 				if (pair.first != "omlaag" && 
 					pair.first != "omhoog" &&
-					std::find(visited.begin(), visited.end(), pair.second) == visited.end() &&
-					std::find(queue.begin(), queue.end(), std::make_pair(pair.second, currentSteps)) == queue.end())
+					steps.count(pair.second) == 0)
 				{
-					queue.push_back(std::make_pair(pair.second, currentSteps));
+					queue.push(pair.second);
+					steps[pair.second] = currentSteps;
 				}
 			});
 		}
