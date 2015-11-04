@@ -66,6 +66,8 @@ void Map::showMap(Room* currentRoom, bool showUnvisitedRooms)
 				// Teken uitgang van west naar oost
 				if (room->getAllExits().count("oost"))
 					std::cout << '-';
+				else if (room->isCollapsed("oost"))
+					std::cout << '~';
 				else
 					std::cout << ' ';
 			}
@@ -79,6 +81,9 @@ void Map::showMap(Room* currentRoom, bool showUnvisitedRooms)
 					if (eastRoom->getIsVisited() &&
 						eastRoom->getAllExits().count("west"))
 						std::cout << '-';
+					else if (eastRoom->getIsVisited() &&
+						eastRoom->isCollapsed("west"))
+						std::cout << '~';
 					else
 						std::cout << ' ';
 				}
@@ -96,6 +101,8 @@ void Map::showMap(Room* currentRoom, bool showUnvisitedRooms)
 			{
 				if (room->getAllExits().count("zuid"))
 					std::cout << "| ";
+				else if (room->isCollapsed("zuid"))
+					std::cout << "~ ";
 				else
 					std::cout << "  ";
 			}
@@ -107,6 +114,9 @@ void Map::showMap(Room* currentRoom, bool showUnvisitedRooms)
 					if (southRoom->getIsVisited() &&
 						southRoom->getAllExits().count("noord"))
 						std::cout << "| ";
+					else if (southRoom->getIsVisited() &&
+						southRoom->isCollapsed("noord"))
+						std::cout << "~ ";
 					else
 						std::cout << "  ";
 				}
@@ -119,6 +129,7 @@ void Map::showMap(Room* currentRoom, bool showUnvisitedRooms)
 
 	std::cout << "Legenda: \n";
 	std::cout << "|- : Gangen \n";
+	std::cout << "~  : Ingestortte gang \n";
 	std::cout << "S  : Start locatie \n";
 	std::cout << "E  : Eind vijhand \n";
 	std::cout << "N  : Normale ruimte \n";
