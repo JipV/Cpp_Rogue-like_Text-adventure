@@ -269,46 +269,42 @@ void Hero::changeShield()
 
 void Hero::useTalisman()
 {
-	int numberOfSteps = 0;
+	int currentSteps = 0;
 
-	std::deque<std::pair<Room*, int>>* queue = new std::deque<std::pair<Room*, int>>();
-	std::vector<Room*>* visited = new std::vector<Room*>();
+	std::deque<std::pair<Room*, int>> queue = std::deque<std::pair<Room*, int>>();
+	std::vector<Room*> visited = std::vector<Room*>();
 
-	queue->push_back(std::make_pair(currentRoom_, 0));
+	queue.push_back(std::make_pair(currentRoom_, 0));
 
-	while (!queue->empty()) {
-		auto currentPair = queue->front();
+	while (!queue.empty()) {
+		auto currentPair = queue.front();
 		Room* currentRoom = currentPair.first;
-		int currentSteps = currentPair.second;
+		currentSteps = currentPair.second;
 
 		if (currentRoom->getType() != Room::StairsDown) {
-			queue->pop_front();
-			visited->push_back(currentRoom);
+			queue.pop_front();
+			visited.push_back(currentRoom);
 			currentSteps++;
 
 			std::map<std::string, Room*> exits = currentRoom->getAllExits();
 
-			std::for_each(exits.begin(), exits.end(), [queue, visited, currentSteps](std::pair<std::string, Room*> pair)
+			std::for_each(exits.begin(), exits.end(), [&queue, visited, currentSteps](std::pair<std::string, Room*> pair)
 			{
 				if (pair.first != "omlaag" && 
 					pair.first != "omhoog" &&
-					std::find(visited->begin(), visited->end(), pair.second) == visited->end() &&
-					std::find(queue->begin(), queue->end(), std::make_pair(pair.second, currentSteps)) == queue->end())
+					std::find(visited.begin(), visited.end(), pair.second) == visited.end() &&
+					std::find(queue.begin(), queue.end(), std::make_pair(pair.second, currentSteps)) == queue.end())
 				{
-					queue->push_back(std::make_pair(pair.second, currentSteps));
+					queue.push_back(std::make_pair(pair.second, currentSteps));
 				}
 			});
 		}
 		else {
-			numberOfSteps = currentSteps;
 			break;
 		}
 	}
 
-	std::cout << "\nDe talisman licht op en fluistert dat de trap omlaag " << numberOfSteps << " kamers ver weg is.\n";
-
-	delete queue;
-	delete visited;
+	std::cout << "\nDe talisman licht op en fluistert dat de trap omlaag " << currentSteps << " kamers ver weg is.\n";
 }
 
 void Hero::viewCharacteristics()

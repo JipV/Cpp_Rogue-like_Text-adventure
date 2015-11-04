@@ -179,7 +179,7 @@ void Map::destroyCorridors(Room* currentRoom)
 	KruskalMST mst = KruskalMST(getAllRooms(currentRoom->getLevel()));
 
 	std::vector<Corridor> corridorsToCollapse = mst.getNonCrucialCorridors();
-	int amountToCollapse = Random::getRandomNumber(10, 15);
+	size_t amountToCollapse = Random::getRandomNumber(10, 15);
 
 	if (corridorsToCollapse.size() == 0)
 	{
@@ -201,7 +201,7 @@ void Map::destroyCorridors(Room* currentRoom)
 		}
 		else
 		{
-			for (int i = 0; i < amountToCollapse; i++)
+			for (size_t i = 0; i < amountToCollapse; i++)
 			{
 				int index = Random::getRandomNumber(0, corridorsToCollapse.size() - 1);
 
