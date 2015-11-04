@@ -142,6 +142,7 @@ void Map::showMap(Room* currentRoom, bool showUnvisitedRooms)
 void Map::getActions(std::vector<std::string>* actions)
 {
 	actions->push_back("kaart");
+	actions->push_back("handgranaat");
 }
 
 bool Map::handleAction(std::string fullCommand, Hero* hero)
@@ -161,8 +162,8 @@ bool Map::handleAction(std::string fullCommand, Hero* hero)
 
 	if (fullCommand == "handgranaat")
 	{
-		destroyCorridors(hero->getCurrentRoom()->getLevel());
-		return false; // Room moet dit ook nog afhandelen
+		destroyCorridors(hero->getCurrentRoom());
+		return true;
 	}
 
 	return false;
@@ -173,9 +174,9 @@ void Map::addRoom(Room* room, int x, int y, int z)
 	rooms_[index(x, y, z)] = room;
 }
 
-bool Map::destroyCorridors(int z)
+void Map::destroyCorridors(Room* currentRoom)
 {
-	KruskalMST mst = KruskalMST(getAllRooms(z));
+	KruskalMST mst = KruskalMST(getAllRooms(currentRoom->getLevel()));
 
 	std::vector<Corridor> corridorsToCollapse = mst.getNonCrucialCorridors();
 	int amountToCollapse = Random::getRandomNumber(10, 15);
@@ -183,12 +184,11 @@ bool Map::destroyCorridors(int z)
 	if (corridorsToCollapse.size() == 0)
 	{
 		std::cout << "Je vreest dat een extra handgranaat een cruciale passage zal blokkeren. Het is beter om deze niet meer te gebruiken op deze verdieping." << std::endl;
-
-		return false;
 	}
 	else
 	{
 		std::cout << "De kerker schudt op zijn grondvesten, alle tegenstanders in de kamer zijn verslagen! Een donderend geluid maakt duidelijk dat gedeeltes van de kerker zijn ingestort..." << std::endl;
+		currentRoom->removeAllEnemies();
 
 		// Als alles moet instorten, hoeven we geen random kamers te selecteren.
 		if (corridorsToCollapse.size() <= amountToCollapse)
@@ -211,8 +211,6 @@ bool Map::destroyCorridors(int z)
 				corridorsToCollapse.erase(corridorsToCollapse.begin() + index);
 			}
 		}
-
-		return true;
 	}
 	
 }

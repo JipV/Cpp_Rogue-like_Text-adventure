@@ -37,6 +37,7 @@ class Room
 		
 		void addEnemy(Enemy* enemy);
 		void removeEnemy(Enemy* enemy);
+		void removeAllEnemies();
 		bool hasEnemies();
 		std::vector<Enemy*> getEnemies();
 

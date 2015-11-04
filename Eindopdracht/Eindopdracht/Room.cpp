@@ -114,7 +114,17 @@ void Room::addEnemy(Enemy* enemy)
 
 void Room::removeEnemy(Enemy* enemy)
 {
+	delete enemy;
 	enemies_.erase(std::remove(enemies_.begin(), enemies_.end(), enemy), enemies_.end());
+}
+
+void Room::removeAllEnemies()
+{
+	std::for_each(enemies_.begin(), enemies_.end(), [](Enemy* e)
+	{
+		delete e;
+	});
+	enemies_.clear();
 }
 
 void Room::addItem(Item* item)
