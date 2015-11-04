@@ -311,6 +311,11 @@ void Hero::useTalisman()
 	delete visited;
 }
 
+void Hero::useCompass()
+{
+	std::cout << "\nGEBRUIK KOMPAS\n";
+}
+
 void Hero::viewCharacteristics()
 {
 	std::cout << "\nEigenschappen held:\n";
@@ -450,6 +455,7 @@ void Hero::getActions(std::vector<std::string>* actions)
 	}
 
 	actions->push_back("gebruik talisman");
+	actions->push_back("gebruik kompas");
 	actions->push_back("bekijk eigenschappen");
 	actions->push_back("held opslaan");
 
@@ -482,6 +488,11 @@ bool Hero::handleAction(std::string fullCommand, std::vector<std::string> action
 	if (fullCommand == "gebruik talisman")
 	{
 		useTalisman();
+		return true;
+	}
+	if (fullCommand == "gebruik kompas")
+	{
+		useCompass();
 		return true;
 	}
 	if (fullCommand == "bekijk spullen")
