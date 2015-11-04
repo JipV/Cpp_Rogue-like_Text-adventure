@@ -219,7 +219,7 @@ Room::ROOM_TYPE Room::getType()
 	return type_;
 }
 
-std::map<std::string, Room*> Room::getAllExits()
+std::unordered_map<std::string, Room*> Room::getAllExits()
 {
 	return exits_;
 }
