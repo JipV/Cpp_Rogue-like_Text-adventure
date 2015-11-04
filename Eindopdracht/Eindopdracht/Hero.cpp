@@ -58,7 +58,7 @@ void Hero::fight()
 
 	if (currentRoom_->getEnemies().size() > 1) {
 		
-		std::map<std::string, Enemy*> enemyOptions = std::map<std::string, Enemy*>();
+		std::unordered_map<std::string, Enemy*> enemyOptions = std::unordered_map<std::string, Enemy*>();
 		for (size_t i = 0; i < currentRoom_->getEnemies().size(); i++) {
 			std::cout << "\nOptie " << i + 1 << ": " << *currentRoom_->getEnemies().at(i);
 			enemyOptions[std::to_string(i + 1)] = currentRoom_->getEnemies().at(i);
@@ -176,7 +176,7 @@ void Hero::viewItems()
 
 void Hero::changeWeapon()
 {
-	std::map<std::string, Weapon*> weaponOptions = std::map<std::string, Weapon*>();
+	std::unordered_map<std::string, Weapon*> weaponOptions = std::unordered_map<std::string, Weapon*>();
 	for (size_t i = 0; i < getWeapons().size(); i++) {
 		std::cout << "\nOptie " << i + 1 << ": " << *getWeapons().at(i) << " (Aanval is " << getWeapons().at(i)->getAttack() << ")";
 		weaponOptions[std::to_string(i + 1)] = getWeapons().at(i);
@@ -222,7 +222,7 @@ void Hero::changeWeapon()
 
 void Hero::changeShield()
 {
-	std::map<std::string, Shield*> shieldOptions = std::map<std::string, Shield*>();
+	std::unordered_map<std::string, Shield*> shieldOptions = std::unordered_map<std::string, Shield*>();
 	for (size_t i = 0; i < getShields().size(); i++) {
 		std::cout << "\nOptie " << i + 1 << ": " << *getShields().at(i) << " (Verdediging is " << getShields().at(i)->getDefence() << ")";
 		shieldOptions[std::to_string(i + 1)] = getShields().at(i);
@@ -286,7 +286,7 @@ void Hero::useTalisman()
 			visited.push_back(currentRoom);
 			currentSteps++;
 
-			std::map<std::string, Room*> exits = currentRoom->getAllExits();
+			std::unordered_map<std::string, Room*> exits = currentRoom->getAllExits();
 
 			std::for_each(exits.begin(), exits.end(), [&queue, visited, currentSteps](std::pair<std::string, Room*> pair)
 			{

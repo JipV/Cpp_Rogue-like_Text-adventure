@@ -23,7 +23,7 @@ private:
 	std::vector<std::string> bossesOptions_;
 	std::vector<std::string> enemySizeOptions_;
 
-	std::map<int, std::vector<Enemy*>> possibleEnemies_;
+	std::unordered_map<int, std::vector<Enemy*>> possibleEnemies_;
 };
 
 class TrapGenerator
@@ -36,7 +36,7 @@ public:
 
 private:
 	EnemyGenerator* enemyGenerator_;
-	std::map<int, std::vector<Trap*>> possibleTraps_;
+	std::unordered_map<int, std::vector<Trap*>> possibleTraps_;
 
 	void parseLine(std::string line, Trap* trap);
 	void saveTrap(Trap* trap);
@@ -54,7 +54,7 @@ private:
 	std::vector<std::string> weaponOptions_;
 	std::vector<std::string> weaponMaterialOptions_;
 
-	std::map<int, std::vector<Weapon*>> possibleWeapons_;
+	std::unordered_map<int, std::vector<Weapon*>> possibleWeapons_;
 
 	Weapon* parseLine(std::string weaponOption, std::string weaponMaterialOption);
 };
@@ -71,7 +71,7 @@ private:
 	std::vector<std::string> shieldSizeOptions_;
 	std::vector<std::string> shieldMaterialOptions_;
 
-	std::map<int, std::vector<Shield*>> possibleShields_;
+	std::unordered_map<int, std::vector<Shield*>> possibleShields_;
 
 	Shield* parseLine(std::string shieldSizeOption, std::string shieldMaterialOption);
 };
