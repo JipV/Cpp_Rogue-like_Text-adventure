@@ -172,7 +172,7 @@ TrapGenerator::~TrapGenerator()
 Trap* TrapGenerator::createTrap(int z)
 {
 	//TODO: hoeveel kans willen we dat een kamer een val heeft?
-	if (Random::getRandomNumber(1, 100) <= 10)
+	if (Random::getRandomNumber(1, 100) <= 100)
 	{
 		std::vector<Trap*> allowedTraps;
 		for (int i = z; i <= z + 2; i++)

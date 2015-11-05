@@ -228,3 +228,35 @@ std::vector<Enemy*> Room::getEnemies()
 {
 	return enemies_;
 }
+
+int Room::getTotalHPEnemies()
+{
+	int totalHP = 0;
+	std::for_each(enemies_.begin(), enemies_.end(), [&totalHP](Enemy* e)
+	{
+		totalHP += e->getCurrentHP();
+	});
+	return totalHP;
+}
+
+void Room::viewCheatInfo()
+{
+	std::cout << "Type: " << type_ << std::endl;
+	std::cout << "Enemies: " << enemies_.size() << std::endl;
+	std::for_each(enemies_.begin(), enemies_.end(), [](Enemy* e)
+	{
+		e->viewCheatInfo();
+	});
+
+	std::cout << "Trap: " << (trap_ != nullptr);
+}
+
+void Room::cheatAddEnemy()
+{
+	//Enemy(std::string type, std::string size, int level, int maxHP, int chanceToHit, int chanceToDefend, int attack, int chanceHeroEscapes);
+	enemies_.push_back(new Enemy("cheat enemy", "normaal", 100, 100000, 0, 0, 0, 100));
+}
+
+Trap* Room::getTrap() {
+	return trap_;
+}

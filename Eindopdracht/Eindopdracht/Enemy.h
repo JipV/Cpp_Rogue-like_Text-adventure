@@ -21,6 +21,7 @@ class Enemy
 		int getChanceHeroEscapes();
 		int getXP();
 
+		void viewCheatInfo();
 	private:
 
 		bool isDefeated_;
