@@ -2,10 +2,11 @@
 #include "Map.h"
 #include "Room.h"
 #include "Hero.h"
-#include "KruskalMSP.h"
+#include "KruskalMST.h"
 #include "Graph.h"
 #include "Enemy.h"
 #include "Trap.h"
+#include "Random.h"
 
 Map::Map(int xSize, int ySize, int zSize)
 	: xSize_{ xSize }, ySize_{ ySize }, zSize_{ zSize }, rooms_{ nullptr }
@@ -68,6 +69,8 @@ void Map::showMap(Room* currentRoom, bool showUnvisitedRooms)
 				// Teken uitgang van west naar oost
 				if (room->getAllExits().count("oost"))
 					std::cout << '-';
+				else if (room->isCollapsed("oost"))
+					std::cout << '~';
 				else
 					std::cout << ' ';
 			}
@@ -81,6 +84,9 @@ void Map::showMap(Room* currentRoom, bool showUnvisitedRooms)
 					if (eastRoom->getIsVisited() &&
 						eastRoom->getAllExits().count("west"))
 						std::cout << '-';
+					else if (eastRoom->getIsVisited() &&
+						eastRoom->isCollapsed("west"))
+						std::cout << '~';
 					else
 						std::cout << ' ';
 				}
@@ -98,6 +104,8 @@ void Map::showMap(Room* currentRoom, bool showUnvisitedRooms)
 			{
 				if (room->getAllExits().count("zuid"))
 					std::cout << "| ";
+				else if (room->isCollapsed("zuid"))
+					std::cout << "~ ";
 				else
 					std::cout << "  ";
 			}
@@ -109,6 +117,9 @@ void Map::showMap(Room* currentRoom, bool showUnvisitedRooms)
 					if (southRoom->getIsVisited() &&
 						southRoom->getAllExits().count("noord"))
 						std::cout << "| ";
+					else if (southRoom->getIsVisited() &&
+						southRoom->isCollapsed("noord"))
+						std::cout << "~ ";
 					else
 						std::cout << "  ";
 				}
@@ -121,6 +132,7 @@ void Map::showMap(Room* currentRoom, bool showUnvisitedRooms)
 
 	std::cout << "Legenda: \n";
 	std::cout << "|- : Gangen \n";
+	std::cout << "~  : Ingestortte gang \n";
 	std::cout << "S  : Start locatie \n";
 	std::cout << "E  : Eind vijhand \n";
 	std::cout << "N  : Normale ruimte \n";
@@ -134,7 +146,7 @@ void Map::useCompass(Room* currentRoom, std::vector<Room*> allRooms)
 {
 	struct Vertex {
 		Room* vertex;
-		std::map<std::string, Room*> edges;
+		std::unordered_map<std::string, Room*> edges;
 		int distance;
 		Vertex* previousVertex;
 		bool done;
@@ -315,6 +327,7 @@ void Map::getActions(std::vector<std::string>* actions)
 {
 	actions->push_back("kaart");
 	actions->push_back("gebruik kompas");
+	actions->push_back("handgranaat");
 }
 
 bool Map::handleAction(std::string fullCommand, Hero* hero)
@@ -339,8 +352,8 @@ bool Map::handleAction(std::string fullCommand, Hero* hero)
 
 	if (fullCommand == "handgranaat")
 	{
-		destroyCorridors(hero->getCurrentRoom()->getLevel());
-		return false; // Room moet dit ook nog afhandelen
+		destroyCorridors(hero->getCurrentRoom());
+		return true;
 	}
 
 	return false;
@@ -351,18 +364,46 @@ void Map::addRoom(Room* room, int x, int y, int z)
 	rooms_[index(x, y, z)] = room;
 }
 
-void Map::destroyCorridors(int z)
+void Map::destroyCorridors(Room* currentRoom)
 {
-	std::cout << "handgranaat!\n";
-	KruskalMST mst = KruskalMST(getAllRooms(z));
+	// Random gangen storten in
+	//KruskalMST mst = KruskalMST(getAllRooms(currentRoom->getLevel()));
+
+	// MST met bonus: gangen vlakbij de speler storten in.
+	KruskalMST mst = KruskalMST(currentRoom);
 
 	std::vector<Corridor> corridorsToCollapse = mst.getNonCrucialCorridors();
+	size_t amountToCollapse = Random::getRandomNumber(10, 15);
 
-	std::for_each(corridorsToCollapse.begin(), corridorsToCollapse.end(), [](Corridor c)
+	if (corridorsToCollapse.size() == 0)
 	{
-		c.Room1->collapseCorridorToRoom(c.Room2);
-		c.Room2->collapseCorridorToRoom(c.Room1);
-	});
+		std::cout << "Je vreest dat een extra handgranaat een cruciale passage zal blokkeren. Het is beter om deze niet meer te gebruiken op deze verdieping." << std::endl;
+	}
+	else
+	{
+		std::cout << "De kerker schudt op zijn grondvesten, alle tegenstanders in de kamer zijn verslagen! Een donderend geluid maakt duidelijk dat gedeeltes van de kerker zijn ingestort..." << std::endl;
+		currentRoom->removeAllEnemies();
+
+		// Als alles moet instorten, hoeven we geen random kamers te selecteren.
+		if (corridorsToCollapse.size() <= amountToCollapse)
+		{
+			std::for_each(corridorsToCollapse.begin(), corridorsToCollapse.end(), [](Corridor c)
+			{
+				c.Room1->collapseCorridorToRoom(c.Room2);
+				c.Room2->collapseCorridorToRoom(c.Room1);
+			});
+		}
+		else
+		{
+			// De dichtsbijzijnde gangen staan op het einde van de vector, laat deze instorten.
+			std::for_each(corridorsToCollapse.end() - amountToCollapse, corridorsToCollapse.end(), [](Corridor c)
+			{
+				c.Room1->collapseCorridorToRoom(c.Room2);
+				c.Room2->collapseCorridorToRoom(c.Room1);
+			});
+		}
+	}
+	
 }
 
 Room* Map::getRoom(int x, int y, int z)

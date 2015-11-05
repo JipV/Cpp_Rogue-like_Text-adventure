@@ -30,11 +30,14 @@ class Room
 		bool handleAction(std::string fullCommand, std::vector<std::string> action, Hero* hero);
 
 		Room* getExit(std::string name);
+		bool isCollapsed(std::string exit);
+
 		void collapseCorridorToRoom(Room* room);
-		std::map<std::string, Room*> getAllExits();
+		std::unordered_map<std::string, Room*> getAllExits();
 		
 		void addEnemy(Enemy* enemy);
 		void removeEnemy(Enemy* enemy);
+		void removeAllEnemies();
 		bool hasEnemies();
 		std::vector<Enemy*> getEnemies();
 
@@ -56,7 +59,8 @@ class Room
 
 		std::string description_;
 
-		std::map<std::string, Room*> exits_;
+		std::unordered_map<std::string, Room*> exits_;
+		std::vector<std::string> collapsedExits_;
 
 		std::vector<Enemy*> enemies_;
 		std::vector<Item*> items_;

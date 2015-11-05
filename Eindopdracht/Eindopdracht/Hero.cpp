@@ -58,7 +58,7 @@ void Hero::fight()
 
 	if (currentRoom_->getEnemies().size() > 1) {
 		
-		std::map<std::string, Enemy*> enemyOptions = std::map<std::string, Enemy*>();
+		std::unordered_map<std::string, Enemy*> enemyOptions = std::unordered_map<std::string, Enemy*>();
 		for (size_t i = 0; i < currentRoom_->getEnemies().size(); i++) {
 			std::cout << "\nOptie " << i + 1 << ": " << *currentRoom_->getEnemies().at(i);
 			enemyOptions[std::to_string(i + 1)] = currentRoom_->getEnemies().at(i);
@@ -176,7 +176,7 @@ void Hero::viewItems()
 
 void Hero::changeWeapon()
 {
-	std::map<std::string, Weapon*> weaponOptions = std::map<std::string, Weapon*>();
+	std::unordered_map<std::string, Weapon*> weaponOptions = std::unordered_map<std::string, Weapon*>();
 	for (size_t i = 0; i < getWeapons().size(); i++) {
 		std::cout << "\nOptie " << i + 1 << ": " << *getWeapons().at(i) << " (Aanval is " << getWeapons().at(i)->getAttack() << ")";
 		weaponOptions[std::to_string(i + 1)] = getWeapons().at(i);
@@ -222,7 +222,7 @@ void Hero::changeWeapon()
 
 void Hero::changeShield()
 {
-	std::map<std::string, Shield*> shieldOptions = std::map<std::string, Shield*>();
+	std::unordered_map<std::string, Shield*> shieldOptions = std::unordered_map<std::string, Shield*>();
 	for (size_t i = 0; i < getShields().size(); i++) {
 		std::cout << "\nOptie " << i + 1 << ": " << *getShields().at(i) << " (Verdediging is " << getShields().at(i)->getDefence() << ")";
 		shieldOptions[std::to_string(i + 1)] = getShields().at(i);
@@ -269,46 +269,40 @@ void Hero::changeShield()
 
 void Hero::useTalisman()
 {
-	int numberOfSteps = 0;
+	std::queue<Room*> queue;
+	std::unordered_map<Room*, int> steps;
 
-	std::deque<std::pair<Room*, int>>* queue = new std::deque<std::pair<Room*, int>>();
-	std::vector<Room*>* visited = new std::vector<Room*>();
+	queue.push(currentRoom_);
+	steps[currentRoom_] = 0;
 
-	queue->push_back(std::make_pair(currentRoom_, 0));
+	int currentSteps = 0;
 
-	while (!queue->empty()) {
-		auto currentPair = queue->front();
-		Room* currentRoom = currentPair.first;
-		int currentSteps = currentPair.second;
+	while (!queue.empty()) {
+		Room* currentRoom = queue.front();
+		currentSteps = steps.at(currentRoom);
 
-		if (currentRoom->getType() != Room::StairsDown) {
-			queue->pop_front();
-			visited->push_back(currentRoom);
-			currentSteps++;
-
-			std::map<std::string, Room*> exits = currentRoom->getAllExits();
-
-			std::for_each(exits.begin(), exits.end(), [queue, visited, currentSteps](std::pair<std::string, Room*> pair)
-			{
-				if (pair.first != "omlaag" && 
-					pair.first != "omhoog" &&
-					std::find(visited->begin(), visited->end(), pair.second) == visited->end() &&
-					std::find(queue->begin(), queue->end(), std::make_pair(pair.second, currentSteps)) == queue->end())
-				{
-					queue->push_back(std::make_pair(pair.second, currentSteps));
-				}
-			});
-		}
-		else {
-			numberOfSteps = currentSteps;
+		if (currentRoom->getType() == Room::StairsDown ||
+			currentRoom->getType() == Room::EndEnemy)
 			break;
-		}
+
+		queue.pop();
+		currentSteps++;
+
+		std::unordered_map<std::string, Room*> exits = currentRoom->getAllExits();
+
+		std::for_each(exits.begin(), exits.end(), [&queue, &steps, currentSteps](std::pair<std::string, Room*> pair)
+		{
+			if (pair.first != "omlaag" && 
+				pair.first != "omhoog" &&
+				steps.count(pair.second) == 0)
+			{
+				queue.push(pair.second);
+				steps[pair.second] = currentSteps;
+			}
+		});
 	}
 
-	std::cout << "\nDe talisman licht op en fluistert dat de trap omlaag " << numberOfSteps << " kamers ver weg is.\n";
-
-	delete queue;
-	delete visited;
+	std::cout << "\nDe talisman licht op en fluistert dat de trap omlaag " << currentSteps << " kamers ver weg is.\n";
 }
 
 void Hero::viewCharacteristics()

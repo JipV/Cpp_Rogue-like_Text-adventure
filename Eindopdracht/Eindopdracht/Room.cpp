@@ -114,7 +114,17 @@ void Room::addEnemy(Enemy* enemy)
 
 void Room::removeEnemy(Enemy* enemy)
 {
+	delete enemy;
 	enemies_.erase(std::remove(enemies_.begin(), enemies_.end(), enemy), enemies_.end());
+}
+
+void Room::removeAllEnemies()
+{
+	std::for_each(enemies_.begin(), enemies_.end(), [](Enemy* e)
+	{
+		delete e;
+	});
+	enemies_.clear();
 }
 
 void Room::addItem(Item* item)
@@ -173,14 +183,23 @@ Room* Room::getExit(std::string name)
 	return nullptr;
 }
 
+bool Room::isCollapsed(std::string exit)
+{
+	return std::find(collapsedExits_.begin(), collapsedExits_.end(), exit) != collapsedExits_.end();
+}
+
 void Room::collapseCorridorToRoom(Room* room)
 {
 	std::vector<std::string> directions = { "noord", "oost", "zuid", "west" };
 
 	std::for_each(directions.begin(), directions.end(), [this, room](std::string d)
 	{
-		if (exits_[d] == room ||
-			exits_[d] == nullptr)
+		if (exits_[d] == room)
+		{
+			exits_.erase(d);
+			collapsedExits_.push_back(d);
+		}
+		else if(exits_[d] == nullptr)
 			exits_.erase(d);
 	});
 }
@@ -200,7 +219,7 @@ Room::ROOM_TYPE Room::getType()
 	return type_;
 }
 
-std::map<std::string, Room*> Room::getAllExits()
+std::unordered_map<std::string, Room*> Room::getAllExits()
 {
 	return exits_;
 }

@@ -112,6 +112,8 @@ bool Trap::tryTrigger(Hero* hero, Room* room)
 			{
 				room->addEnemy(e);
 			});
+
+			enemiesToSummon_.clear();
 		}
 
 		return true;
