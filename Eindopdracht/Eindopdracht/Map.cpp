@@ -130,7 +130,7 @@ void Map::showMap(Room* currentRoom, bool showUnvisitedRooms)
 }
 
 
-void Map::useCompass(Room* currentRoom)
+void Map::useCompass(Room* currentRoom, std::vector<Room*> allRooms)
 {
 	struct Vertex {
 		Room* vertex;
@@ -144,26 +144,24 @@ void Map::useCompass(Room* currentRoom)
 	std::queue<Vertex*> queue = std::queue<Vertex*>();
 
 	// Maak vertices aan
-	for (int i = 0; i < zSize_; i++) {
-		std::vector<Room*> rooms = getAllRooms(i);
-		std::for_each(rooms.begin(), rooms.end(), [currentRoom, &vertices, &queue](Room* room)
-		{
-			Vertex* newVertex = new Vertex();
-			newVertex->vertex = room;
-			newVertex->edges = room->getAllExits();
-			newVertex->distance = std::numeric_limits<double>::infinity();
-			newVertex->previousVertex = nullptr;
-			newVertex->done = false;
+	std::for_each(allRooms.begin(), allRooms.end(), [currentRoom, &vertices, &queue](Room* room)
+	{
+		Vertex* newVertex = new Vertex();
+		newVertex->vertex = room;
+		newVertex->edges = room->getAllExits();
+		newVertex->distance = std::numeric_limits<double>::infinity();
+		newVertex->previousVertex = nullptr;
+		newVertex->done = false;
 
-			// Zet de afstand van de eerste vertex op 0 en van de rest op oneindig
-			if (room == currentRoom) {
-				newVertex->distance = 0;
-				queue.push(newVertex); // Begin bij de vertex met de laagste afstand
-			}
+		// Zet de afstand van de eerste vertex op 0 en van de rest op oneindig
+		if (room == currentRoom) {
+			newVertex->distance = 0;
+			queue.push(newVertex); // Begin bij de vertex met de laagste afstand
+		}
 
-			vertices.push_back(newVertex);
-		});
-	}
+		vertices.push_back(newVertex);
+	});
+	
 
 	/*std::cout << "\nAlle vertices:\n";
 	std::for_each(vertices.begin(), vertices.end(), [](Vertex* v)
@@ -213,7 +211,7 @@ void Map::useCompass(Room* currentRoom)
 	std::vector<Vertex*> route = std::vector<Vertex*>();
 
 	// Bepaalde korste route
-	auto v = std::find_if(vertices.begin(), vertices.end(), [](Vertex* vertex2) {return vertex2->vertex->getType() == Room::EndEnemy; });
+	auto v = std::find_if(vertices.begin(), vertices.end(), [](Vertex* vertex2) {return vertex2->vertex->getType() == Room::StairsDown || vertex2->vertex->getType() == Room::EndEnemy; });
 	if (v != vertices.end())
 	{
 		Vertex* currentVertex = *v;
@@ -329,7 +327,7 @@ bool Map::handleAction(std::string fullCommand, Hero* hero)
 	}
 	if (fullCommand == "gebruik kompas")
 	{
-		useCompass(hero->getCurrentRoom());
+		useCompass(hero->getCurrentRoom(), getAllRooms(hero->getCurrentRoom()->getLevel()));
 		return true;
 	}
 

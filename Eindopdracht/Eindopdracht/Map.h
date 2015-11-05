@@ -36,7 +36,7 @@ private:
 	void addRoom(Room* room, int x, int y, int z);
 
 	void showMap(Room* currentRoom, bool showUnvisitedRooms);
-	void useCompass(Room* currentRoom);
+	void useCompass(Room* currentRoom, std::vector<Room*> allRooms);
 	void destroyCorridors(int z);
 	
 };
