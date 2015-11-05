@@ -139,11 +139,11 @@ void Map::useCompass(Room* currentRoom, std::vector<Room*> allRooms)
 		bool done;
 	};
 
-	std::vector<Vertex*>* vertices = new std::vector<Vertex*>();
-	std::queue<Vertex*>* queue = new std::queue<Vertex*>();
+	std::vector<Vertex*> vertices = std::vector<Vertex*>();
+	std::queue<Vertex*> queue = std::queue<Vertex*>();
 
 	// Maak vertices aan
-	std::for_each(allRooms.begin(), allRooms.end(), [currentRoom, vertices, queue](Room* room)
+	std::for_each(allRooms.begin(), allRooms.end(), [currentRoom, &vertices, &queue](Room* room)
 	{
 		Vertex* newVertex = new Vertex();
 		newVertex->vertex = room;
@@ -155,10 +155,10 @@ void Map::useCompass(Room* currentRoom, std::vector<Room*> allRooms)
 		// Zet de afstand van de eerste vertex op 0 en van de rest op oneindig
 		if (room == currentRoom) {
 			newVertex->distance = 0;
-			queue->push(newVertex); // Begin bij de vertex met de laagste afstand
+			queue.push(newVertex); // Begin bij de vertex met de laagste afstand
 		}
 
-		vertices->push_back(newVertex);
+		vertices.push_back(newVertex);
 	});
 
 	/*std::cout << "\nAlle vertices:\n";
@@ -168,15 +168,15 @@ void Map::useCompass(Room* currentRoom, std::vector<Room*> allRooms)
 	});*/
 
 	// Bepaal afstanden
-	while (!queue->empty()) {
-		Vertex* vertex = queue->front();
-		queue->pop();
+	while (!queue.empty()) {
+		Vertex* vertex = queue.front();
+		queue.pop();
 
-		std::for_each(vertex->edges.begin(), vertex->edges.end(), [queue, vertices, vertex](std::pair<std::string, Room*> exitPair)
+		std::for_each(vertex->edges.begin(), vertex->edges.end(), [&queue, vertices, vertex](std::pair<std::string, Room*> exitPair)
 		{
 			// Haal de vertex uit de vector, die hoort bij de gang
-			auto vertex2 = std::find_if(vertices->begin(), vertices->end(), [exitPair](Vertex* vertex2) {return vertex2->vertex == exitPair.second; });
-			if (vertex2 != vertices->end())
+			auto vertex2 = std::find_if(vertices.begin(), vertices.end(), [exitPair](Vertex* vertex2) {return vertex2->vertex == exitPair.second; });
+			if (vertex2 != vertices.end())
 			{
 				int weigthEdge = exitPair.second->getTotalHPEnemies(); // TODO: + EVENTUELE VAL
 				int distance = vertex->distance + weigthEdge;
@@ -189,7 +189,7 @@ void Map::useCompass(Room* currentRoom, std::vector<Room*> allRooms)
 
 				// Voeg eventueel vertex toe aan de queue
 				if (!(*vertex2)->done) {
-					queue->push(*vertex2);
+					queue.push(*vertex2);
 				}
 			}
 		});
@@ -203,21 +203,21 @@ void Map::useCompass(Room* currentRoom, std::vector<Room*> allRooms)
 		std::cout << v->vertex << " weight: " << v->distance << "\n";
 	});*/
 
-	std::vector<Vertex*>* route = new std::vector<Vertex*>();
+	std::vector<Vertex*> route = std::vector<Vertex*>();
 
 	// Bepaalde korste route
-	auto v = std::find_if(vertices->begin(), vertices->end(), [](Vertex* vertex2) {return vertex2->vertex->getType() == Room::StairsDown; }); // TODO: moet eindvijand worden
-	if (v != vertices->end())
+	auto v = std::find_if(vertices.begin(), vertices.end(), [](Vertex* vertex2) {return vertex2->vertex->getType() == Room::StairsDown; }); // TODO: moet eindvijand worden
+	if (v != vertices.end())
 	{
 		Vertex* currentVertex = *v;
 		while (currentVertex != nullptr) {
-			route->push_back(currentVertex);
+			route.push_back(currentVertex);
 			currentVertex = currentVertex->previousVertex;
 		}
 	}
 
 	// Zet de vertices in de goede volgorde (van held naar doel, in plaats van doel naar held)
-	std::reverse(route->begin(), route->end());
+	std::reverse(route.begin(), route.end());
 
 	/*std::cout << "\nRooms in route:\n";
 	std::for_each(route->begin(), route->end(), [](Vertex* v)
@@ -231,17 +231,17 @@ void Map::useCompass(Room* currentRoom, std::vector<Room*> allRooms)
 	std::vector<int> HPs = std::vector<int>();
 
 	// Toont de route die je moet lopen
-	for (int i = 0; i < route->size(); i++) {
-		std::for_each(route->at(i)->edges.begin(), route->at(i)->edges.end(), [route, i, &numberOfEnemies, &HPs](std::pair<std::string, Room*> exitPair)
+	for (int i = 0; i < route.size(); i++) {
+		std::for_each(route.at(i)->edges.begin(), route.at(i)->edges.end(), [route, i, &numberOfEnemies, &HPs](std::pair<std::string, Room*> exitPair)
 		{
-			if (i + 1 < route->size()) {
-				if (exitPair.second == route->at(i + 1)->vertex) {
+			if (i + 1 < route.size()) {
+				if (exitPair.second == route.at(i + 1)->vertex) {
 					std::cout << exitPair.first;
-					if (i != route->size() - 2) {
+					if (i != route.size() - 2) {
 						std::cout << " - ";
 					}
 
-					std::vector<Enemy*> enemies = route->at(i)->vertex->getEnemies();
+					std::vector<Enemy*> enemies = route.at(i)->vertex->getEnemies();
 					numberOfEnemies += enemies.size();
 					std::for_each(enemies.begin(), enemies.end(), [&HPs](Enemy* enemy)
 					{
@@ -275,9 +275,8 @@ void Map::useCompass(Room* currentRoom, std::vector<Room*> allRooms)
 
 	// TODO: toon aantal vallen die je tegenkomt
 
-	delete vertices;
-	delete queue;
-	delete route;
+
+
 
 	// STAPPENPLAN
 
