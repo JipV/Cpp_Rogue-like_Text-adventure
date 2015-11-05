@@ -29,5 +29,6 @@
 #include <map>
 #include <deque>
 #include <queue>
+#include <climits>
 
 // TODO: reference additional headers your program requires here

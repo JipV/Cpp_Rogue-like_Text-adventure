@@ -135,7 +135,7 @@ void Map::useCompass(Room* currentRoom, std::vector<Room*> allRooms)
 	struct Vertex {
 		Room* vertex;
 		std::map<std::string, Room*> edges;
-		double distance;
+		int distance;
 		Vertex* previousVertex;
 		bool done;
 	};
@@ -149,7 +149,7 @@ void Map::useCompass(Room* currentRoom, std::vector<Room*> allRooms)
 		Vertex* newVertex = new Vertex();
 		newVertex->vertex = room;
 		newVertex->edges = room->getAllExits();
-		newVertex->distance = std::numeric_limits<double>::infinity();
+		newVertex->distance = INT_MAX;
 		newVertex->previousVertex = nullptr;
 		newVertex->done = false;
 
@@ -248,7 +248,7 @@ void Map::useCompass(Room* currentRoom, std::vector<Room*> allRooms)
 					}
 
 					std::vector<Enemy*> enemies = route.at(i)->vertex->getEnemies();
-					numberOfEnemies += enemies.size();
+					numberOfEnemies += static_cast<int>(enemies.size());
 					std::for_each(enemies.begin(), enemies.end(), [&HPs](Enemy* enemy)
 					{
 						HPs.push_back(enemy->getCurrentHP());
