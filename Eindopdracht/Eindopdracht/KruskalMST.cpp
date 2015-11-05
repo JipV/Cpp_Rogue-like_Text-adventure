@@ -38,9 +38,6 @@ std::vector<Corridor> KruskalMST::getNonCrucialCorridors()
 
 void KruskalMST::findMST(Graph graph)
 {
-	crucialCorridors_ = std::vector<Corridor>();
-	nonCrucialCorridors_ = std::vector<Corridor>();
-
 	size_t requiredEdges = graph.Rooms.size() - 1;
 
 	std::for_each(graph.Rooms.begin(), graph.Rooms.end(), [this](Room* r)
