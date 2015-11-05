@@ -152,8 +152,8 @@ void Map::useCompass(Room* currentRoom, std::vector<Room*> allRooms)
 		bool done;
 	};
 
-	std::vector<Vertex*> vertices = std::vector<Vertex*>();
-	std::queue<Vertex*> queue = std::queue<Vertex*>();
+	std::vector<Vertex*> vertices;
+	std::queue<Vertex*> queue;
 
 	// Maak vertices aan
 	std::for_each(allRooms.begin(), allRooms.end(), [currentRoom, &vertices, &queue](Room* room)
@@ -173,13 +173,6 @@ void Map::useCompass(Room* currentRoom, std::vector<Room*> allRooms)
 
 		vertices.push_back(newVertex);
 	});
-	
-
-	/*std::cout << "\nAlle vertices:\n";
-	std::for_each(vertices.begin(), vertices.end(), [](Vertex* v)
-	{
-	std::cout << v->vertex << " weight: " << v->distance << "\n";
-	});*/
 
 	// Bepaal afstanden
 	while (!queue.empty()) {
@@ -189,7 +182,7 @@ void Map::useCompass(Room* currentRoom, std::vector<Room*> allRooms)
 		std::for_each(vertex->edges.begin(), vertex->edges.end(), [&queue, vertices, vertex](std::pair<std::string, Room*> exitPair)
 		{
 			// Haal de vertex uit de vector, die hoort bij de gang
-			auto vertex2 = std::find_if(vertices.begin(), vertices.end(), [exitPair](Vertex* vertex2) {return vertex2->vertex == exitPair.second; });
+			auto vertex2 = std::find_if(vertices.begin(), vertices.end(), [exitPair](Vertex* v) {return v->vertex == exitPair.second; });
 			if (vertex2 != vertices.end())
 			{
 				int weigthEdge = exitPair.second->getTotalHPEnemies();
@@ -214,12 +207,6 @@ void Map::useCompass(Room* currentRoom, std::vector<Room*> allRooms)
 		vertex->done = true;
 	}
 
-	/*std::cout << "\nAlle vertices:\n";
-	std::for_each(vertices.begin(), vertices.end(), [](Vertex* v)
-	{
-		std::cout << v->vertex << " weight: " << v->distance << "\n";
-	});*/
-
 	std::vector<Vertex*> route = std::vector<Vertex*>();
 
 	// Bepaalde korste route
@@ -236,17 +223,11 @@ void Map::useCompass(Room* currentRoom, std::vector<Room*> allRooms)
 	// Zet de vertices in de goede volgorde (van held naar doel, in plaats van doel naar held)
 	std::reverse(route.begin(), route.end());
 
-	/*std::cout << "\nRooms in route:\n";
-	std::for_each(route.begin(), route.end(), [](Vertex* v)
-	{
-		std::cout << v->vertex << "\n";
-	});*/
-
 	std::cout << "\nJe haalt het kompas uit je zak. Het trilt in je hand en projecteert in grote lichtgevende letters in de lucht:\n" << std::endl;
 
 	int numberOfTraps = 0;
 	int numberOfEnemies = 0;
-	std::vector<int> HPs = std::vector<int>();
+	std::vector<int> HPs;
 
 	// Toont de route die je moet lopen
 	for (int i = 0; i < route.size(); i++) {
@@ -356,6 +337,18 @@ bool Map::handleAction(std::string fullCommand, Hero* hero)
 		return true;
 	}
 
+	if (fullCommand == "bekijk kamer")
+	{
+		viewRoom();
+		return true;
+	}
+
+	if (fullCommand == "plaats enemy")
+	{
+		addEnemy();
+		return true;
+	}
+
 	return false;
 }
 
@@ -403,7 +396,45 @@ void Map::destroyCorridors(Room* currentRoom)
 			});
 		}
 	}
-	
+}
+
+Room* Map::findRoom()
+{
+	std::string temp;
+	int x, y, z;
+
+	std::cout << "Geef de coordinaten op.\nx: ";
+
+	try
+	{
+		std::getline(std::cin, temp);
+		x = std::stoi(temp);
+
+		std::cout << "y: ";
+		std::getline(std::cin, temp);
+		y = std::stoi(temp);
+
+		std::cout << "z: ";
+		std::getline(std::cin, temp);
+		z = std::stoi(temp);
+	}
+	catch (std::exception)
+	{
+		std::cout << "\nDe ingevoerde waarde is ongeldig.\n";
+		return findRoom();
+	}
+
+	return getRoom(x, y, z);
+}
+
+void Map::viewRoom()
+{
+	findRoom()->viewCheatInfo();
+}
+
+void Map::addEnemy()
+{
+	findRoom()->cheatAddEnemy();
 }
 
 Room* Map::getRoom(int x, int y, int z)

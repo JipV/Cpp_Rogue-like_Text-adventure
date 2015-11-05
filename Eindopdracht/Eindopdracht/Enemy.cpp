@@ -80,6 +80,14 @@ int Enemy::getXP()
 	// L10: 95 XP
 }
 
+void Enemy::viewCheatInfo()
+{
+	std::cout << "    ";
+	if (size_ != "normaal")
+		std::cout << size_ << " ";
+	std::cout << type_ << " (" << currentHP_ << "/" << maxHP_ << " HP)\n";
+}
+
 // Hierdoor werkt std::cout << Enemy
 std::ostream& operator<<(std::ostream& os, const Enemy& enemy)
 {

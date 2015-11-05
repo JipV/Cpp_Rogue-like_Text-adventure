@@ -49,6 +49,8 @@ class Room
 		
 		int getTotalHPEnemies();
 
+		void viewCheatInfo();
+		void cheatAddEnemy();
 	private:
 
 		bool isVisited_;
