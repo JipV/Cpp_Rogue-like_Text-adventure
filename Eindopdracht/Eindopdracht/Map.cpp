@@ -209,11 +209,10 @@ void Map::useCompass(Room* currentRoom, std::vector<Room*> allRooms)
 	if (v != vertices->end())
 	{
 		Vertex* currentVertex = *v;
-		while (currentVertex->previousVertex != nullptr) {
+		while (currentVertex != nullptr) {
 			route->push_back(currentVertex);
 			currentVertex = currentVertex->previousVertex;
 		}
-		
 	}
 
 	// Zet de vertices in de goede volgorde (van held naar doel, in plaats van doel naar held)
@@ -227,14 +226,13 @@ void Map::useCompass(Room* currentRoom, std::vector<Room*> allRooms)
 
 	std::cout << "\nJe haalt het kompas uit je zak. Het trilt in je hand en projecteert in grote lichtgevende letters in de lucht:\n" << std::endl;
 
-	//std::cout << "\nLoop route:\n";
 	for (int i = 0; i < route->size(); i++) {
 		std::for_each(route->at(i)->edges.begin(), route->at(i)->edges.end(), [route, i](std::pair<std::string, Room*> exitPair)
 		{
 			if (i + 1 < route->size()) {
 				if (exitPair.second == route->at(i + 1)->vertex) {
 					std::cout << exitPair.first;
-					if (i != route->size() - 1) {
+					if (i != route->size() - 2) {
 						std::cout << " - ";
 					}
 				}
