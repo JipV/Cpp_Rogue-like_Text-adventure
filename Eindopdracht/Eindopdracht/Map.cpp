@@ -5,6 +5,7 @@
 #include "KruskalMSP.h"
 #include "Graph.h"
 #include "Enemy.h"
+#include "Trap.h"
 
 Map::Map(int xSize, int ySize, int zSize)
 	: xSize_{ xSize }, ySize_{ ySize }, zSize_{ zSize }, rooms_{ nullptr }
@@ -181,7 +182,10 @@ void Map::useCompass(Room* currentRoom)
 			auto vertex2 = std::find_if(vertices.begin(), vertices.end(), [exitPair](Vertex* vertex2) {return vertex2->vertex == exitPair.second; });
 			if (vertex2 != vertices.end())
 			{
-				int weigthEdge = exitPair.second->getTotalHPEnemies(); // TODO: + EVENTUELE VAL
+				int weigthEdge = exitPair.second->getTotalHPEnemies();
+				if (exitPair.second->getTrap() != nullptr) {
+					weigthEdge += exitPair.second->getTrap()->getLevel();
+				}
 				int distance = vertex->distance + weigthEdge;
 
 				// Bepaal de kleinste afstand
@@ -230,12 +234,13 @@ void Map::useCompass(Room* currentRoom)
 
 	std::cout << "\nJe haalt het kompas uit je zak. Het trilt in je hand en projecteert in grote lichtgevende letters in de lucht:\n" << std::endl;
 
+	int numberOfTraps = 0;
 	int numberOfEnemies = 0;
 	std::vector<int> HPs = std::vector<int>();
 
 	// Toont de route die je moet lopen
 	for (int i = 0; i < route.size(); i++) {
-		std::for_each(route.at(i)->edges.begin(), route.at(i)->edges.end(), [route, i, &numberOfEnemies, &HPs](std::pair<std::string, Room*> exitPair)
+		std::for_each(route.at(i)->edges.begin(), route.at(i)->edges.end(), [route, i, &numberOfEnemies, &HPs, &numberOfTraps](std::pair<std::string, Room*> exitPair)
 		{
 			if (i + 1 < route.size()) {
 				if (exitPair.second == route.at(i + 1)->vertex) {
@@ -250,6 +255,10 @@ void Map::useCompass(Room* currentRoom)
 					{
 						HPs.push_back(enemy->getCurrentHP());
 					});
+
+					if (route.at(i)->vertex->getTrap() != nullptr) {
+						numberOfTraps++;
+					}
 				}
 			}
 		});
@@ -276,9 +285,13 @@ void Map::useCompass(Room* currentRoom)
 		std::cout << ")" << std::endl;
 	}
 
-	// TODO: toon aantal vallen die je tegenkomt
-
-
+	// Toont aantal vallen
+	if (numberOfTraps == 1) {
+		std::cout << "\n" << numberOfTraps << " val" << std::endl;
+	}
+	else {
+		std::cout << "\n" << numberOfTraps << " vallen" << std::endl;
+	}
 
 
 	// STAPPENPLAN

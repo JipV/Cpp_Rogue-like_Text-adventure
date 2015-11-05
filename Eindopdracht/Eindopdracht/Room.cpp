@@ -219,3 +219,7 @@ int Room::getTotalHPEnemies()
 	});
 	return totalHP;
 }
+
+Trap* Room::getTrap() {
+	return trap_;
+}

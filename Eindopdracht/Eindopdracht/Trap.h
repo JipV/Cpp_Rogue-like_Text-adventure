@@ -16,6 +16,9 @@ public:
 	bool handleAction(std::string fullCommand, std::vector<std::string> action, Hero* hero, Room* room);
 	bool searchRoom(int perception);
 	void showRoomDescription();
+
+	int getLevel();
+
 private:
 	bool triggered_;
 

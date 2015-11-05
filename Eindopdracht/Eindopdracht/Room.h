@@ -42,6 +42,7 @@ class Room
 		void setIsVisited(bool isVisited);
 
 		ROOM_TYPE getType();
+		Trap* getTrap();
 		
 		int getTotalHPEnemies();
 

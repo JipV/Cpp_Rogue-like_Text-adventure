@@ -119,3 +119,8 @@ bool Trap::tryTrigger(Hero* hero, Room* room)
 
 	return false;
 }
+
+int Trap::getLevel()
+{
+	return level_;
+}
