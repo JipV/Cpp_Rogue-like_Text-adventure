@@ -267,10 +267,10 @@ void Map::useCompass(Room* currentRoom)
 
 	// Toont aantal vijanden die je tegenkomt
 	if (numberOfEnemies == 1) {
-		std::cout << numberOfEnemies << " tegenstander";
+		std::cout << "\n" << numberOfEnemies << " tegenstander";
 	} 
 	else {
-		std::cout << numberOfEnemies << " tegenstanders";
+		std::cout << "\n" << numberOfEnemies << " tegenstanders";
 	}
 
 	// Toont hp van vijanden
@@ -287,10 +287,10 @@ void Map::useCompass(Room* currentRoom)
 
 	// Toont aantal vallen
 	if (numberOfTraps == 1) {
-		std::cout << "\n" << numberOfTraps << " val" << std::endl;
+		std::cout << numberOfTraps << " val" << std::endl;
 	}
 	else {
-		std::cout << "\n" << numberOfTraps << " vallen" << std::endl;
+		std::cout << numberOfTraps << " vallen" << std::endl;
 	}
 
 
