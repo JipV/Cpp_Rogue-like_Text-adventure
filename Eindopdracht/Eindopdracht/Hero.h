@@ -5,7 +5,6 @@ class Room;
 class Item;
 class Weapon;
 class Shield;
-class Map;
 
 class Hero
 {

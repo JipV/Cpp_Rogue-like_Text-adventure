@@ -4,6 +4,7 @@
 #include "Hero.h"
 #include "KruskalMSP.h"
 #include "Graph.h"
+#include "Enemy.h"
 
 Map::Map(int xSize, int ySize, int zSize)
 	: xSize_{ xSize }, ySize_{ ySize }, zSize_{ zSize }, rooms_{ nullptr }
@@ -203,7 +204,7 @@ void Map::useCompass(Room* currentRoom, std::vector<Room*> allRooms)
 	});*/
 
 	std::vector<Vertex*>* route = new std::vector<Vertex*>();
-	
+
 	// Bepaalde korste route
 	auto v = std::find_if(vertices->begin(), vertices->end(), [](Vertex* vertex2) {return vertex2->vertex->getType() == Room::StairsDown; }); // TODO: moet eindvijand worden
 	if (v != vertices->end())
@@ -226,8 +227,12 @@ void Map::useCompass(Room* currentRoom, std::vector<Room*> allRooms)
 
 	std::cout << "\nJe haalt het kompas uit je zak. Het trilt in je hand en projecteert in grote lichtgevende letters in de lucht:\n" << std::endl;
 
+	int numberOfEnemies = 0;
+	std::vector<int> HPs = std::vector<int>();
+
+	// Toont de route die je moet lopen
 	for (int i = 0; i < route->size(); i++) {
-		std::for_each(route->at(i)->edges.begin(), route->at(i)->edges.end(), [route, i](std::pair<std::string, Room*> exitPair)
+		std::for_each(route->at(i)->edges.begin(), route->at(i)->edges.end(), [route, i, &numberOfEnemies, &HPs](std::pair<std::string, Room*> exitPair)
 		{
 			if (i + 1 < route->size()) {
 				if (exitPair.second == route->at(i + 1)->vertex) {
@@ -235,11 +240,40 @@ void Map::useCompass(Room* currentRoom, std::vector<Room*> allRooms)
 					if (i != route->size() - 2) {
 						std::cout << " - ";
 					}
+
+					std::vector<Enemy*> enemies = route->at(i)->vertex->getEnemies();
+					numberOfEnemies += enemies.size();
+					std::for_each(enemies.begin(), enemies.end(), [&HPs](Enemy* enemy)
+					{
+						HPs.push_back(enemy->getCurrentHP());
+					});
 				}
 			}
 		});
 	}
 	std::cout << "\n";
+
+	// Toont aantal vijanden die je tegenkomt
+	if (numberOfEnemies == 1) {
+		std::cout << numberOfEnemies << " tegenstander";
+	} 
+	else {
+		std::cout << numberOfEnemies << " tegenstanders";
+	}
+
+	// Toont hp van vijanden
+	if (numberOfEnemies > 0) {
+		std::cout << " (";
+		for (int i = 0; i < HPs.size(); i++) {
+			std::cout << HPs.at(i) << " hp";
+			if (i != HPs.size() - 1) {
+				std::cout << ", ";
+			}
+		}
+		std::cout << ")" << std::endl;
+	}
+
+	// TODO: toon aantal vallen die je tegenkomt
 
 	delete vertices;
 	delete queue;

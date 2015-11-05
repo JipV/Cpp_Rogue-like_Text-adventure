@@ -6,7 +6,6 @@
 #include "Item.h"
 #include "Weapon.h"
 #include "Shield.h"
-#include "Map.h"
 
 // ReSharper disable once CppPossiblyUninitializedMember
 Hero::Hero(std::string name) : 
